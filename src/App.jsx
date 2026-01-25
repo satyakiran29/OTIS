@@ -4,8 +4,7 @@ import Login from "./pages/Login";
 function App() {
   return (
     <>
-      <Signup />
-      <Login />
+      hello world
     </>
   );
 }
