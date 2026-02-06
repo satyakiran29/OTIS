@@ -8,7 +8,7 @@ const Login = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         // Simulate login
-        navigate('/dashboard');
+        navigate('/');
     };
 
     return (
