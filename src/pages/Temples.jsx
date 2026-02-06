@@ -1,48 +1,10 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import SectionTitle from '../components/SectionTitle';
+import temples from '../data/temples';
 
 const Temples = () => {
     const [searchTerm, setSearchTerm] = useState('');
-
-    const temples = [
-        {
-            id: 1,
-            name: 'Angkor Wat',
-            location: 'Cambodia',
-            image: 'https://images.unsplash.com/photo-1563806286-4447434c4424?w=500&auto=format&fit=crop&q=60',
-        },
-        {
-            id: 2,
-            name: 'Borobudur',
-            location: 'Indonesia',
-            image: 'https://images.unsplash.com/photo-1596401057633-565652f50bf8?w=500&auto=format&fit=crop&q=60',
-        },
-        {
-            id: 3,
-            name: 'Wat Arun',
-            location: 'Thailand',
-            image: 'https://images.unsplash.com/photo-1590422915835-2ab63ccdf07f?w=500&auto=format&fit=crop&q=60',
-        },
-        {
-            id: 4,
-            name: 'Kinkaku-ji',
-            location: 'Japan',
-            image: 'https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=500&auto=format&fit=crop&q=60',
-        },
-        {
-            id: 5,
-            name: 'Shwedagon Pagoda',
-            location: 'Myanmar',
-            image: 'https://images.unsplash.com/photo-1579895393392-50d4eb952c21?w=500&auto=format&fit=crop&q=60',
-        },
-        {
-            id: 6,
-            name: 'Prambanan',
-            location: 'Indonesia',
-            image: 'https://images.unsplash.com/photo-1590497576571-001099196b02?w=500&auto=format&fit=crop&q=60',
-        },
-    ];
 
     const filteredTemples = temples.filter(temple =>
         temple.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -143,18 +105,19 @@ const Temples = () => {
                                 {temple.name}
                             </h3>
                             <div style={{ marginBottom: '1rem' }}>
-                                <button style={{
+                                <Link to={`/temples/${temple.id}`} style={{
                                     border: 'none',
                                     background: 'transparent',
                                     color: '#64748b',
                                     padding: 0,
                                     fontSize: '0.9rem',
-                                    cursor: 'pointer'
+                                    cursor: 'pointer',
+                                    textDecoration: 'none'
                                 }}>
                                     View
-                                </button>
+                                </Link>
                             </div>
-                            <button style={{
+                            <Link to={`/temples/${temple.id}`} style={{
                                 width: '100%',
                                 padding: '0.6rem',
                                 background: '#3b82f6',
@@ -162,13 +125,16 @@ const Temples = () => {
                                 border: 'none',
                                 borderRadius: '6px',
                                 fontWeight: '600',
-                                cursor: 'pointer'
+                                cursor: 'pointer',
+                                display: 'block',
+                                textAlign: 'center',
+                                textDecoration: 'none'
                             }}
                                 onMouseEnter={(e) => e.target.style.background = '#2563eb'}
                                 onMouseLeave={(e) => e.target.style.background = '#3b82f6'}
                             >
                                 View
-                            </button>
+                            </Link>
                         </div>
                     ))}
                 </div>

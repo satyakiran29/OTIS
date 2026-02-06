@@ -6,6 +6,7 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Temples from './pages/Temples';
+import TempleDetails from './pages/TempleDetails';
 
 import './App.css';
 
@@ -30,6 +31,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/temples" element={<Temples />} />
+          <Route path="/temples/:id" element={<TempleDetails />} />
         </Routes>
       </Layout>
     </BrowserRouter>
