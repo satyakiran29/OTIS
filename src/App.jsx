@@ -5,13 +5,12 @@ import Footer from './components/Footer';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
-import Signup from './pages/Signup';
+import Temples from './pages/Temples';
 
 import './App.css';
 
 // Layout component to handle conditional rendering of Navbar/Footer
 const Layout = ({ children }) => {
-
 
   return (
     <div className="app">
@@ -30,7 +29,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
-
+          <Route path="/temples" element={<Temples />} />
         </Routes>
       </Layout>
     </BrowserRouter>

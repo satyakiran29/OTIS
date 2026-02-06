@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Hero = () => {
     return (
@@ -96,17 +97,19 @@ const Hero = () => {
                     }}>
                         View Our Team
                     </a>
-                    <a href="#project" style={{
+                    <Link to="/temples" style={{
                         padding: '0.8rem 2rem',
                         background: 'rgba(255,255,255,0.05)',
                         border: '1px solid rgba(255,255,255,0.1)',
                         color: 'var(--text-light)',
                         borderRadius: '50px',
                         fontWeight: '600',
-                        cursor: 'pointer'
+                        cursor: 'pointer',
+                        textDecoration: 'none',
+                        display: 'inline-block'
                     }}>
-                        Learn More
-                    </a>
+                        Get Started
+                    </Link>
                 </div>
             </div>
         </section>
