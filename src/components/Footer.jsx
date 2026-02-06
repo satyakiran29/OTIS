@@ -14,7 +14,7 @@ const Footer = () => {
                     Temple Management Info System Project
                 </p>
                 <p style={{ color: 'rgba(255,255,255,0.2)', fontSize: '0.9rem' }}>
-                    © {new Date().getFullYear()} GMR Computer Science Engineering. All rights reserved.
+                    © {new Date().getFullYear()} Team 10. All rights reserved.
                 </p>
             </div>
         </footer>
