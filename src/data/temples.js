@@ -13,7 +13,7 @@ const temples = [
     id: 2,
     name: 'Arasavalli Sun Temple',
     location: 'Srikakulam, Andhra Pradesh',
-    image: 'https://upload.wikimedia.org/wikipedia/commons/5/5e/Arasavalli_Sun_Temple.jpg',
+    image: 'https://famoustemplesofindia.com/wp-content/uploads/2024/02/Arasavalli-Temple-Sri-Suryanarayana-Swamy-Temple-1.jpg',
     description:
       'Arasavalli Sun Temple is dedicated to Lord Surya (Sun God). It is one of the few Sun temples in India where the Sun rays fall on the idol on specific days.',
     history:
