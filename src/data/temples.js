@@ -23,7 +23,7 @@ const temples = [
     id: 3,
     name: 'Srikurmam Temple',
     location: 'Srikakulam, Andhra Pradesh',
-    image: 'https://upload.wikimedia.org/wikipedia/commons/0/05/Srikurmam_Temple.jpg',
+    image: 'https://srikurmam.info/sites/default/files/styles/wide/public/2023-04/Srikurmam-8.JPG?itok=yC-NkpYU',
     description:
       'Srikurmam Temple is a unique Vishnu temple where Lord Vishnu is worshipped in the Kurma (tortoise) avatar.',
     history:
@@ -33,7 +33,7 @@ const temples = [
     id: 4,
     name: 'Pydithalli Ammavari Temple',
     location: 'Vizianagaram, Andhra Pradesh',
-    image: 'https://upload.wikimedia.org/wikipedia/commons/3/36/Pydithalli_Ammavari_Temple.jpg',
+    image: 'https://hangouthillsresorts.com/wp-content/uploads/2025/05/2-1-1024x576.png',
     description:
       'Pydithalli Ammavari Temple is a famous Shakti temple and the presiding deity of Vizianagaram town.',
     history:
@@ -43,7 +43,7 @@ const temples = [
     id: 5,
     name: 'Simhachalam Temple',
     location: 'Visakhapatnam, Andhra Pradesh',
-    image: 'https://upload.wikimedia.org/wikipedia/commons/f/f0/Simhachalam_Temple.jpg',
+    image: 'https://1.bp.blogspot.com/-1k3U94qn3zA/XqlmpjaPazI/AAAAAAAAF4k/DPlbVJ4XjpgKp3RUgL1l0XHNx4RWaPvkgCLcBGAsYHQ/s1600/Simhachalam%2BTemple.JPG',
     description:
       'Simhachalam Temple is dedicated to Lord Varaha Narasimha Swamy and is one of the most important pilgrimage centers in Andhra Pradesh.',
     history:
@@ -53,7 +53,7 @@ const temples = [
     id: 6,
     name: 'Kanaka Mahalakshmi Temple',
     location: 'Visakhapatnam, Andhra Pradesh',
-    image: 'https://upload.wikimedia.org/wikipedia/commons/8/8c/Kanaka_Mahalakshmi_Temple.jpg',
+    image: 'https://s7ap1.scene7.com/is/image/incredibleindia/sri-kanaka-mahalakshmi-temple-vishakapatnam-andhra-pradesh-1-attr-hero?qlt=82&ts=1726744354294',
     description:
       'Kanaka Mahalakshmi Temple is dedicated to Goddess Lakshmi and is believed to fulfill devotees’ wishes related to wealth and prosperity.',
     history:
