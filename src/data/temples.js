@@ -3,7 +3,7 @@ const temples = [
     id: 1,
     name: 'Srimukhalingam Temple',
     location: 'Srikakulam, Andhra Pradesh',
-    image: 'https://upload.wikimedia.org/wikipedia/commons/7/73/Srimukhalingam_Temple.jpg',
+    image: 'https://farm2.staticflickr.com/1891/43893753944_613a5ef51b_b.jpg',
     description:
       'Srimukhalingam Temple is an ancient Shiva temple dedicated to Lord Shiva. It is known for its beautiful Kalinga-style architecture and historical inscriptions.',
     history:
