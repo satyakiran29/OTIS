@@ -14,7 +14,7 @@ const Darshan = () => {
             try {
                 // Fetching all Sevas for now, ideally filter by category if added
                 // Or just assume all Sevas displayed here are accessible for booking
-                const res = await axios.get('/api/sevas');
+                const res = await axios.get('/sevas');
                 setDarshans(res.data);
             } catch (err) {
                 console.error('Error fetching darshan options:', err);

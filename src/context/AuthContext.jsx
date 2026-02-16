@@ -1,4 +1,5 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
+import axios from '../utils/axiosConfig';
 
 const AuthContext = createContext();
 
@@ -14,37 +15,29 @@ export const AuthProvider = ({ children }) => {
         setLoading(false);
     }, []);
 
-    const login = async (email, password) => {
-        const response = await fetch('/api/auth/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, password }),
-        });
-        const data = await response.json();
+    // ...
 
-        if (response.ok) {
+    const login = async (email, password) => {
+        try {
+            const response = await axios.post('/auth/login', { email, password });
+            const data = response.data;
             localStorage.setItem('user', JSON.stringify(data));
             setUser(data);
             return { success: true };
-        } else {
-            return { success: false, message: data.message };
+        } catch (error) {
+            return { success: false, message: error.response?.data?.message || 'Login failed' };
         }
     };
 
     const register = async (name, email, password) => {
-        const response = await fetch('/api/auth/register', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name, email, password }),
-        });
-        const data = await response.json();
-
-        if (response.ok) {
+        try {
+            const response = await axios.post('/auth/register', { name, email, password });
+            const data = response.data;
             localStorage.setItem('user', JSON.stringify(data));
             setUser(data);
             return { success: true };
-        } else {
-            return { success: false, message: data.message };
+        } catch (error) {
+            return { success: false, message: error.response?.data?.message || 'Registration failed' };
         }
     };
 

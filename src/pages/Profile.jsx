@@ -25,10 +25,10 @@ const Profile = () => {
                 headers: { 'Authorization': `Bearer ${user.token}` }
             };
 
-            const bookingsRes = await axios.get('/api/bookings/mybookings', config);
+            const bookingsRes = await axios.get('/bookings/mybookings', config);
             setBookings(bookingsRes.data);
 
-            const donationsRes = await axios.get('/api/donations/my', config);
+            const donationsRes = await axios.get('/donations/my', config);
             setDonations(donationsRes.data);
         } catch (err) {
             console.error('Error fetching profile data:', err);

@@ -30,7 +30,7 @@ const BookingForm = ({ type, item, onClose, onSuccess }) => {
                 members: parseInt(members)
             };
 
-            await axios.post('/api/bookings', body, config);
+            await axios.post('/bookings', body, config);
             setStatus('success');
             if (onSuccess) onSuccess();
             setTimeout(() => {

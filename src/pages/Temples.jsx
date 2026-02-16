@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import SectionTitle from '../components/SectionTitle';
+import axios from '../utils/axiosConfig';
 
 const Temples = () => {
     const [temples, setTemples] = useState([]);
@@ -9,9 +10,8 @@ const Temples = () => {
     useEffect(() => {
         const fetchTemples = async () => {
             try {
-                const response = await fetch('/api/temples');
-                const data = await response.json();
-                setTemples(data);
+                const response = await axios.get('/temples');
+                setTemples(response.data);
             } catch (error) {
                 console.error('Error fetching temples:', error);
             }

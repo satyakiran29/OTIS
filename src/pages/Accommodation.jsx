@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import BookingForm from '../components/BookingForm';
 import './Accommodation.css';
+import axios from '../utils/axiosConfig';
 
 const Accommodation = () => {
     const [accommodations, setAccommodations] = useState([]);
@@ -12,7 +13,7 @@ const Accommodation = () => {
     useEffect(() => {
         const fetchAccommodations = async () => {
             try {
-                const res = await axios.get('/api/accommodations');
+                const res = await axios.get('/accommodations');
                 setAccommodations(res.data);
             } catch (err) {
                 console.error('Error fetching accommodations:', err);

@@ -17,7 +17,7 @@ const Donations = () => {
     useEffect(() => {
         const fetchTemples = async () => {
             try {
-                const res = await axios.get('/api/temples');
+                const res = await axios.get('/temples');
                 setTemples(res.data);
             } catch (err) {
                 console.error('Error fetching temples:', err);

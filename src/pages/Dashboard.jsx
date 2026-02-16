@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import TempleDisplay from '../components/TempleDisplay';
 import Bill from '../components/Bill';
 import './Dashboard.css';
+import axios from '../utils/axiosConfig';
 
 const Dashboard = () => {
     const { user } = useAuth();
@@ -37,11 +38,12 @@ const Dashboard = () => {
         fetchUsers();
     }, []);
 
+    // ...
+
     const fetchTemples = async () => {
         try {
-            const response = await fetch('/api/temples');
-            const data = await response.json();
-            setTemples(data);
+            const response = await axios.get('/temples'); // BaseURL includes /api
+            setTemples(response.data);
         } catch (error) {
             console.error('Error fetching temples:', error);
         }
@@ -49,9 +51,8 @@ const Dashboard = () => {
 
     const fetchSevas = async () => {
         try {
-            const response = await fetch('/api/sevas');
-            const data = await response.json();
-            setSevas(data);
+            const response = await axios.get('/sevas');
+            setSevas(response.data);
         } catch (error) {
             console.error('Error fetching sevas:', error);
         }
@@ -59,11 +60,10 @@ const Dashboard = () => {
 
     const fetchDonations = async () => {
         try {
-            const response = await fetch('/api/donations', {
+            const response = await axios.get('/donations', {
                 headers: { 'Authorization': `Bearer ${user.token}` }
             });
-            const data = await response.json();
-            setDonations(data);
+            setDonations(response.data);
         } catch (error) {
             console.error('Error fetching donations:', error);
         }
@@ -71,11 +71,10 @@ const Dashboard = () => {
 
     const fetchBookings = async () => {
         try {
-            const response = await fetch('/api/bookings', {
+            const response = await axios.get('/bookings', {
                 headers: { 'Authorization': `Bearer ${user.token}` }
             });
-            const data = await response.json();
-            setBookings(data);
+            setBookings(response.data);
         } catch (error) {
             console.error('Error fetching bookings:', error);
         }
@@ -83,11 +82,10 @@ const Dashboard = () => {
 
     const fetchUsers = async () => {
         try {
-            const response = await fetch('/api/users', {
+            const response = await axios.get('/users', {
                 headers: { 'Authorization': `Bearer ${user.token}` }
             });
-            const data = await response.json();
-            setUsers(data);
+            setUsers(response.data);
         } catch (error) {
             console.error('Error fetching users:', error);
         }

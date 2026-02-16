@@ -13,7 +13,7 @@ const Events = () => {
     useEffect(() => {
         const fetchEvents = async () => {
             try {
-                const res = await axios.get('/api/events');
+                const res = await axios.get('/events');
                 setEvents(res.data);
                 setLoading(false);
             } catch (err) {
