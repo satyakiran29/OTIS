@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import axios from 'axios';
+import axios from '../utils/axiosConfig';
 import BookingForm from '../components/BookingForm';
 import { useAuth } from '../context/AuthContext';
 
@@ -14,10 +14,10 @@ const TempleDetails = () => {
 
     const fetchData = async () => {
         try {
-            const templeRes = await axios.get(`/api/temples/${id}`);
+            const templeRes = await axios.get(`/temples/${id}`);
             setTemple(templeRes.data);
 
-            const sevasRes = await axios.get(`/api/sevas/temple/${id}`);
+            const sevasRes = await axios.get(`/sevas/temple/${id}`);
             setSevas(sevasRes.data);
         } catch (error) {
             console.error('Error fetching data:', error);
