@@ -58,7 +58,7 @@ const Navbar = () => {
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
-                maxWidth: '1400px',
+                maxWidth: '1200px',
                 margin: '0 auto'
             }}>
                 <div className="logo" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', zIndex: 1001 }}>

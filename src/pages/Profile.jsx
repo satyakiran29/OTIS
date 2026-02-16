@@ -54,7 +54,7 @@ const Profile = () => {
     if (!user) return <div className="profile-page">Please login to view profile.</div>;
 
     return (
-        <div className="profile-page">
+        <div className="profile-page page-container">
             <div className="profile-header glass-card">
                 <div className="profile-avatar">
                     {user.name.charAt(0).toUpperCase()}

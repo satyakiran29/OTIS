@@ -32,7 +32,7 @@ const Darshan = () => {
     };
 
     return (
-        <div className="events-page"> {/* Reusing events-page class for styling */}
+        <div className="events-page page-container"> {/* Reusing events-page class for styling */}
             <div className="events-header">
                 <h1 className="page-title">Darshan Booking</h1>
                 <p className="page-subtitle">Book your slot for a divine experience.</p>

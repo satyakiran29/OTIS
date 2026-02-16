@@ -236,7 +236,7 @@ const Dashboard = () => {
     };
 
     return (
-        <div className="dashboard-page">
+        <div className="dashboard-page page-container">
             <div className="dashboard-container">
                 <SectionTitle title="Admin Dashboard" subtitle="Manage Content" />
 

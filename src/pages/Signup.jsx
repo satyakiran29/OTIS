@@ -69,7 +69,10 @@ const Signup = () => {
                                 borderRadius: '8px',
                                 color: '#fff',
                                 outline: 'none',
+                                transition: 'border-color 0.3s'
                             }}
+                            onFocus={(e) => e.target.style.borderColor = 'var(--primary-color)'}
+                            onBlur={(e) => e.target.style.borderColor = 'rgba(255,255,255,0.1)'}
                         />
                     </div>
 
@@ -90,7 +93,10 @@ const Signup = () => {
                                 borderRadius: '8px',
                                 color: '#fff',
                                 outline: 'none',
+                                transition: 'border-color 0.3s'
                             }}
+                            onFocus={(e) => e.target.style.borderColor = 'var(--primary-color)'}
+                            onBlur={(e) => e.target.style.borderColor = 'rgba(255,255,255,0.1)'}
                         />
                     </div>
 
@@ -111,7 +117,10 @@ const Signup = () => {
                                 borderRadius: '8px',
                                 color: '#fff',
                                 outline: 'none',
+                                transition: 'border-color 0.3s'
                             }}
+                            onFocus={(e) => e.target.style.borderColor = 'var(--primary-color)'}
+                            onBlur={(e) => e.target.style.borderColor = 'rgba(255,255,255,0.1)'}
                         />
                     </div>
 
@@ -132,7 +141,10 @@ const Signup = () => {
                                 borderRadius: '8px',
                                 color: '#fff',
                                 outline: 'none',
+                                transition: 'border-color 0.3s'
                             }}
+                            onFocus={(e) => e.target.style.borderColor = 'var(--primary-color)'}
+                            onBlur={(e) => e.target.style.borderColor = 'rgba(255,255,255,0.1)'}
                         />
                     </div>
 

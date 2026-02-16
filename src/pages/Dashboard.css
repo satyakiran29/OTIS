@@ -1,7 +1,7 @@
 .dashboard-page {
     min-height: 100vh;
-    padding-top: 120px;
-    padding-bottom: 4rem;
+    min-height: 100vh;
+    /* Padding handled by page-container or specific layout */
     background-color: var(--bg-dark);
     background-image: var(--gradient-main);
 }

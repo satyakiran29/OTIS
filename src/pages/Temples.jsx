@@ -24,12 +24,7 @@ const Temples = () => {
     );
 
     return (
-        <div style={{
-            minHeight: '100vh',
-            paddingTop: '100px',
-            paddingBottom: '4rem',
-            background: 'var(--bg-dark)'
-        }}>
+        <div className="page-container">
             <div className="container" style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 1rem' }}>
                 <SectionTitle title="Explore Temples" subtitle="Sacred Destinations" />
 

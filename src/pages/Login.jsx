@@ -110,7 +110,7 @@ const Login = () => {
                         type="submit"
                         style={{
                             padding: '1rem',
-                            background: 'var(--primary-color)',
+                            background: 'linear-gradient(to right, #ff9933, #e63946)',
                             color: '#fff',
                             border: 'none',
                             borderRadius: '8px',

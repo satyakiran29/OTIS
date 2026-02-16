@@ -115,21 +115,32 @@ ul {
   -webkit-text-fill-color: transparent;
 }
 
+.page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-top: 130px;
+  /* Standard header offset */
+  padding-left: 2rem;
+  padding-right: 2rem;
+  padding-bottom: 4rem;
+  min-height: 100vh;
+}
+
 /* Responsive Styles */
-@media (max-width: 1024px) {
+@media (max-width: 1200px) {
   .section-padding {
     padding: 3rem 1.5rem;
   }
 
-  /* Navbar adjustments for tablets */
+  /* Navbar adjustments for tablets/smaller laptops */
   .desktop-menu {
     gap: 1rem;
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1100px) {
 
-  /* Navbar Mobile Mode */
+  /* Navbar Mobile Mode - Trigger earlier for better layout */
   .desktop-menu {
     display: none !important;
   }

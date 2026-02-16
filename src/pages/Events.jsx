@@ -40,7 +40,7 @@ const Events = () => {
     if (loading) return <div className="loading">Loading Events...</div>;
 
     return (
-        <div className="events-page">
+        <div className="events-page page-container">
             <h1 className="page-title">Upcoming Spiritual Events</h1>
             <div className="events-grid">
                 {events.map(event => (

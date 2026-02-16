@@ -60,7 +60,7 @@ const Donations = () => {
     };
 
     return (
-        <div className="donations-page">
+        <div className="donations-page page-container">
             <div className="donations-container">
                 <h1 className="page-title">Make a Donation</h1>
                 <p className="page-subtitle">Support your favorite temples and their activities.</p>

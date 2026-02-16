@@ -30,7 +30,7 @@ const Accommodation = () => {
     };
 
     return (
-        <div className="accommodation-page">
+        <div className="accommodation-page page-container">
             <h1 className="page-title">Stay at Our Temples</h1>
             <p className="page-subtitle">Comfortable and affordable stay for pilgrims.</p>
 
