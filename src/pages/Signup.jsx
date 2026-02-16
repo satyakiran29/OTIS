@@ -1,12 +1,32 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 const Signup = () => {
     const navigate = useNavigate();
+    const { register } = useAuth();
+    const [formData, setFormData] = React.useState({
+        name: '',
+        email: '',
+        mobile: '',
+        password: ''
+    });
+    const [error, setError] = React.useState('');
 
-    const handleSubmit = (e) => {
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        navigate('/login');
+        const { name, email, password } = formData; // Mobile unused in backend for now
+        const result = await register(name, email, password);
+
+        if (result.success) {
+            navigate('/');
+        } else {
+            setError(result.message);
+        }
     };
 
     return (
@@ -28,6 +48,7 @@ const Signup = () => {
                 <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
                     <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '2rem', marginBottom: '0.5rem' }}>Create Account</h2>
                     <p style={{ color: 'var(--text-muted)' }}>Join the Temple Info System community</p>
+                    {error && <p style={{ color: 'red', marginTop: '0.5rem' }}>{error}</p>}
                 </div>
 
                 <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
@@ -35,6 +56,9 @@ const Signup = () => {
                         <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)' }}>Full Name</label>
                         <input
                             type="text"
+                            name="name"
+                            value={formData.name}
+                            onChange={handleChange}
                             placeholder="John Doe"
                             required
                             style={{
@@ -53,6 +77,9 @@ const Signup = () => {
                         <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)' }}>Email Address</label>
                         <input
                             type="email"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleChange}
                             placeholder="john@example.com"
                             required
                             style={{
@@ -71,6 +98,9 @@ const Signup = () => {
                         <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)' }}>Mobile Number</label>
                         <input
                             type="tel"
+                            name="mobile"
+                            value={formData.mobile}
+                            onChange={handleChange}
                             placeholder="+91 98765 43210"
                             required
                             style={{
@@ -89,6 +119,9 @@ const Signup = () => {
                         <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)' }}>Password</label>
                         <input
                             type="password"
+                            name="password"
+                            value={formData.password}
+                            onChange={handleChange}
                             placeholder="Create a strong password"
                             required
                             style={{

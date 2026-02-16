@@ -1,10 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import '../index.css';
 
 const Navbar = () => {
     const [scrolled, setScrolled] = useState(false);
     const location = useLocation();
+    const navigate = useNavigate();
+    const { user, logout } = useAuth();
+
+    const handleLogout = () => {
+        logout();
+        navigate('/');
+    };
 
     // Hide specific links if not on home page, or just link back to home sections
     const isHome = location.pathname === '/';
@@ -57,7 +65,7 @@ const Navbar = () => {
 
             <div style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
                 <ul style={{ display: 'flex', gap: '2rem' }}>
-                    {['Home', 'About', 'Team', 'Project'].map((item) => (
+                    {['Home', 'About', 'Team', 'Project', 'Events', 'Temples', 'Darshan', 'Accommodation', 'Donations'].map((item) => (
                         <li key={item}>
                             {isHome ? (
                                 <a
@@ -91,26 +99,60 @@ const Navbar = () => {
                 </ul>
 
                 <div style={{ display: 'flex', gap: '1rem' }}>
-                    <Link to="/login" style={{
-                        padding: '0.5rem 1.5rem',
-                        border: '1px solid var(--primary-color)',
-                        borderRadius: '50px',
-                        color: 'var(--primary-color)',
-                        fontWeight: '500',
-                        fontSize: '0.9rem'
-                    }}>
-                        Login
-                    </Link>
-                    <Link to="/signup" style={{
-                        padding: '0.5rem 1.5rem',
-                        background: 'var(--primary-color)',
-                        borderRadius: '50px',
-                        color: '#fff',
-                        fontWeight: '500',
-                        fontSize: '0.9rem'
-                    }}>
-                        Sign Up
-                    </Link>
+                    {user ? (
+                        <>
+                            <Link to="/profile" style={{ color: 'var(--text-light)', alignSelf: 'center', textDecoration: 'none', fontWeight: '600' }}>
+                                Hello, {user.name}
+                            </Link>
+                            {user.role === 'admin' && (
+                                <Link to="/dashboard" style={{
+                                    padding: '0.5rem 1.5rem',
+                                    border: '1px solid var(--primary-color)',
+                                    borderRadius: '50px',
+                                    color: 'var(--primary-color)',
+                                    fontWeight: '500',
+                                    fontSize: '0.9rem'
+                                }}>
+                                    Dashboard
+                                </Link>
+                            )}
+                            <button onClick={handleLogout} style={{
+                                padding: '0.5rem 1.5rem',
+                                background: 'var(--primary-color)',
+                                border: 'none',
+                                borderRadius: '50px',
+                                color: '#fff',
+                                fontWeight: '500',
+                                fontSize: '0.9rem',
+                                cursor: 'pointer'
+                            }}>
+                                Logout
+                            </button>
+                        </>
+                    ) : (
+                        <>
+                            <Link to="/login" style={{
+                                padding: '0.5rem 1.5rem',
+                                border: '1px solid var(--primary-color)',
+                                borderRadius: '50px',
+                                color: 'var(--primary-color)',
+                                fontWeight: '500',
+                                fontSize: '0.9rem'
+                            }}>
+                                Login
+                            </Link>
+                            <Link to="/signup" style={{
+                                padding: '0.5rem 1.5rem',
+                                background: 'var(--primary-color)',
+                                borderRadius: '50px',
+                                color: '#fff',
+                                fontWeight: '500',
+                                fontSize: '0.9rem'
+                            }}>
+                                Sign Up
+                            </Link>
+                        </>
+                    )}
                 </div>
             </div>
         </nav>

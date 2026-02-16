@@ -1,0 +1,97 @@
+.booking-form-container {
+    text-align: center;
+}
+
+.booking-form-container h2 {
+    color: #d35400;
+    margin-bottom: 0.5rem;
+}
+
+.item-name {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 1rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #555;
+    font-weight: 500;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 1rem;
+}
+
+.booking-summary {
+    background: #fdf2e9;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    text-align: left;
+}
+
+.booking-summary p {
+    margin: 0.5rem 0;
+    color: #d35400;
+    font-weight: 600;
+}
+
+.confirm-btn {
+    width: 100%;
+    padding: 12px;
+    background: #27ae60;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.confirm-btn:hover {
+    background: #2ecc71;
+}
+
+.confirm-btn:disabled {
+    background: #95a5a6;
+    cursor: not-allowed;
+}
+
+.booking-success {
+    text-align: center;
+    padding: 2rem 0;
+}
+
+.booking-success i {
+    font-size: 4rem;
+    color: #27ae60;
+    margin-bottom: 1rem;
+}
+
+.booking-success h3 {
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+.error-message {
+    background: #ffe6e6;
+    color: #c0392b;
+    padding: 0.8rem;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+}

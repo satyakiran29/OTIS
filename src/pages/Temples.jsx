@@ -1,10 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import SectionTitle from '../components/SectionTitle';
-import temples from '../data/temples';
 
 const Temples = () => {
+    const [temples, setTemples] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
+
+    useEffect(() => {
+        const fetchTemples = async () => {
+            try {
+                const response = await fetch('/api/temples');
+                const data = await response.json();
+                setTemples(data);
+            } catch (error) {
+                console.error('Error fetching temples:', error);
+            }
+        };
+        fetchTemples();
+    }, []);
 
     const filteredTemples = temples.filter(temple =>
         temple.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -69,7 +82,7 @@ const Temples = () => {
                     gap: '2rem'
                 }}>
                     {filteredTemples.map(temple => (
-                        <div key={temple.id} className="glass-card" style={{
+                        <div key={temple._id} className="glass-card" style={{
                             overflow: 'hidden',
                             padding: '1rem',
                             boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
@@ -84,7 +97,7 @@ const Temples = () => {
                                 marginBottom: '1rem'
                             }}>
                                 <img
-                                    src={temple.image}
+                                    src={Array.isArray(temple.images) && temple.images.length > 0 ? temple.images[0] : temple.image}
                                     alt={temple.name}
                                     style={{
                                         width: '100%',
@@ -105,7 +118,7 @@ const Temples = () => {
                                 {temple.name}
                             </h3>
                             <div style={{ marginBottom: '1rem' }}>
-                                <Link to={`/temples/${temple.id}`} style={{
+                                <Link to={`/temples/${temple._id}`} style={{
                                     border: 'none',
                                     background: 'transparent',
                                     color: '#64748b',
@@ -117,7 +130,7 @@ const Temples = () => {
                                     View
                                 </Link>
                             </div>
-                            <Link to={`/temples/${temple.id}`} style={{
+                            <Link to={`/temples/${temple._id}`} style={{
                                 width: '100%',
                                 padding: '0.6rem',
                                 background: '#3b82f6',

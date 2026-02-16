@@ -1,14 +1,34 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import SectionTitle from '../components/SectionTitle';
 
 const Login = () => {
     const navigate = useNavigate();
+    const { login } = useAuth();
+    const [formData, setFormData] = React.useState({
+        email: '',
+        password: ''
+    });
+    const [error, setError] = React.useState('');
 
-    const handleSubmit = (e) => {
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Simulate login
-        navigate('/');
+        const { email, password } = formData;
+        const result = await login(email, password);
+
+        if (result.success) {
+            // Check role is handled in AuthProvider/App by user state, 
+            // but we can look at the returned/stored user to decide navigation if needed immediately.
+            // For now, simple redirect to home. Admin can go to dashboard via link.
+            navigate('/');
+        } else {
+            setError(result.message);
+        }
     };
 
     return (
@@ -29,6 +49,7 @@ const Login = () => {
                 <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
                     <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '2rem', marginBottom: '0.5rem' }}>Welcome Back</h2>
                     <p style={{ color: 'var(--text-muted)' }}>Sign in to continue to Temple Info System</p>
+                    {error && <p style={{ color: 'red', marginTop: '0.5rem' }}>{error}</p>}
                 </div>
 
                 <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
@@ -36,6 +57,9 @@ const Login = () => {
                         <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)' }}>Email Address</label>
                         <input
                             type="email"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleChange}
                             placeholder="admin@temple.com"
                             style={{
                                 width: '100%',
@@ -56,6 +80,9 @@ const Login = () => {
                         <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)' }}>Password</label>
                         <input
                             type="password"
+                            name="password"
+                            value={formData.password}
+                            onChange={handleChange}
                             placeholder="••••••••"
                             style={{
                                 width: '100%',

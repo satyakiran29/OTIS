@@ -1,0 +1,139 @@
+.bill-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.bill-container {
+    background: white;
+    padding: 2rem;
+    width: 100%;
+    max-width: 600px;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.bill-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 1rem;
+}
+
+.bill-header h2 {
+    color: #e67e22;
+    margin: 0;
+}
+
+.bill-header p {
+    color: #777;
+    margin: 0.5rem 0 0;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 0.8rem;
+}
+
+.bill-details {
+    margin-bottom: 2rem;
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+}
+
+.bill-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 2rem;
+}
+
+.bill-table th {
+    background: #f8f9fa;
+    padding: 10px;
+    text-align: left;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.bill-table td {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.bill-total {
+    text-align: right;
+    margin-bottom: 2rem;
+    font-size: 1.2rem;
+    color: #2c3e50;
+    border-top: 2px solid #eee;
+    padding-top: 1rem;
+}
+
+.bill-footer {
+    text-align: center;
+    font-size: 0.8rem;
+    color: #999;
+    margin-bottom: 2rem;
+}
+
+.bill-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.print-btn {
+    background: #27ae60;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.close-btn {
+    background: #e74c3c;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+@media print {
+    body * {
+        visibility: hidden;
+    }
+
+    .bill-container,
+    .bill-container * {
+        visibility: visible;
+    }
+
+    .bill-overlay {
+        position: absolute;
+        left: 0;
+        top: 0;
+        background: white;
+    }
+
+    .bill-container {
+        box-shadow: none;
+        width: 100%;
+        max-width: none;
+    }
+
+    .bill-actions {
+        display: none;
+    }
+}
