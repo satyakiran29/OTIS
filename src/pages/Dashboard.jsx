@@ -109,32 +109,22 @@ const Dashboard = () => {
             images: templeFormData.images.split(',').map(url => url.trim()).filter(url => url !== '')
         };
 
-        const url = editingId ? `/api/temples/${editingId}` : '/api/temples';
-        const method = editingId ? 'PUT' : 'POST';
+        const url = editingId ? `/temples/${editingId}` : '/temples';
+        const method = editingId ? 'put' : 'post';
 
         try {
-            const response = await fetch(url, {
-                method: method,
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${user.token}`
-                },
-                body: JSON.stringify(templeData)
+            const response = await axios[method](url, templeData, {
+                headers: { 'Authorization': `Bearer ${user.token}` }
             });
 
-            if (response.ok) {
-                setMessage(editingId ? 'Temple updated successfully!' : 'Temple added successfully!');
-                setStatus('success');
-                setTempleFormData({ name: '', location: '', description: '', history: '', images: '' });
-                setEditingId(null);
-                fetchTemples();
-                setTimeout(() => { setMessage(''); setStatus(''); }, 3000);
-            } else {
-                setMessage('Error saving temple.');
-                setStatus('error');
-            }
+            setMessage(editingId ? 'Temple updated successfully!' : 'Temple added successfully!');
+            setStatus('success');
+            setTempleFormData({ name: '', location: '', description: '', history: '', images: '' });
+            setEditingId(null);
+            fetchTemples();
+            setTimeout(() => { setMessage(''); setStatus(''); }, 3000);
         } catch (error) {
-            setMessage('Network error.');
+            setMessage('Error saving temple.');
             setStatus('error');
         }
     };
@@ -144,32 +134,22 @@ const Dashboard = () => {
         setMessage('Submitting...');
         setStatus('loading');
 
-        const url = editingId ? `/api/sevas/${editingId}` : '/api/sevas';
-        const method = editingId ? 'PUT' : 'POST';
+        const url = editingId ? `/sevas/${editingId}` : '/sevas';
+        const method = editingId ? 'put' : 'post';
 
         try {
-            const response = await fetch(url, {
-                method: method,
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${user.token}`
-                },
-                body: JSON.stringify(sevaFormData)
+            const response = await axios[method](url, sevaFormData, {
+                headers: { 'Authorization': `Bearer ${user.token}` }
             });
 
-            if (response.ok) {
-                setMessage(editingId ? 'Seva updated successfully!' : 'Seva added successfully!');
-                setStatus('success');
-                setSevaFormData({ name: '', description: '', price: '', duration: '', temple: '', ticketLimit: '' });
-                setEditingId(null);
-                fetchSevas();
-                setTimeout(() => { setMessage(''); setStatus(''); }, 3000);
-            } else {
-                setMessage('Error saving seva.');
-                setStatus('error');
-            }
+            setMessage(editingId ? 'Seva updated successfully!' : 'Seva added successfully!');
+            setStatus('success');
+            setSevaFormData({ name: '', description: '', price: '', duration: '', temple: '', ticketLimit: '' });
+            setEditingId(null);
+            fetchSevas();
+            setTimeout(() => { setMessage(''); setStatus(''); }, 3000);
         } catch (error) {
-            setMessage('Network error.');
+            setMessage('Error saving seva.');
             setStatus('error');
         }
     };
@@ -202,27 +182,21 @@ const Dashboard = () => {
     const handleDelete = async (id, type) => {
         if (!window.confirm(`Are you sure you want to delete this ${type}?`)) return;
 
-        const endpoint = type === 'temple' ? `/api/temples/${id}` : `/api/sevas/${id}`;
+        const endpoint = type === 'temple' ? `/temples/${id}` : `/sevas/${id}`;
 
         try {
-            const response = await fetch(endpoint, {
-                method: 'DELETE',
+            await axios.delete(endpoint, {
                 headers: {
                     'Authorization': `Bearer ${user.token}`
                 }
             });
 
-            if (response.ok) {
-                setMessage(`${type.charAt(0).toUpperCase() + type.slice(1)} deleted successfully.`);
-                setStatus('success');
-                if (type === 'temple') fetchTemples(); else fetchSevas();
-                setTimeout(() => { setMessage(''); setStatus(''); }, 3000);
-            } else {
-                setMessage(`Error deleting ${type}.`);
-                setStatus('error');
-            }
+            setMessage(`${type.charAt(0).toUpperCase() + type.slice(1)} deleted successfully.`);
+            setStatus('success');
+            if (type === 'temple') fetchTemples(); else fetchSevas();
+            setTimeout(() => { setMessage(''); setStatus(''); }, 3000);
         } catch (error) {
-            setMessage('Network error.');
+            setMessage(`Error deleting ${type}.`);
             setStatus('error');
         }
     };

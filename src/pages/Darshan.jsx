@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import axios from '../utils/axiosConfig';
 import { useAuth } from '../context/AuthContext';
 import BookingForm from '../components/BookingForm';
 import './Events.css'; // Reusing Events CSS as it's similar grid
