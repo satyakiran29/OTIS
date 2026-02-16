@@ -114,3 +114,36 @@ ul {
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+
+/* Responsive Styles */
+@media (max-width: 1024px) {
+  .section-padding {
+    padding: 3rem 1.5rem;
+  }
+
+  /* Navbar adjustments for tablets */
+  .desktop-menu {
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+
+  /* Navbar Mobile Mode */
+  .desktop-menu {
+    display: none !important;
+  }
+
+  .mobile-menu-btn {
+    display: block !important;
+  }
+
+  .section-padding {
+    padding: 2.5rem 1rem;
+  }
+
+  h1 {
+    font-size: 2rem !important;
+    /* Override inline styles if needed */
+  }
+}
