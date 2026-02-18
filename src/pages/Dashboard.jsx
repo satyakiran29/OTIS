@@ -396,7 +396,7 @@ const Dashboard = () => {
                     <h3 className="form-title" style={{ textAlign: 'left', marginBottom: '1.5rem' }}>
                         {activeTab === 'temples' ? 'Existing Temples' : (activeTab === 'sevas' ? 'Existing Sevas' : (activeTab === 'bookings' ? 'All Bookings' : (activeTab === 'users' ? 'Registered Users' : 'All Donations')))}
                     </h3>
-                    <div className="glass-card" style={{ padding: '0', overflow: 'hidden' }}>
+                    <div className="glass-card" style={{ padding: '0', overflowX: 'auto' }}>
                         {activeTab === 'temples' ? (
                             temples.length > 0 ? (
                                 <table className="admin-table">

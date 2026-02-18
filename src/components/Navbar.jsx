@@ -205,20 +205,22 @@ const Navbar = () => {
                 left: 0,
                 width: '100%',
                 height: '100vh',
-                background: '#0f172a',
+                background: 'rgba(15, 23, 42, 0.98)',
+                backdropFilter: 'blur(15px)',
                 padding: '5rem 2rem 2rem',
                 transform: mobileMenuOpen ? 'translateX(0)' : 'translateX(100%)',
-                transition: 'transform 0.3s ease-in-out',
-                overflowY: 'auto'
+                transition: 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                overflowY: 'auto',
+                zIndex: 999
             }}>
-                <ul style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', listStyle: 'none', padding: 0, marginBottom: '2rem' }}>
+                <ul style={{ display: 'flex', flexDirection: 'column', gap: '2rem', listStyle: 'none', padding: 0, marginBottom: '3rem', textAlign: 'center' }}>
                     {navLinks.map((item) => (
-                        <li key={item} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '0.5rem' }}>
+                        <li key={item} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '0.8rem' }}>
                             {isHome ? (
                                 <a
                                     href={`#${item.toLowerCase()}`}
                                     onClick={() => setMobileMenuOpen(false)}
-                                    style={{ color: 'var(--text-light)', fontSize: '1.2rem', fontWeight: '500', textDecoration: 'none', display: 'block' }}
+                                    style={{ color: 'var(--text-light)', fontSize: '1.5rem', fontWeight: '500', textDecoration: 'none', display: 'block' }}
                                 >
                                     {item}
                                 </a>
@@ -226,7 +228,7 @@ const Navbar = () => {
                                 <Link
                                     to={`/#${item.toLowerCase()}`}
                                     onClick={() => setMobileMenuOpen(false)}
-                                    style={{ color: 'var(--text-light)', fontSize: '1.2rem', fontWeight: '500', textDecoration: 'none', display: 'block' }}
+                                    style={{ color: 'var(--text-light)', fontSize: '1.5rem', fontWeight: '500', textDecoration: 'none', display: 'block' }}
                                 >
                                     {item}
                                 </Link>
@@ -235,40 +237,43 @@ const Navbar = () => {
                     ))}
                 </ul>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                     {user ? (
                         <>
-                            <div style={{ color: 'var(--text-muted)', marginBottom: '0.5rem' }}>Signed in as {user.name}</div>
+                            <div style={{ color: 'var(--text-muted)', marginBottom: '0.5rem', textAlign: 'center' }}>Signed in as {user.name}</div>
                             <Link to="/profile" onClick={() => setMobileMenuOpen(false)} style={{
-                                padding: '0.8rem',
+                                padding: '1rem',
                                 background: 'rgba(255,255,255,0.05)',
-                                borderRadius: '8px',
+                                borderRadius: '12px',
                                 color: 'var(--text-light)',
                                 textAlign: 'center',
-                                textDecoration: 'none'
+                                textDecoration: 'none',
+                                fontSize: '1.1rem'
                             }}>
                                 My Profile
                             </Link>
                             {user.role === 'admin' && (
                                 <Link to="/dashboard" onClick={() => setMobileMenuOpen(false)} style={{
-                                    padding: '0.8rem',
+                                    padding: '1rem',
                                     border: '1px solid var(--primary-color)',
-                                    borderRadius: '8px',
+                                    borderRadius: '12px',
                                     color: 'var(--primary-color)',
                                     textAlign: 'center',
-                                    textDecoration: 'none'
+                                    textDecoration: 'none',
+                                    fontSize: '1.1rem'
                                 }}>
                                     Dashboard
                                 </Link>
                             )}
                             <button onClick={handleLogout} style={{
-                                padding: '0.8rem',
+                                padding: '1rem',
                                 background: 'var(--primary-color)',
                                 border: 'none',
-                                borderRadius: '8px',
+                                borderRadius: '12px',
                                 color: '#fff',
                                 fontWeight: '600',
-                                cursor: 'pointer'
+                                cursor: 'pointer',
+                                fontSize: '1.1rem'
                             }}>
                                 Logout
                             </button>
@@ -276,24 +281,26 @@ const Navbar = () => {
                     ) : (
                         <>
                             <Link to="/login" onClick={() => setMobileMenuOpen(false)} style={{
-                                padding: '0.8rem',
+                                padding: '1rem',
                                 border: '1px solid var(--primary-color)',
-                                borderRadius: '8px',
+                                borderRadius: '12px',
                                 color: 'var(--primary-color)',
                                 textAlign: 'center',
                                 fontWeight: '600',
-                                textDecoration: 'none'
+                                textDecoration: 'none',
+                                fontSize: '1.1rem'
                             }}>
                                 Login
                             </Link>
                             <Link to="/signup" onClick={() => setMobileMenuOpen(false)} style={{
-                                padding: '0.8rem',
+                                padding: '1rem',
                                 background: 'var(--primary-color)',
-                                borderRadius: '8px',
+                                borderRadius: '12px',
                                 color: '#fff',
                                 textAlign: 'center',
                                 fontWeight: '600',
-                                textDecoration: 'none'
+                                textDecoration: 'none',
+                                fontSize: '1.1rem'
                             }}>
                                 Sign Up
                             </Link>
