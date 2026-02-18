@@ -1,5 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 import { AuthProvider, useAuth } from './context/AuthContext';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
@@ -65,6 +67,8 @@ function App() {
             <Route path="/accommodation" element={<Accommodation />} />
             <Route path="/dashboard" element={<ProtectedRoute adminOnly={true}><Dashboard /></ProtectedRoute>} />
           </Routes>
+          <Analytics />
+          <SpeedInsights />
         </Layout>
       </AuthProvider>
     </BrowserRouter>
