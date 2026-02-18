@@ -37,7 +37,7 @@ const Navbar = () => {
         setMobileMenuOpen(false);
     }, [location]);
 
-    const navLinks = ['Home', 'About', 'Team', 'Project', 'Events', 'Temples', 'Darshan', 'Accommodation', 'Donations'];
+    const navLinks = ['Home', 'About', 'Team', 'Project', 'Events'];
 
     return (
         <nav

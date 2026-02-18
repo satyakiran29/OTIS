@@ -12,15 +12,53 @@ const Signup = () => {
         password: ''
     });
     const [error, setError] = React.useState('');
+    const [passwordRequirements, setPasswordRequirements] = React.useState({
+        length: false,
+        upper: false,
+        lower: false,
+        number: false,
+        special: false
+    });
+
+    const validatePassword = (pass) => {
+        setPasswordRequirements({
+            length: pass.length >= 8,
+            upper: /[A-Z]/.test(pass),
+            lower: /[a-z]/.test(pass),
+            number: /[0-9]/.test(pass),
+            special: /[@#$%&*!?_-]/.test(pass)
+        });
+    };
+
+    const handlePasswordChange = (e) => {
+        const pass = e.target.value;
+        setFormData(prev => ({ ...prev, password: pass }));
+        validatePassword(pass);
+    };
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
+    const isPasswordValid = Object.values(passwordRequirements).every(Boolean);
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const { name, email, password } = formData; // Mobile unused in backend for now
-        const result = await register(name, email, password);
+
+
+        if (!isPasswordValid) {
+            setError('Please ensure password meets all requirements.');
+            return;
+        }
+
+        const { name, email, mobile, password } = formData; // Mobile unused in backend for now
+
+        if (mobile.length !== 10) {
+            setError('Mobile number must be exactly 10 digits.');
+            return;
+        }
+
+        const result = await register(name, email, password, mobile);
 
         if (result.success) {
             navigate('/');
@@ -130,7 +168,7 @@ const Signup = () => {
                             type="password"
                             name="password"
                             value={formData.password}
-                            onChange={handleChange}
+                            onChange={handlePasswordChange}
                             placeholder="Create a strong password"
                             required
                             style={{
@@ -146,6 +184,28 @@ const Signup = () => {
                             onFocus={(e) => e.target.style.borderColor = 'var(--primary-color)'}
                             onBlur={(e) => e.target.style.borderColor = 'rgba(255,255,255,0.1)'}
                         />
+
+                        {/* Password Requirements List */}
+                        <div style={{ marginTop: '0.5rem', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+                            <p style={{ marginBottom: '0.25rem' }}>Password must contain:</p>
+                            <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+                                <li style={{ color: passwordRequirements.length ? '#4ade80' : 'inherit' }}>
+                                    {passwordRequirements.length ? '✓' : '○'} At least 8 characters
+                                </li>
+                                <li style={{ color: passwordRequirements.upper ? '#4ade80' : 'inherit' }}>
+                                    {passwordRequirements.upper ? '✓' : '○'} At least 1 uppercase letter
+                                </li>
+                                <li style={{ color: passwordRequirements.lower ? '#4ade80' : 'inherit' }}>
+                                    {passwordRequirements.lower ? '✓' : '○'} At least 1 lowercase letter
+                                </li>
+                                <li style={{ color: passwordRequirements.number ? '#4ade80' : 'inherit' }}>
+                                    {passwordRequirements.number ? '✓' : '○'} At least 1 number
+                                </li>
+                                <li style={{ color: passwordRequirements.special ? '#4ade80' : 'inherit' }}>
+                                    {passwordRequirements.special ? '✓' : '○'} At least 1 special char (@ # $ % & * ! ? _ -)
+                                </li>
+                            </ul>
+                        </div>
                     </div>
 
                     <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'start', fontSize: '0.9rem', color: 'var(--text-muted)' }}>
@@ -153,20 +213,24 @@ const Signup = () => {
                         <span>I agree to the <a href="#" style={{ color: 'var(--primary-color)' }}>Terms of Service</a> and <a href="#" style={{ color: 'var(--primary-color)' }}>Privacy Policy</a></span>
                     </div>
 
+
+
                     <button
                         type="submit"
+                        disabled={!isPasswordValid}
                         style={{
                             padding: '1rem',
-                            background: 'linear-gradient(to right, #ff9933, #e63946)',
-                            color: '#fff',
+                            background: isPasswordValid ? 'linear-gradient(to right, #ff9933, #e63946)' : '#666',
+                            color: isPasswordValid ? '#fff' : '#ccc',
                             border: 'none',
                             borderRadius: '8px',
                             fontWeight: '600',
                             fontSize: '1rem',
-                            cursor: 'pointer',
+                            cursor: isPasswordValid ? 'pointer' : 'not-allowed',
                             marginTop: '0.5rem',
                             transition: 'transform 0.2s',
-                            boxShadow: 'var(--shadow-glow)'
+                            boxShadow: isPasswordValid ? 'var(--shadow-glow)' : 'none',
+                            opacity: isPasswordValid ? 1 : 0.7
                         }}
                         onMouseEnter={(e) => e.target.style.transform = 'scale(1.02)'}
                         onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}

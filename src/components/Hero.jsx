@@ -45,20 +45,7 @@ const Hero = () => {
             }}></div>
 
             <div style={{ zIndex: 1, maxWidth: '800px' }} className="animate-fade-in">
-                <span style={{
-                    display: 'inline-block',
-                    padding: '0.5rem 1rem',
-                    borderRadius: '50px',
-                    background: 'rgba(255, 153, 51, 0.1)',
-                    border: '1px solid rgba(255, 153, 51, 0.3)',
-                    color: 'var(--primary-color)',
-                    fontSize: '0.9rem',
-                    letterSpacing: '2px',
-                    textTransform: 'uppercase',
-                    marginBottom: '1.5rem'
-                }}>
-                    Sacred Heritage • Digital Future
-                </span>
+
 
                 <h1 style={{
                     fontSize: 'clamp(2.5rem, 5vw, 4.5rem)',
@@ -108,7 +95,7 @@ const Hero = () => {
                         textDecoration: 'none',
                         display: 'inline-block'
                     }}>
-                        Get Started
+                        View Temples
                     </Link>
                 </div>
             </div>
