@@ -1,297 +1,288 @@
+/* Bill.css */
+
 .bill-overlay {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(0, 0, 0, 0.7);
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1000;
-    backdrop-filter: blur(5px);
+    z-index: 2000;
+    backdrop-filter: blur(4px);
+    animation: fadeIn 0.3s ease;
+    padding: 1rem;
 }
 
 .bill-container {
     background: #fff;
-    padding: 2.5rem;
     width: 100%;
-    max-width: 500px;
-    border-radius: 2px;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+    max-width: 650px;
+    border-radius: 8px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
     position: relative;
-    color: #333;
-    font-family: 'Courier New', Courier, monospace;
-    /* Receipt look */
+    color: #1f2937;
+    font-family: var(--font-main, sans-serif);
+    padding: 2rem;
+    animation: slideUp 0.3s ease;
+    max-height: 90vh;
+    overflow-y: auto;
 }
 
-/* Zigzag edge effect (optional, keeping simple for now) */
-.bill-container::before {
-    content: '';
+@keyframes slideUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.bill-close-btn {
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 5px;
-    background: linear-gradient(135deg, #fff 5px, transparent 5px) 0 0,
-        linear-gradient(225deg, #fff 5px, transparent 5px) 0 0;
-    background-size: 10px 10px;
-    background-color: transparent;
-    transform: translateY(-5px);
-    /* To visually create a jagged top edge, we'd need more complex CSS or an image. 
-       For now, just a clean paper look. */
-    display: none;
+    top: 10px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 2rem;
+    color: #9ca3af;
+    cursor: pointer;
+    line-height: 1;
+    z-index: 10;
+    transition: color 0.2s;
+}
+
+.bill-close-btn:hover {
+    color: #ef4444;
 }
 
 .bill-header {
     text-align: center;
     margin-bottom: 2rem;
-    border-bottom: 2px dashed #ccc;
-    padding-bottom: 1.5rem;
 }
 
 .bill-header h2 {
-    color: #000;
+    color: #ea580c;
+    /* Orange-600 */
     margin: 0;
-    font-size: 1.8rem;
-    font-weight: bold;
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+.sub-header {
+    color: #6b7280;
+    font-size: 0.875rem;
+    margin: 0;
     text-transform: uppercase;
     letter-spacing: 1px;
 }
 
-.bill-header p {
-    color: #555;
-    margin: 0.5rem 0 0;
-    text-transform: uppercase;
-    letter-spacing: 2px;
+.receipt-badge {
+    display: inline-block;
+    background: #f3f4f6;
+    color: #374151;
     font-size: 0.75rem;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-top: 0.5rem;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    border: 1px solid #e5e7eb;
 }
 
-.bill-details {
-    margin-bottom: 1.5rem;
+.bill-details-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background: #f9fafb;
+    border-radius: 6px;
+    border: 1px solid #f3f4f6;
 }
 
-.detail-row {
+.detail-item {
     display: flex;
-    justify-content: space-between;
-    margin-bottom: 0.8rem;
-    font-size: 0.9rem;
+    flex-direction: column;
 }
 
-.detail-row strong {
-    color: #555;
+.detail-item label {
+    font-size: 0.75rem;
+    color: #9ca3af;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+}
+
+.detail-item span {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #111827;
+    word-break: break-word;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.font-bold {
+    font-weight: 700;
+}
+
+.table-container {
+    margin-bottom: 2rem;
 }
 
 .bill-table {
     width: 100%;
     border-collapse: collapse;
-    margin-bottom: 1.5rem;
     font-size: 0.9rem;
 }
 
 .bill-table th {
-    border-top: 1px solid #000;
-    border-bottom: 1px solid #000;
-    padding: 10px 5px;
     text-align: left;
-    font-weight: bold;
-    color: #000;
+    color: #6b7280;
+    font-weight: 500;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid #e5e7eb;
+    font-size: 0.8rem;
+    text-transform: uppercase;
 }
 
 .bill-table td {
-    padding: 10px 5px;
-    border-bottom: 1px dashed #eee;
+    padding: 1rem 0;
+    border-bottom: 1px solid #f3f4f6;
+    vertical-align: top;
 }
 
-.bill-total {
-    text-align: right;
+.item-name {
+    font-weight: 500;
+    color: #111827;
+}
+
+.item-date {
+    font-size: 0.8rem;
+    color: #9ca3af;
+    margin-top: 2px;
+}
+
+.bill-summary {
+    display: flex;
+    justify-content: flex-end;
     margin-bottom: 2rem;
-    font-size: 1.4rem;
-    color: #000;
-    border-top: 2px solid #000;
     padding-top: 1rem;
-    font-weight: bold;
+}
+
+.total-row {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.total-row span {
+    font-size: 1rem;
+    color: #374151;
+}
+
+.total-row .amount {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #ea580c;
 }
 
 .bill-footer {
     text-align: center;
-    font-size: 0.75rem;
-    color: #777;
-    margin-bottom: 2rem;
-    border-top: 1px dashed #ccc;
-    padding-top: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: #6b7280;
+}
+
+.bill-footer p {
+    margin: 0.25rem 0;
+    font-size: 0.9rem;
+}
+
+.small-text {
+    font-size: 0.75rem !important;
+    color: #9ca3af;
 }
 
 .bill-actions {
     display: flex;
-    justify-content: center;
     gap: 1rem;
+    justify-content: center;
 }
 
 .print-btn,
-.close-btn {
-    padding: 10px 25px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-family: 'Inter', sans-serif;
-    /* Back to sans-serif for buttons */
-    font-weight: 500;
-    transition: transform 0.2s;
-}
-
-.print-btn {
-    background: #000;
-    color: white;
-    border: none;
-}
-
-.close-btn {
-    background: transparent;
-    color: #e74c3c;
-    border: 1px solid #e74c3c;
-}
-
-.print-btn:hover,
-.close-btn:hover {
-    transform: translateY(-2px);
-}
-
-@media print {
-    body * {
-        visibility: hidden;
-    }
-
-    .bill-container,
-    .bill-container * {
-        visibility: visible;
-    }
-
-    .bill-overlay {
-        position: absolute;
-        left: 0;
-        top: 0;
-        background: white;
-    }
-
-    .bill-container {
-        box-shadow: none;
-        width: 100%;
-        max-width: none;
-        padding: 0;
-        font-family: 'Courier New', Courier, monospace;
-    }
-
-    .bill-actions {
-        display: none;
-    }
-}
-
-.bill-container {
-    background: rgb(0, 0, 0);
-    padding: 2rem;
-    width: 100%;
-    max-width: 600px;
-    border-radius: 10px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-}
-
-.bill-header {
-    text-align: center;
-    margin-bottom: 2rem;
-    border-bottom: 2px solid #eee;
-    padding-bottom: 1rem;
-}
-
-.bill-header h2 {
-    color: #e67e22;
-    margin: 0;
-}
-
-.bill-header p {
-    color: #777;
-    margin: 0.5rem 0 0;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    font-size: 0.8rem;
-}
-
-.bill-details {
-    margin-bottom: 2rem;
-}
-
-.detail-row {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 0.5rem;
-    font-size: 0.95rem;
-}
-
-.bill-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 2rem;
-}
-
-.bill-table th {
-    background: #f8f9fa;
-    padding: 10px;
-    text-align: left;
+.close-action-btn {
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
     font-size: 0.9rem;
-    color: #555;
-}
-
-.bill-table td {
-    padding: 10px;
-    border-bottom: 1px solid #eee;
-}
-
-.bill-total {
-    text-align: right;
-    margin-bottom: 2rem;
-    font-size: 1.2rem;
-    color: #2c3e50;
-    border-top: 2px solid #eee;
-    padding-top: 1rem;
-}
-
-.bill-footer {
-    text-align: center;
-    font-size: 0.8rem;
-    color: #999;
-    margin-bottom: 2rem;
-}
-
-.bill-actions {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
 }
 
 .print-btn {
-    background: #27ae60;
+    background: #1f2937;
     color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
+    flex: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
 }
 
-.close-btn {
-    background: #e74c3c;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
+.print-btn:hover {
+    background: #111827;
 }
 
+.close-action-btn {
+    background: #f3f4f6;
+    color: #374151;
+    flex: 1;
+}
+
+.close-action-btn:hover {
+    background: #e5e7eb;
+}
+
+/* Print Styles */
 @media print {
+    .bill-overlay {
+        position: absolute;
+        background: white;
+        padding: 0;
+    }
+
+    .bill-container {
+        box-shadow: none;
+        max-width: none;
+        width: 100%;
+        padding: 0;
+    }
+
+    .bill-close-btn,
+    .bill-actions {
+        display: none;
+    }
+
     body * {
         visibility: hidden;
     }
 
-    .bill-container,
-    .bill-container * {
+    .bill-overlay,
+    .bill-overlay * {
         visibility: visible;
     }
 
@@ -299,16 +290,5 @@
         position: absolute;
         left: 0;
         top: 0;
-        background: white;
-    }
-
-    .bill-container {
-        box-shadow: none;
-        width: 100%;
-        max-width: none;
-    }
-
-    .bill-actions {
-        display: none;
     }
 }
