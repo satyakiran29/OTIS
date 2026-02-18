@@ -18,7 +18,7 @@ const Bill = ({ booking, onClose }) => {
 
                 <div className="bill-header">
                     <h2>OTIS</h2>
-                    <p className="sub-header">Temple Management System</p>
+                    <p className="sub-header">Online Temple Information Management System</p>
                     <div className="receipt-badge">Official Receipt</div>
                 </div>
 
