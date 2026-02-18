@@ -1,5 +1,5 @@
 .profile-page {
-    padding: 2rem;
+    /* Padding handled by page-container */
     max-width: 1000px;
     margin: 0 auto;
     min-height: 80vh;
