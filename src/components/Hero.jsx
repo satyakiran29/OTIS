@@ -14,37 +14,26 @@ const Hero = () => {
                 textAlign: 'center',
                 padding: '0 2rem',
                 position: 'relative',
-                background: 'radial-gradient(circle at top, #2e1065 0%, #0f172a 60%)',
+                backgroundImage: 'url("https://media.istockphoto.com/id/941308078/photo/worship-of-indian-god-godess-idol-arati-with-pancha-pradip.jpg?s=612x612&w=0&k=20&c=e2BTs5qN6fP4gCZjKyjkBqrtoxeoBirlesWYjoDy4ZE=")',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
                 overflow: 'hidden'
             }}
         >
+            {/* Dark Overlay for readability */}
+            <div style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                background: 'rgba(0, 0, 0, 0.6)',
+                zIndex: 0
+            }}></div>
             {/* Decorative Circles */}
-            <div style={{
-                position: 'absolute',
-                top: '20%',
-                left: '20%',
-                width: '300px',
-                height: '300px',
-                background: 'var(--primary-color)',
-                filter: 'blur(150px)',
-                opacity: 0.2,
-                borderRadius: '50%',
-                zIndex: 0
-            }}></div>
-            <div style={{
-                position: 'absolute',
-                bottom: '20%',
-                right: '20%',
-                width: '400px',
-                height: '400px',
-                background: 'var(--accent-color)',
-                filter: 'blur(150px)',
-                opacity: 0.1,
-                borderRadius: '50%',
-                zIndex: 0
-            }}></div>
 
-            <div style={{ zIndex: 1, maxWidth: '800px' }} className="animate-fade-in">
+
+            <div style={{ zIndex: 2, maxWidth: '800px', position: 'relative' }} className="animate-fade-in">
 
 
                 <h1 style={{

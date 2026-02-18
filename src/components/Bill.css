@@ -4,15 +4,190 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.7);
+    background: rgba(0, 0, 0, 0.8);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 1000;
+    backdrop-filter: blur(5px);
 }
 
 .bill-container {
-    background: white;
+    background: #fff;
+    padding: 2.5rem;
+    width: 100%;
+    max-width: 500px;
+    border-radius: 2px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+    position: relative;
+    color: #333;
+    font-family: 'Courier New', Courier, monospace;
+    /* Receipt look */
+}
+
+/* Zigzag edge effect (optional, keeping simple for now) */
+.bill-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: linear-gradient(135deg, #fff 5px, transparent 5px) 0 0,
+        linear-gradient(225deg, #fff 5px, transparent 5px) 0 0;
+    background-size: 10px 10px;
+    background-color: transparent;
+    transform: translateY(-5px);
+    /* To visually create a jagged top edge, we'd need more complex CSS or an image. 
+       For now, just a clean paper look. */
+    display: none;
+}
+
+.bill-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    border-bottom: 2px dashed #ccc;
+    padding-bottom: 1.5rem;
+}
+
+.bill-header h2 {
+    color: #000;
+    margin: 0;
+    font-size: 1.8rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.bill-header p {
+    color: #555;
+    margin: 0.5rem 0 0;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 0.75rem;
+}
+
+.bill-details {
+    margin-bottom: 1.5rem;
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.8rem;
+    font-size: 0.9rem;
+}
+
+.detail-row strong {
+    color: #555;
+}
+
+.bill-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+}
+
+.bill-table th {
+    border-top: 1px solid #000;
+    border-bottom: 1px solid #000;
+    padding: 10px 5px;
+    text-align: left;
+    font-weight: bold;
+    color: #000;
+}
+
+.bill-table td {
+    padding: 10px 5px;
+    border-bottom: 1px dashed #eee;
+}
+
+.bill-total {
+    text-align: right;
+    margin-bottom: 2rem;
+    font-size: 1.4rem;
+    color: #000;
+    border-top: 2px solid #000;
+    padding-top: 1rem;
+    font-weight: bold;
+}
+
+.bill-footer {
+    text-align: center;
+    font-size: 0.75rem;
+    color: #777;
+    margin-bottom: 2rem;
+    border-top: 1px dashed #ccc;
+    padding-top: 1.5rem;
+}
+
+.bill-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.print-btn,
+.close-btn {
+    padding: 10px 25px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    /* Back to sans-serif for buttons */
+    font-weight: 500;
+    transition: transform 0.2s;
+}
+
+.print-btn {
+    background: #000;
+    color: white;
+    border: none;
+}
+
+.close-btn {
+    background: transparent;
+    color: #e74c3c;
+    border: 1px solid #e74c3c;
+}
+
+.print-btn:hover,
+.close-btn:hover {
+    transform: translateY(-2px);
+}
+
+@media print {
+    body * {
+        visibility: hidden;
+    }
+
+    .bill-container,
+    .bill-container * {
+        visibility: visible;
+    }
+
+    .bill-overlay {
+        position: absolute;
+        left: 0;
+        top: 0;
+        background: white;
+    }
+
+    .bill-container {
+        box-shadow: none;
+        width: 100%;
+        max-width: none;
+        padding: 0;
+        font-family: 'Courier New', Courier, monospace;
+    }
+
+    .bill-actions {
+        display: none;
+    }
+}
+
+.bill-container {
+    background: rgb(0, 0, 0);
     padding: 2rem;
     width: 100%;
     max-width: 600px;

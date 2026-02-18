@@ -15,6 +15,8 @@ const Dashboard = () => {
     const [bookings, setBookings] = useState([]);
     const [users, setUsers] = useState([]);
     const [selectedBooking, setSelectedBooking] = useState(null);
+    const [selectedDonation, setSelectedDonation] = useState(null);
+    const [viewingSevaBookings, setViewingSevaBookings] = useState(null);
 
     // Temple Form Data
     const [templeFormData, setTempleFormData] = useState({
@@ -88,6 +90,64 @@ const Dashboard = () => {
             setUsers(response.data);
         } catch (error) {
             console.error('Error fetching users:', error);
+        }
+    };
+
+    const handleUserDelete = async (id) => {
+        if (!window.confirm('Are you sure you want to delete this user?')) return;
+        try {
+            await axios.delete(`/users/${id}`, {
+                headers: { 'Authorization': `Bearer ${user.token}` }
+            });
+            setMessage('User deleted successfully');
+            setStatus('success');
+            fetchUsers();
+            setTimeout(() => { setMessage(''); setStatus(''); }, 3000);
+        } catch (error) {
+            setMessage('Error deleting user');
+            setStatus('error');
+        }
+    };
+
+    const handleRoleUpdate = async (id, currentRole) => {
+        const newRole = currentRole === 'admin' ? 'user' : 'admin';
+        if (!window.confirm(`Promote/Demote this user to ${newRole}?`)) return;
+
+        try {
+            await axios.put(`/users/${id}/role`, { role: newRole }, {
+                headers: { 'Authorization': `Bearer ${user.token}` }
+            });
+            setMessage(`User role updated to ${newRole}`);
+            setStatus('success');
+            fetchUsers();
+            setTimeout(() => { setMessage(''); setStatus(''); }, 3000);
+        } catch (error) {
+            console.error('Error updating role:', error);
+            setMessage(error.response?.data?.message || 'Error updating role');
+            setStatus('error');
+        }
+    };
+
+    const handleBookingStatusUpdate = async (id, newStatus) => {
+        try {
+            await axios.put(`/bookings/${id}/status`, { status: newStatus }, {
+                headers: { 'Authorization': `Bearer ${user.token}` }
+            });
+            setMessage(`Booking status updated to ${newStatus}`);
+            setStatus('success');
+
+            // Optimistically update the bookings state
+            setBookings(prevBookings =>
+                prevBookings.map(b => b._id === id ? { ...b, status: newStatus } : b)
+            );
+
+            fetchBookings(); // Fetch to ensure sync
+            setTimeout(() => { setMessage(''); setStatus(''); }, 3000);
+        } catch (error) {
+            console.error('Error updating booking status:', error);
+            const errorMsg = error.response?.data?.message || 'Error updating booking status';
+            setMessage(errorMsg);
+            setStatus('error');
         }
     };
 
@@ -225,6 +285,18 @@ const Dashboard = () => {
                         onClick={() => setActiveTab('sevas')}
                     >
                         Manage Sevas
+                    </button>
+                    <button
+                        className={`tab-btn ${activeTab === 'users' ? 'active' : ''}`}
+                        onClick={() => setActiveTab('users')}
+                    >
+                        Manage Users
+                    </button>
+                    <button
+                        className={`tab-btn ${activeTab === 'donations' ? 'active' : ''}`}
+                        onClick={() => setActiveTab('donations')}
+                    >
+                        Donations
                     </button>
                 </div>
 
@@ -369,8 +441,14 @@ const Dashboard = () => {
                                                 <td>{seva.temple?.name || 'N/A'}</td>
                                                 <td>₹{seva.price}</td>
                                                 <td>{seva.ticketLimit}</td>
-                                                <td style={{ fontWeight: 'bold', color: '#2c3e50' }}>{seva.bookedCount || 0}</td>
+                                                <td className="seva-booked-count">{seva.bookedCount || 0}</td>
                                                 <td className="text-right actions-cell">
+                                                    <button
+                                                        onClick={() => setViewingSevaBookings(seva)}
+                                                        className="edit-btn btn-bookings"
+                                                    >
+                                                        Bookings
+                                                    </button>
                                                     <button onClick={() => handleEdit(seva, 'seva')} className="edit-btn">Edit</button>
                                                     <button onClick={() => handleDelete(seva._id, 'seva')} className="delete-btn">Delete</button>
                                                 </td>
@@ -404,7 +482,25 @@ const Dashboard = () => {
                                                 </td>
                                                 <td>{new Date(booking.date).toLocaleDateString()}</td>
                                                 <td>{booking.members}</td>
-                                                <td>{booking.status}</td>
+                                                <td>{booking.members}</td>
+                                                <td>
+                                                    <select
+                                                        value={booking.status}
+                                                        onChange={(e) => handleBookingStatusUpdate(booking._id, e.target.value)}
+                                                        style={{
+                                                            padding: '4px',
+                                                            borderRadius: '4px',
+                                                            border: '1px solid rgba(255,255,255,0.2)',
+                                                            background: 'rgba(0,0,0,0.2)',
+                                                            color: 'white'
+                                                        }}
+                                                    >
+                                                        <option value="pending" style={{ color: 'black' }}>Pending</option>
+                                                        <option value="confirmed" style={{ color: 'black' }}>Confirmed</option>
+                                                        <option value="completed" style={{ color: 'black' }}>Completed</option>
+                                                        <option value="cancelled" style={{ color: 'black' }}>Cancelled</option>
+                                                    </select>
+                                                </td>
                                                 <td className="text-right">
                                                     <button
                                                         onClick={() => setSelectedBooking(booking)}
@@ -428,6 +524,7 @@ const Dashboard = () => {
                                             <th>Email</th>
                                             <th>Role</th>
                                             <th>Joined Date</th>
+                                            <th className="text-right">Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -447,6 +544,16 @@ const Dashboard = () => {
                                                     </span>
                                                 </td>
                                                 <td>{new Date(u.createdAt).toLocaleDateString()}</td>
+                                                <td className="text-right actions-cell">
+                                                    <button
+                                                        onClick={() => handleRoleUpdate(u._id, u.role)}
+                                                        className="edit-btn"
+                                                        style={{ background: u.role === 'admin' ? '#f59e0b' : '#3b82f6' }}
+                                                    >
+                                                        {u.role === 'admin' ? 'Demote' : 'Make Admin'}
+                                                    </button>
+                                                    <button onClick={() => handleUserDelete(u._id)} className="delete-btn">Delete</button>
+                                                </td>
                                             </tr>
                                         ))}
                                     </tbody>
@@ -457,21 +564,31 @@ const Dashboard = () => {
                                 <table className="admin-table">
                                     <thead>
                                         <tr>
-                                            <th>User</th>
+                                            <th>User/Donor</th>
                                             <th>Temple</th>
                                             <th>Amount</th>
                                             <th>Method</th>
                                             <th>Date</th>
+                                            <th className="text-right">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {donations.map(donation => (
                                             <tr key={donation._id}>
-                                                <td>{donation.user?.name || 'Unknown'}</td>
+                                                <td>{donation.donorName || donation.user?.name || 'Unknown'}</td>
                                                 <td>{donation.temple?.name || 'N/A'}</td>
                                                 <td style={{ color: '#27ae60', fontWeight: 'bold' }}>₹{donation.amount}</td>
                                                 <td>{donation.paymentMethod}</td>
-                                                <td>{new Date(donation.date).toLocaleDateString()}</td>
+                                                <td>{new Date(donation.createdAt).toLocaleDateString()}</td>
+                                                <td className="text-right">
+                                                    <button
+                                                        onClick={() => setSelectedDonation(donation)}
+                                                        className="edit-btn"
+                                                        style={{ background: '#8e44ad' }}
+                                                    >
+                                                        View
+                                                    </button>
+                                                </td>
                                             </tr>
                                         ))}
                                     </tbody>
@@ -483,83 +600,137 @@ const Dashboard = () => {
             </div>
             {selectedBooking && <Bill booking={selectedBooking} onClose={() => setSelectedBooking(null)} />}
 
-            <style>{`
-                .dashboard-tabs {
-                    display: flex;
-                    gap: 1rem;
-                    margin-bottom: 2rem;
-                    justify-content: center;
-                }
-                .tab-btn {
-                    padding: 0.8rem 2rem;
-                    background: rgba(255, 255, 255, 0.1);
-                    border: 1px solid rgba(255, 255, 255, 0.2);
-                    color: white;
-                    border-radius: 30px;
-                    cursor: pointer;
-                    font-size: 1rem;
-                    transition: all 0.3s ease;
-                }
-                .tab-btn.active, .tab-btn:hover {
-                    background: var(--primary-color);
-                    border-color: var(--primary-color);
-                }
-                .form-row {
-                    display: grid;
-                    grid-template-columns: 1fr 1fr;
-                    gap: 1rem;
-                }
-                .form-buttons {
-                    display: flex;
-                    gap: 1rem;
-                    margin-top: 1rem;
-                }
-                .cancel-btn {
-                    padding: 0.8rem 2rem;
-                    background: #64748b;
-                    color: white;
-                    border: none;
-                    border-radius: 8px;
-                    cursor: pointer;
-                }
-                .admin-table {
-                    width: 100%;
-                    border-collapse: collapse;
-                    color: var(--text-light);
-                }
-                .admin-table th {
-                    padding: 1rem;
-                    text-align: left;
-                    background: rgba(255, 255, 255, 0.05);
-                }
-                .admin-table td {
-                    padding: 1rem;
-                    border-top: 1px solid rgba(255, 255, 255, 0.05);
-                }
-                .text-right { text-align: right; }
-                .actions-cell { display: flex; gap: 0.5rem; justify-content: flex-end; }
-                .edit-btn {
-                    padding: 0.5rem 1rem;
-                    background: var(--primary-color);
-                    border: none;
-                    border-radius: 4px;
-                    color: white;
-                    cursor: pointer;
-                }
-                .delete-btn {
-                    padding: 0.5rem 1rem;
-                    background: #ef4444;
-                    border: none;
-                    border-radius: 4px;
-                    color: white;
-                    cursor: pointer;
-                }
-                .no-data {
-                    padding: 2rem;
-                    text-align: center;
-                    color: var(--text-muted);
-                }
-            `}</style>
+            {viewingSevaBookings && (
+                <div className="modal-overlay" onClick={() => setViewingSevaBookings(null)}>
+                    <div className="modal-content glass-card" onClick={e => e.stopPropagation()} style={{ maxWidth: '800px', width: '90%', maxHeight: '90vh', overflowY: 'auto' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+                            <div>
+                                <h2 style={{ margin: 0, color: 'var(--primary-color)' }}>{viewingSevaBookings.name} - Bookings</h2>
+                                <p style={{ margin: '0.5rem 0 0', color: '#888', fontSize: '0.9rem' }}>
+                                    Total Tickets Sold: {viewingSevaBookings.bookedCount || 0}
+                                </p>
+                            </div>
+                            <button onClick={() => setViewingSevaBookings(null)} style={{ background: 'none', border: 'none', fontSize: '1.5rem', cursor: 'pointer', color: 'var(--text-light)' }}>×</button>
+                        </div>
+
+                        <div className="table-responsive">
+                            <table className="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th>Devotee / User</th>
+                                        <th>Date</th>
+                                        <th>Tickets</th>
+                                        <th>Status</th>
+                                        <th>Contact</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {bookings.filter(b => b.item?._id === viewingSevaBookings._id || b.item === viewingSevaBookings._id).length > 0 ? (
+                                        bookings.filter(b => b.item?._id === viewingSevaBookings._id || b.item === viewingSevaBookings._id).map(booking => (
+                                            <tr key={booking._id}>
+                                                <td>
+                                                    <div style={{ fontWeight: '500' }}>{booking.user?.name || booking.devotee || 'Guest'}</div>
+                                                </td>
+                                                <td>{new Date(booking.date).toLocaleDateString()}</td>
+                                                <td>{booking.members}</td>
+                                                <td>
+                                                    <span className={`status-badge ${booking.status || 'pending'}`} style={{
+                                                        padding: '4px 8px',
+                                                        borderRadius: '4px',
+                                                        fontSize: '0.85rem',
+                                                        background: booking.status === 'confirmed' ? 'rgba(74, 222, 128, 0.2)' : booking.status === 'completed' ? 'rgba(96, 165, 250, 0.2)' : 'rgba(251, 191, 36, 0.2)',
+                                                        color: booking.status === 'confirmed' ? '#4ade80' : booking.status === 'completed' ? '#60a5fa' : '#fbbf24',
+                                                        border: '1px solid currentColor'
+                                                    }}>
+                                                        {booking.status || 'pending'}
+                                                    </span>
+                                                </td>
+                                                <td>{booking.user?.email || booking.mobile || '-'}</td>
+                                            </tr>
+                                        ))
+                                    ) : (
+                                        <tr>
+                                            <td colSpan="4" style={{ textAlign: 'center', padding: '2rem', color: '#888' }}>
+                                                No bookings found for this Seva.
+                                            </td>
+                                        </tr>
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {selectedDonation && (
+                <div className="modal-overlay" onClick={() => setSelectedDonation(null)}>
+                    <div className="modal-content glass-card" onClick={e => e.stopPropagation()} style={{ maxWidth: '600px', width: '90%', maxHeight: '90vh', overflowY: 'auto' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+                            <h2 style={{ margin: 0, color: 'var(--primary-color)' }}>Donation Details</h2>
+                            <button onClick={() => setSelectedDonation(null)} style={{ background: 'none', border: 'none', fontSize: '1.5rem', cursor: 'pointer', color: 'var(--text-light)' }}>×</button>
+                        </div>
+
+                        <div className="detail-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                            <div>
+                                <label style={{ display: 'block', fontSize: '0.8rem', color: '#888' }}>Donor Name</label>
+                                <div style={{ fontSize: '1.1rem', fontWeight: '500' }}>{selectedDonation.donorName}</div>
+                            </div>
+                            <div>
+                                <label style={{ display: 'block', fontSize: '0.8rem', color: '#888' }}>Amount</label>
+                                <div style={{ fontSize: '1.1rem', fontWeight: 'bold', color: '#27ae60' }}>₹{selectedDonation.amount}</div>
+                            </div>
+
+                            <div>
+                                <label style={{ display: 'block', fontSize: '0.8rem', color: '#888' }}>Temple</label>
+                                <div>{selectedDonation.temple?.name || 'N/A'}</div>
+                            </div>
+                            <div>
+                                <label style={{ display: 'block', fontSize: '0.8rem', color: '#888' }}>Payment Method</label>
+                                <div>{selectedDonation.paymentMethod}</div>
+                            </div>
+
+                            <div>
+                                <label style={{ display: 'block', fontSize: '0.8rem', color: '#888' }}>Gothram</label>
+                                <div>{selectedDonation.gothram || '-'}</div>
+                            </div>
+                            <div>
+                                <label style={{ display: 'block', fontSize: '0.8rem', color: '#888' }}>Occasion</label>
+                                <div>{selectedDonation.occasion || '-'}</div>
+                            </div>
+
+                            <div>
+                                <label style={{ display: 'block', fontSize: '0.8rem', color: '#888' }}>Mobile</label>
+                                <div>{selectedDonation.mobile}</div>
+                            </div>
+                            <div>
+                                <label style={{ display: 'block', fontSize: '0.8rem', color: '#888' }}>Gender</label>
+                                <div>{selectedDonation.gender}</div>
+                            </div>
+
+                            <div>
+                                <label style={{ display: 'block', fontSize: '0.8rem', color: '#888' }}>My DOB</label>
+                                <div>{selectedDonation.dob ? new Date(selectedDonation.dob).toLocaleDateString() : '-'}</div>
+                            </div>
+                            <div>
+                                <label style={{ display: 'block', fontSize: '0.8rem', color: '#888' }}>Donation Date</label>
+                                <div>{selectedDonation.donationDate ? new Date(selectedDonation.donationDate).toLocaleDateString() : '-'}</div>
+                            </div>
+
+                            <div style={{ gridColumn: 'span 2' }}>
+                                <label style={{ display: 'block', fontSize: '0.8rem', color: '#888' }}>Address</label>
+                                <div>
+                                    {selectedDonation.address}<br />
+                                    {selectedDonation.address2 && <>{selectedDonation.address2}<br /></>}
+                                    {selectedDonation.city}, {selectedDonation.state} - {selectedDonation.zipcode}<br />
+                                    {selectedDonation.country}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+
         </div>
     );
 };

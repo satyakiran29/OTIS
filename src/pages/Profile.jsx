@@ -43,7 +43,7 @@ const Profile = () => {
             const config = {
                 headers: { 'Authorization': `Bearer ${user.token}` }
             };
-            await axios.put(`/api/bookings/${id}/cancel`, {}, config);
+            await axios.put(`/bookings/${id}/cancel`, {}, config);
             fetchData(); // Refresh data
         } catch (err) {
             console.error('Error cancelling booking:', err);
@@ -98,7 +98,7 @@ const Profile = () => {
                                             <p><i className="far fa-calendar-alt"></i> {new Date(booking.date).toLocaleDateString()}</p>
                                             <p><i className="fas fa-ticket-alt"></i> {booking.members} Tickets</p>
                                             <div style={{ display: 'flex', gap: '10px', marginTop: '1rem' }}>
-                                                {booking.status === 'pending' || booking.status === 'confirmed' ? (
+                                                {booking.status === 'pending' ? (
                                                     <button
                                                         onClick={() => handleCancelBooking(booking._id)}
                                                         className="cancel-btn-sm"
