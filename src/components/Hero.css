@@ -78,20 +78,24 @@
 
 .btn-outline {
     padding: 0.8rem 2rem;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(15, 23, 42, 0.6);
+    /* Darker semi-transparent background for readability */
+    backdrop-filter: blur(4px);
+    /* Add blur for extra contrast against the background image */
+    border: 1px solid rgba(255, 255, 255, 0.2);
     color: var(--text-light);
     border-radius: 50px;
     font-weight: 600;
     cursor: pointer;
     text-decoration: none;
     display: inline-block;
-    transition: transform 0.2s ease, background-color 0.2s ease;
+    transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
 }
 
 .btn-outline:hover {
     transform: translateY(-3px);
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(15, 23, 42, 0.8);
+    border-color: rgba(255, 255, 255, 0.4);
 }
 
 /* Mobile Responsiveness */

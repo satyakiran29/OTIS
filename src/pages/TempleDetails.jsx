@@ -137,7 +137,7 @@ const TempleDetails = () => {
             <style>{`
                 .temple-details-page {
                     min-height: 100vh;
-                    background-color: #f8f9fa;
+                    background-color: var(--bg-dark);
                     padding-bottom: 4rem;
                 }
                 .temple-hero {
@@ -167,22 +167,23 @@ const TempleDetails = () => {
                     z-index: 10;
                 }
                 .info-section, .sevas-section, .gallery-section {
-                    background: white;
+                    background: var(--bg-card);
                     padding: 2.5rem;
                     border-radius: 15px;
-                    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+                    border: 1px solid rgba(255, 255, 255, 0.05);
+                    box-shadow: var(--shadow-lg);
                     margin-bottom: 2rem;
                 }
                 .info-section h2, .sevas-section h2, .gallery-section h2 {
-                    color: #d35400;
-                    font-family: 'Playfair Display', serif;
+                    color: var(--primary-color);
+                    font-family: var(--font-serif);
                     margin-bottom: 1.5rem;
-                    border-bottom: 2px solid #fdf2e9;
+                    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
                     padding-bottom: 0.5rem;
                 }
                 .info-section p {
                     line-height: 1.8;
-                    color: #4a5568;
+                    color: var(--text-light);
                     margin-bottom: 1.5rem;
                 }
                 .sevas-grid {
@@ -191,19 +192,20 @@ const TempleDetails = () => {
                     gap: 1.5rem;
                 }
                 .seva-card {
-                    border: 1px solid #e2e8f0;
+                    border: 1px solid rgba(255, 255, 255, 0.1);
                     border-radius: 10px;
                     padding: 1.5rem;
+                    background: rgba(0, 0, 0, 0.2);
                     transition: transform 0.2s;
                 }
                 .seva-card:hover {
                     transform: translateY(-5px);
-                    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-                    border-color: #d35400;
+                    box-shadow: var(--shadow-glow);
+                    border-color: var(--primary-color);
                 }
                 .seva-card h3 {
                     margin: 0 0 0.5rem 0;
-                    color: #2d3748;
+                    color: var(--text-light);
                 }
                 .seva-footer {
                     display: flex;
@@ -213,11 +215,11 @@ const TempleDetails = () => {
                     font-weight: 600;
                 }
                 .seva-price {
-                    color: #d35400;
+                    color: var(--primary-color);
                     font-size: 1.2rem;
                 }
                 .seva-duration {
-                    color: #718096;
+                    color: var(--text-muted);
                     font-size: 0.9rem;
                 }
                 .loading-container, .error-container {

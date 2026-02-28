@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from '../utils/axiosConfig';
 import { useAuth } from '../context/AuthContext';
+import StripePaymentModal from '../components/StripePaymentModal';
 import './Donations.css';
 
 const Donations = () => {
@@ -27,6 +28,8 @@ const Donations = () => {
     });
     const [status, setStatus] = useState('idle');
     const [message, setMessage] = useState('');
+    const [clientSecret, setClientSecret] = useState('');
+    const [showPaymentModal, setShowPaymentModal] = useState(false);
 
     useEffect(() => {
         const fetchTemples = async () => {
@@ -75,12 +78,46 @@ const Donations = () => {
                 }
             };
 
-            await axios.post('/donations', formData, config);
-            setStatus('success');
-            // Reset logic if needed, but keeping simple for now
+            if (formData.paymentMethod === 'Card') {
+                const res = await axios.post('/payments/create-payment-intent', {
+                    amount: formData.amount,
+                    description: `Donation from ${formData.donorName}`,
+                    metadata: {
+                        donorName: formData.donorName,
+                        templeId: formData.templeId,
+                        mobile: formData.mobile,
+                        occasion: formData.occasion || 'N/A'
+                    }
+                }, config);
+                setClientSecret(res.data.clientSecret);
+                setShowPaymentModal(true);
+                setStatus('idle');
+            } else {
+                await axios.post('/donations', formData, config);
+                setStatus('success');
+            }
         } catch (err) {
             console.error(err);
-            setMessage(err.response?.data?.message || 'Donation failed');
+            setMessage(err.response?.data?.error?.message || err.response?.data?.message || 'Payment initiation failed');
+            setStatus('error');
+        }
+    };
+
+    const handlePaymentSuccess = async () => {
+        setShowPaymentModal(false);
+        setStatus('submitting');
+        try {
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${user.token}`
+                }
+            };
+            await axios.post('/donations', formData, config);
+            setStatus('success');
+        } catch (err) {
+            console.error(err);
+            setMessage('Payment succeeded but failed to save donation info.');
             setStatus('error');
         }
     };
@@ -104,6 +141,14 @@ const Donations = () => {
 
     return (
         <div className="donations-page page-container">
+            {showPaymentModal && (
+                <StripePaymentModal
+                    clientSecret={clientSecret}
+                    amount={formData.amount}
+                    onSuccess={handlePaymentSuccess}
+                    onClose={() => setShowPaymentModal(false)}
+                />
+            )}
             <div className="donations-container">
                 <h1 className="page-title">Make a Donation</h1>
 

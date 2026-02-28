@@ -7,7 +7,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://otis-api.onrender.com/',
+        target: 'https://otis-api.onrender.com',
         changeOrigin: true,
         secure: false,
       },

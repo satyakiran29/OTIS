@@ -60,10 +60,8 @@ const Temples = () => {
                             <h3 className="temple-name">
                                 {temple.name}
                             </h3>
-                            <div>
-                                <Link to={`/temples/${temple._id}`} className="temple-view-link">
-                                    View Details
-                                </Link>
+                            <div className="temple-location">
+                                <i className="fas fa-map-marker-alt"></i> {temple.location || "Location unavailable"}
                             </div>
                             <Link to={`/temples/${temple._id}`} className="temple-view-btn">
                                 View

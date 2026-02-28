@@ -80,39 +80,71 @@ const Navbar = () => {
                 {/* Desktop Menu */}
                 <div className="desktop-menu" style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
                     <ul style={{ display: 'flex', gap: '2rem', listStyle: 'none', margin: 0, padding: 0 }}>
-                        {navLinks.map((item) => (
-                            <li key={item}>
-                                {isHome ? (
-                                    <a
-                                        href={`#${item.toLowerCase()}`}
-                                        style={{
-                                            color: 'var(--text-light)',
-                                            fontWeight: '500',
-                                            position: 'relative',
-                                            textDecoration: 'none',
-                                            fontSize: '0.95rem'
-                                        }}
-                                        className="nav-link"
-                                    >
-                                        {item}
-                                    </a>
-                                ) : (
-                                    <Link
-                                        to={`/#${item.toLowerCase()}`}
-                                        style={{
-                                            color: 'var(--text-light)',
-                                            fontWeight: '500',
-                                            position: 'relative',
-                                            textDecoration: 'none',
-                                            fontSize: '0.95rem'
-                                        }}
-                                        className="nav-link"
-                                    >
-                                        {item}
-                                    </Link>
-                                )}
-                            </li>
-                        ))}
+                        {navLinks.map((item) => {
+                            const anchorId = item.toLowerCase();
+                            // 'Project' section in Home.jsx has id="project"
+                            // 'Team' section in Home.jsx has id="team"
+                            // 'Home' section in Hero.jsx has id="home"
+                            // 'About' section doesn't exist explicitly in Home.jsx yet, but let's assume it maps to home or a future section
+
+                            // If it's a dedicated page route (like /events, /donations), use normal link
+                            const isPageRoute = ['Events', 'Donations'].includes(item);
+
+                            if (isPageRoute) {
+                                return (
+                                    <li key={item}>
+                                        <Link
+                                            to={`/${anchorId}`}
+                                            style={{
+                                                color: 'var(--text-light)',
+                                                fontWeight: '500',
+                                                position: 'relative',
+                                                textDecoration: 'none',
+                                                fontSize: '0.95rem'
+                                            }}
+                                            className="nav-link"
+                                        >
+                                            {item}
+                                        </Link>
+                                    </li>
+                                );
+                            }
+
+                            // Otherwise it's a section on the Home page
+                            return (
+                                <li key={item}>
+                                    {isHome ? (
+                                        <a
+                                            href={`#${anchorId}`}
+                                            style={{
+                                                color: 'var(--text-light)',
+                                                fontWeight: '500',
+                                                position: 'relative',
+                                                textDecoration: 'none',
+                                                fontSize: '0.95rem'
+                                            }}
+                                            className="nav-link"
+                                        >
+                                            {item}
+                                        </a>
+                                    ) : (
+                                        <Link
+                                            to={`/#${anchorId}`}
+                                            style={{
+                                                color: 'var(--text-light)',
+                                                fontWeight: '500',
+                                                position: 'relative',
+                                                textDecoration: 'none',
+                                                fontSize: '0.95rem'
+                                            }}
+                                            className="nav-link"
+                                        >
+                                            {item}
+                                        </Link>
+                                    )}
+                                </li>
+                            );
+                        })}
                     </ul>
 
                     <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
@@ -214,27 +246,46 @@ const Navbar = () => {
                 zIndex: 999
             }}>
                 <ul style={{ display: 'flex', flexDirection: 'column', gap: '2rem', listStyle: 'none', padding: 0, marginBottom: '3rem', textAlign: 'center' }}>
-                    {navLinks.map((item) => (
-                        <li key={item} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '0.8rem' }}>
-                            {isHome ? (
-                                <a
-                                    href={`#${item.toLowerCase()}`}
-                                    onClick={() => setMobileMenuOpen(false)}
-                                    style={{ color: 'var(--text-light)', fontSize: '1.5rem', fontWeight: '500', textDecoration: 'none', display: 'block' }}
-                                >
-                                    {item}
-                                </a>
-                            ) : (
-                                <Link
-                                    to={`/#${item.toLowerCase()}`}
-                                    onClick={() => setMobileMenuOpen(false)}
-                                    style={{ color: 'var(--text-light)', fontSize: '1.5rem', fontWeight: '500', textDecoration: 'none', display: 'block' }}
-                                >
-                                    {item}
-                                </Link>
-                            )}
-                        </li>
-                    ))}
+                    {navLinks.map((item) => {
+                        const anchorId = item.toLowerCase();
+                        const isPageRoute = ['Events', 'Donations'].includes(item);
+
+                        if (isPageRoute) {
+                            return (
+                                <li key={item} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '0.8rem' }}>
+                                    <Link
+                                        to={`/${anchorId}`}
+                                        onClick={() => setMobileMenuOpen(false)}
+                                        style={{ color: 'var(--text-light)', fontSize: '1.5rem', fontWeight: '500', textDecoration: 'none', display: 'block' }}
+                                    >
+                                        {item}
+                                    </Link>
+                                </li>
+                            );
+                        }
+
+                        return (
+                            <li key={item} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '0.8rem' }}>
+                                {isHome ? (
+                                    <a
+                                        href={`#${anchorId}`}
+                                        onClick={() => setMobileMenuOpen(false)}
+                                        style={{ color: 'var(--text-light)', fontSize: '1.5rem', fontWeight: '500', textDecoration: 'none', display: 'block' }}
+                                    >
+                                        {item}
+                                    </a>
+                                ) : (
+                                    <Link
+                                        to={`/#${anchorId}`}
+                                        onClick={() => setMobileMenuOpen(false)}
+                                        style={{ color: 'var(--text-light)', fontSize: '1.5rem', fontWeight: '500', textDecoration: 'none', display: 'block' }}
+                                    >
+                                        {item}
+                                    </Link>
+                                )}
+                            </li>
+                        );
+                    })}
                 </ul>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>

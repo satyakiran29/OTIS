@@ -1,13 +1,14 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
-import { Analytics } from "@vercel/analytics/react";
-import { SpeedInsights } from "@vercel/speed-insights/react";
 import { AuthProvider, useAuth } from './context/AuthContext';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
+import ForgotPassword from './pages/ForgotPassword';
+import TermsOfService from './pages/TermsOfService';
+import PrivacyPolicy from './pages/PrivacyPolicy';
 import Temples from './pages/Temples';
 import TempleDetails from './pages/TempleDetails';
 import Events from './pages/Events';
@@ -58,6 +59,9 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/terms" element={<TermsOfService />} />
+            <Route path="/privacy" element={<PrivacyPolicy />} />
             <Route path="/temples" element={<Temples />} />
             <Route path="/temples/:id" element={<TempleDetails />} />
             <Route path="/events" element={<Events />} />
@@ -67,8 +71,6 @@ function App() {
             <Route path="/accommodation" element={<Accommodation />} />
             <Route path="/dashboard" element={<ProtectedRoute adminOnly={true}><Dashboard /></ProtectedRoute>} />
           </Routes>
-          <Analytics />
-          <SpeedInsights />
         </Layout>
       </AuthProvider>
     </BrowserRouter>

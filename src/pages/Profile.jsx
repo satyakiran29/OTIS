@@ -98,11 +98,11 @@ const Profile = () => {
                                             <p><i className="far fa-calendar-alt"></i> {new Date(booking.date).toLocaleDateString()}</p>
                                             <p><i className="fas fa-ticket-alt"></i> {booking.members} Tickets</p>
                                             <div style={{ display: 'flex', gap: '10px', marginTop: '1rem' }}>
-                                                {booking.status === 'pending' ? (
+                                                {['pending', 'confirmed'].includes(booking.status) && (Date.now() - new Date(booking.createdAt).getTime() <= 5 * 60 * 1000) ? (
                                                     <button
                                                         onClick={() => handleCancelBooking(booking._id)}
                                                         className="cancel-btn-sm"
-                                                        style={{ marginTop: 0 }}
+                                                        style={{ marginTop: 0, backgroundColor: '#e74c3c' }}
                                                     >
                                                         Cancel Booking
                                                     </button>

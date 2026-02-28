@@ -119,11 +119,13 @@ ul {
   max-width: 1200px;
   margin: 0 auto;
   padding-top: 130px;
-  /* Standard header offset */
+  /* Standard header offset so Navbar doesn't overlap */
   padding-left: 2rem;
   padding-right: 2rem;
   padding-bottom: 4rem;
   min-height: 100vh;
+  background-color: var(--bg-dark);
+  /* Ensure consistent dark theme */
 }
 
 /* Responsive Styles */
