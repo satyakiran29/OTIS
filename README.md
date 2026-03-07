@@ -1,102 +1,77 @@
 # OTIS: Online Temple Information System
 
-OTIS is a comprehensive, modern web application designed to streamline temple administration and enhance the devotee experience. Built with React and Vite, this project serves as a centralized platform for managing temple information, sevas, events, donations, and bookings.
+![React](https://img.shields.io/badge/react-%2320232a.svg?style=flat-square&logo=react&logoColor=%2361DAFB)
+![Vite](https://img.shields.io/badge/vite-%23646CFF.svg?style=flat-square&logo=vite&logoColor=white)
+![Status](https://img.shields.io/badge/status-active-success.svg?style=flat-square)
 
-## Key Features
+OTIS is a comprehensive, modern web application designed to streamline temple administration and enhance the devotee experience. Serving as a centralized platform, it efficiently manages temple information, sevas, events, donations, and bookings.
 
-*   **User Authentication**: Secure user registration and login system with Two-Factor Authentication (OTP via email). Includes password reset functionality.
-*   **Admin Dashboard**: A protected, role-based dashboard for administrators to perform CRUD operations on:
-    *   **Temples**: Add, update, or remove temple listings.
-    *   **Sevas**: Manage temple-specific services, including price, duration, and ticket limits.
-    *   **Users**: View all registered users, manage roles (admin/user), and delete accounts.
-    *   **Bookings & Donations**: Monitor all user bookings and donations made through the platform.
-*   **Temple Exploration**: Users can browse, search, and view detailed information about various temples, including history, descriptions, and image galleries.
-*   **Booking System**:
-    *   Book Sevas (Darshan) and Accommodations for specific temples.
-    *   Dynamic ticket availability tracking.
-*   **Secure Payments**: Integrated with **Stripe** for secure processing of payments for bookings and donations.
-*   **Donation Portal**: A dedicated and detailed form for users to make donations to a temple of their choice.
-*   **User Profile**: Personalized space for users to view their booking history, donation records, and manage their profile.
-*   **Receipt Generation**: Users can view and print an official receipt for their bookings.
-*   **Responsive Design**: A clean, modern, and responsive user interface that works seamlessly across devices.
+## 🌟 Why the project is useful
 
-## Technology Stack
+OTIS simplifies the interaction between temples and devotees by offering a robust feature set:
 
-*   **Frontend**: React.js, Vite
-*   **Routing**: React Router
-*   **HTTP Client**: Axios
-*   **State Management**: React Context API
-*   **Payments**: Stripe.js & React Stripe.js
-*   **Styling**: Custom CSS with variables and a mobile-first approach.
-*   **Analytics**: Vercel Analytics & Speed Insights
+* **User Authentication**: Secure user registration and login system with Two-Factor Authentication (OTP via email) and password reset.
+* **Admin Dashboard**: A role-based dashboard for administrators to manage temples, sevas (services, prices, limits), users, and monitor bookings/donations.
+* **Temple Exploration**: Browse, search, and view detailed information including history, descriptions, and galleries.
+* **Booking System**: Book Sevas (Darshan) and Accommodations with dynamic ticket availability tracking.
+* **Secure Payments**: Integrated with **Stripe** for processing bookings and donations securely.
+* **Donation Portal**: Dedicated portals for user donations and transparent receipt generation.
 
-## Backend
+## 🚀 How users can get started
 
-This frontend application is designed to work with a corresponding backend API. The API endpoint is configured in `vite.config.js` and `src/utils/axiosConfig.js` to point to the live server: `https://otis-api.onrender.com/api`.
+To run the OTIS frontend locally, follow these steps:
 
-## Getting Started
+### Prerequisites
 
-To run this project locally, follow these steps:
+* [Node.js](https://nodejs.org/) (v18 or later)
+* npm or yarn
 
-**Prerequisites:**
-*   Node.js (v18 or later)
-*   npm or yarn
+### Installation
 
-**1. Clone the repository:**
-```bash
-git clone https://github.com/satyakiran29/otis.git
-cd otis
-```
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/satyakiran29/otis.git
+   cd otis
+   ```
 
-**2. Install dependencies:**
-```bash
-npm install
-```
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
 
-**3. Set up environment variables:**
+3. **Set up environment variables:**
+   Create a `.env` file in the root of the project and add your Stripe publishable key:
+   ```env
+   VITE_STRIPE_PUBLISHABLE_KEY=your_stripe_publishable_key
+   ```
 
-Create a `.env` file in the root of the project and add your Stripe publishable key.
+4. **Run the development server:**
+   ```bash
+   npm run dev
+   ```
+   The application will be available at `http://localhost:5173`.
 
-```
-VITE_STRIPE_PUBLISHABLE_KEY=your_stripe_publishable_key
-```
+### Usage Snippet
 
-**4. Run the development server:**
-```bash
-npm run dev
-```
-The application will be available at `http://localhost:5173`.
+If you need to define new API endpoints or adjust connection details, modify the Axios configuration in `src/utils/axiosConfig.js`, which currently points to the live server.
 
-## Available Scripts
+## 🤝 Where users can get help
 
-In the project directory, you can run:
+- **Issue Tracker**: If you find any bugs or have feature requests, please use the [GitHub Issues](https://github.com/satyakiran29/otis/issues) page.
+- **API Reference**: The frontend relies on the `otis-api` backend. Please refer to separate backend documentation if hosting the API locally.
 
-*   `npm run dev`: Runs the app in development mode.
-*   `npm run build`: Builds the app for production to the `dist` folder.
-*   `npm run lint`: Lints the project files using ESLint.
-*   `npm run preview`: Serves the production build locally to preview it.
+## 🛠️ Who maintains and contributes
 
-## Project Structure
+This project was developed and is maintained by:
 
-The project follows a standard React application structure:
+*   **Pampana Satya Kiran** (Full Stack Developer)
+*   **Kurimina Anuradha** (Frontend Developer)
+*   **Manthini Neelaveni** (UI/UX Designer)
+*   **Kambala Vijaya Sankar** (Backend Developer)
+*   **Palaka Dhanunjaya** (Database Engineer)
 
-```
-/src
-├── assets/          # Static assets like images
-├── components/      # Reusable UI components (Navbar, Footer, Cards, etc.)
-├── context/         # React Context for global state (AuthContext)
-├── data/            # Static data used in the application
-├── pages/           # Top-level page components for each route
-└── utils/           # Utility functions (axios configuration)
-```
+Developed under the guidance of **Mrs. G. Nirosha**, Assistant Professor, GMRIT Computer Science Engineering.
 
-## Acknowledgements
+### Contribution Guidelines
 
-This project was developed by:
-*   Pampana Satya Kiran (Full Stack Developer)
-*   Kurimina Anuradha (Frontend Developer)
-*   Manthini Neelaveni (UI/UX Designer)
-*   Kambala Vijaya Sankar (Backend Developer)
-*   Palaka Dhanunjaya (Database Engineer)
-
-Under the guidance of **Mrs. G. Nirosha**, Assistant Professor, GMR Computer Science Engineering.
+We welcome contributions! Please refer to our [Contributing Guide](docs/CONTRIBUTING.md) for details on how to get started with contributing code, reporting issues, or suggesting enhancements.
