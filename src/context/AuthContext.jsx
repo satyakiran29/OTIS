@@ -82,13 +82,68 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
+    const toggleTwoStepVerification = async () => {
+        try {
+            const config = {
+                headers: { 'Authorization': `Bearer ${user.token}` }
+            };
+            const response = await axios.put('/users/profile/two-step-verification', {}, config);
+            const data = response.data;
+            localStorage.setItem('user', JSON.stringify(data));
+            setUser(data);
+            return { success: true, message: 'Two-Step Verification updated' };
+        } catch (error) {
+            return { success: false, message: error.response?.data?.message || 'Failed to update Two-Step Verification' };
+        }
+    };
+
+    const updatePassword = async (currentPassword, newPassword) => {
+        try {
+            const config = {
+                headers: { 'Authorization': `Bearer ${user.token}` }
+            };
+            const response = await axios.put('/users/profile/password', { currentPassword, newPassword }, config);
+            return { success: true, message: response.data.message };
+        } catch (error) {
+            return { success: false, message: error.response?.data?.message || 'Failed to update password' };
+        }
+    };
+
+    const updateProfile = async (profileData) => {
+        try {
+            const config = {
+                headers: { 'Authorization': `Bearer ${user.token}` }
+            };
+            const response = await axios.put('/users/profile', profileData, config);
+            const data = response.data;
+            localStorage.setItem('user', JSON.stringify(data));
+            setUser(data);
+            return { success: true, message: 'Profile updated successfully' };
+        } catch (error) {
+            return { success: false, message: error.response?.data?.message || 'Failed to update profile' };
+        }
+    };
+
+    const deleteAccount = async () => {
+        try {
+            const config = {
+                headers: { 'Authorization': `Bearer ${user.token}` }
+            };
+            const response = await axios.delete('/users/profile', config);
+            logout();
+            return { success: true, message: response.data.message };
+        } catch (error) {
+            return { success: false, message: error.response?.data?.message || 'Failed to delete account' };
+        }
+    };
+
     const logout = () => {
         localStorage.removeItem('user');
         setUser(null);
     };
 
     return (
-        <AuthContext.Provider value={{ user, login, register, logout, sendOtp, forgotPassword, verifyOtp, resetPassword, loading }}>
+        <AuthContext.Provider value={{ user, login, register, logout, sendOtp, forgotPassword, verifyOtp, resetPassword, toggleTwoStepVerification, updatePassword, updateProfile, deleteAccount, loading }}>
             {children}
         </AuthContext.Provider>
     );

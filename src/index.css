@@ -160,3 +160,50 @@ ul {
     /* Override inline styles if needed */
   }
 }
+
+/* Global Temple Loader */
+.temple-loader-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  gap: 1rem;
+}
+
+.temple-icon {
+  font-size: 3rem;
+  animation: bounce 1.5s infinite ease-in-out;
+}
+
+.temple-loader-text {
+  font-size: 1.1rem;
+  color: var(--primary-color, #e67e22);
+  font-weight: 500;
+  letter-spacing: 1px;
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+@keyframes bounce {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-15px);
+  }
+}
+
+@keyframes pulse {
+
+  0%,
+  100% {
+    opacity: 0.6;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}

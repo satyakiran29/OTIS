@@ -37,7 +37,12 @@ const Events = () => {
         setSelectedEvent(null);
     };
 
-    if (loading) return <div className="loading">Loading Events...</div>;
+    if (loading) return (
+        <div className="temple-loader-container">
+            <span className="temple-icon">🛕</span>
+            <span className="temple-loader-text">Loading Events...</span>
+        </div>
+    );
 
     return (
         <div className="events-page page-container">

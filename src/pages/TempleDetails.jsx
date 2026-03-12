@@ -43,7 +43,12 @@ const TempleDetails = () => {
     };
 
     if (loading) {
-        return <div className="loading-container">Loading...</div>;
+        return (
+            <div className="temple-loader-container" style={{ minHeight: '60vh' }}>
+                <span className="temple-icon">🛕</span>
+                <span className="temple-loader-text">Loading Temple Details...</span>
+            </div>
+        );
     }
 
     if (!temple) {
