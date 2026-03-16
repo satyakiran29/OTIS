@@ -3,6 +3,24 @@ import { useParams, Link } from 'react-router-dom';
 import axios from '../utils/axiosConfig';
 import BookingForm from '../components/BookingForm';
 import { useAuth } from '../context/AuthContext';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
+import L from 'leaflet';
+
+// Fix for default marker icon in react-leaflet
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+    iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
+    iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
+    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+});
+
+const customGeoapifyIcon = new L.Icon({
+    iconUrl: 'https://api.geoapify.com/v2/icon?type=material&color=%23ff9800&size=48&icon=om&iconType=awesome&apiKey=ee84d8f7fac5474cb796b03ed929d94f',
+    iconSize: [32, 48],
+    iconAnchor: [16, 48],
+    popupAnchor: [0, -48]
+});
 
 const TempleDetails = () => {
     const { id } = useParams();
@@ -78,6 +96,52 @@ const TempleDetails = () => {
                     <h3>History</h3>
                     <p>{temple.history}</p>
                 </section>
+
+                {temple.coordinates && temple.coordinates.lat && temple.coordinates.lon && (
+                    <section className="map-section">
+                        <h2>Location Map</h2>
+                        <div className="map-container-wrapper" style={{ height: '400px', width: '100%', borderRadius: '10px', overflow: 'hidden' }}>
+                            <MapContainer
+                                center={[temple.coordinates.lat, temple.coordinates.lon]}
+                                zoom={13}
+                                style={{ height: '100%', width: '100%' }}
+                            >
+                                <TileLayer
+                                    attribution='&copy; <a href="https://www.geoapify.com/">Geoapify</a> contributors'
+                                    url={`https://maps.geoapify.com/v1/tile/osm-liberty/{z}/{x}/{y}.png?apiKey=${import.meta.env.VITE_GEOAPIFY_API_KEY}`}
+                                />
+                                <Marker position={[temple.coordinates.lat, temple.coordinates.lon]} icon={customGeoapifyIcon}>
+                                    <Popup>
+                                        <div style={{ textAlign: 'center', minWidth: '180px' }}>
+                                            <a
+                                                href={`https://www.google.com/maps/search/?api=1&query=${temple.coordinates.lat},${temple.coordinates.lon}`}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                style={{ textDecoration: 'none', display: 'block', marginBottom: '8px' }}
+                                                title="Open in Google Maps"
+                                            >
+                                                <h3 style={{ margin: '0 0 5px 0', color: 'var(--primary-color)', fontSize: '1.1rem', textDecoration: 'underline' }}>
+                                                    {temple.name} <i className="fas fa-external-link-alt" style={{ fontSize: '0.8rem', marginLeft: '4px' }}></i>
+                                                </h3>
+                                                <p style={{ margin: '0', fontSize: '0.85rem', color: '#555' }}>
+                                                    <i className="fas fa-map-marker-alt" style={{ color: 'var(--primary-color)', marginRight: '4px' }}></i>
+                                                    {temple.location}
+                                                </p>
+                                            </a>
+                                            {sevas && sevas.length > 0 && (
+                                                <div style={{ background: '#f0fdf4', padding: '4px 8px', borderRadius: '4px', display: 'inline-block' }}>
+                                                    <span style={{ fontSize: '0.8rem', fontWeight: 'bold', color: '#166534' }}>
+                                                        {sevas.length} Sevas Available
+                                                    </span>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </Popup>
+                                </Marker>
+                            </MapContainer>
+                        </div>
+                    </section>
+                )}
 
                 <section className="sevas-section">
                     <h2>Available Sevas</h2>
@@ -171,7 +235,7 @@ const TempleDetails = () => {
                     position: relative;
                     z-index: 10;
                 }
-                .info-section, .sevas-section, .gallery-section {
+                .info-section, .sevas-section, .gallery-section, .map-section {
                     background: var(--bg-card);
                     padding: 2.5rem;
                     border-radius: 15px;
@@ -179,7 +243,7 @@ const TempleDetails = () => {
                     box-shadow: var(--shadow-lg);
                     margin-bottom: 2rem;
                 }
-                .info-section h2, .sevas-section h2, .gallery-section h2 {
+                .info-section h2, .sevas-section h2, .gallery-section h2, .map-section h2 {
                     color: var(--primary-color);
                     font-family: var(--font-serif);
                     margin-bottom: 1.5rem;

@@ -9,6 +9,8 @@ import TempleDisplay from '../components/TempleDisplay';
 import Bill from '../components/Bill';
 import './Dashboard.css';
 import axios from '../utils/axiosConfig';
+import { GeoapifyGeocoderAutocomplete, GeoapifyContext } from '@geoapify/react-geocoder-autocomplete';
+import '@geoapify/geocoder-autocomplete/styles/minimal.css';
 
 const Dashboard = () => {
     const { user } = useAuth();
@@ -24,7 +26,7 @@ const Dashboard = () => {
 
     // Temple Form Data
     const [templeFormData, setTempleFormData] = useState({
-        name: '', location: '', description: '', history: '', images: ''
+        name: '', location: '', description: '', history: '', images: '', coordinateString: ''
     });
 
     // Seva Form Data
@@ -168,9 +170,25 @@ const Dashboard = () => {
         setMessage('Submitting...');
         setStatus('loading');
 
+        let parsedLat = null;
+        let parsedLon = null;
+        if (templeFormData.coordinateString) {
+            const parts = templeFormData.coordinateString.split(',');
+            if (parts.length >= 2) {
+                parsedLat = parseFloat(parts[0].trim());
+                parsedLon = parseFloat(parts[1].trim());
+            } else if (parts.length === 1 && parts[0].trim() !== '') {
+                parsedLat = parseFloat(parts[0].trim());
+            }
+        }
+
         const templeData = {
             ...templeFormData,
-            images: templeFormData.images.split(',').map(url => url.trim()).filter(url => url !== '')
+            images: templeFormData.images.split(',').map(url => url.trim()).filter(url => url !== ''),
+            coordinates: {
+                lat: !isNaN(parsedLat) ? parsedLat : null,
+                lon: !isNaN(parsedLon) ? parsedLon : null
+            }
         };
 
         const url = editingId ? `/temples/${editingId}` : '/temples';
@@ -183,12 +201,13 @@ const Dashboard = () => {
 
             setMessage(editingId ? 'Temple updated successfully!' : 'Temple added successfully!');
             setStatus('success');
-            setTempleFormData({ name: '', location: '', description: '', history: '', images: '' });
+            setTempleFormData({ name: '', location: '', description: '', history: '', images: '', coordinateString: '' });
             setEditingId(null);
             fetchTemples();
             setTimeout(() => { setMessage(''); setStatus(''); }, 3000);
         } catch (error) {
-            setMessage('Error saving temple.');
+            const errorMsg = error.response?.data?.message || 'Error saving temple.';
+            setMessage(`Error: ${errorMsg}`);
             setStatus('error');
         }
     };
@@ -226,7 +245,8 @@ const Dashboard = () => {
                 location: item.location,
                 description: item.description,
                 history: item.history,
-                images: Array.isArray(item.images) ? item.images.join(', ') : item.image || ''
+                images: Array.isArray(item.images) ? item.images.join(', ') : item.image || '',
+                coordinateString: (item.coordinates?.lat && item.coordinates?.lon) ? `${item.coordinates.lat}, ${item.coordinates.lon}` : ''
             });
             setActiveTab('temples');
         } else {
@@ -267,7 +287,7 @@ const Dashboard = () => {
 
     const handleCancelEdit = () => {
         setEditingId(null);
-        setTempleFormData({ name: '', location: '', description: '', history: '', images: '' });
+        setTempleFormData({ name: '', location: '', description: '', history: '', images: '', coordinates: { lat: null, lon: null } });
         setSevaFormData({ name: '', description: '', price: '', duration: '', temple: '', ticketLimit: '' });
     };
 
@@ -494,9 +514,20 @@ const Dashboard = () => {
                                     <label>Temple Name</label>
                                     <input type="text" name="name" value={templeFormData.name} onChange={handleTempleChange} required />
                                 </div>
-                                <div className="form-group">
+                                <div className="form-group" style={{ position: 'relative', zIndex: 100 }}>
                                     <label>Location</label>
-                                    <input type="text" name="location" value={templeFormData.location} onChange={handleTempleChange} required />
+                                    <input type="text" name="location" value={templeFormData.location} onChange={handleTempleChange} required placeholder="Enter city or full address" />
+                                </div>
+                                <div className="form-group">
+                                    <label>Map Coordinates (Optional)</label>
+                                    <input 
+                                        type="text" 
+                                        name="coordinateString" 
+                                        value={templeFormData.coordinateString} 
+                                        onChange={handleTempleChange} 
+                                        placeholder="e.g. 18.4662, 83.6662" 
+                                    />
+                                    <small style={{ color: '#888', display: 'block', marginTop: '4px' }}>Paste latitude and longitude separated by a comma</small>
                                 </div>
                                 <div className="form-group">
                                     <label>Description</label>

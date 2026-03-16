@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import SectionTitle from '../components/SectionTitle';
 import axios from '../utils/axiosConfig';
-
 import './Temples.css';
 
 const Temples = () => {
@@ -64,7 +63,7 @@ const Temples = () => {
                                 <i className="fas fa-map-marker-alt"></i> {temple.location || "Location unavailable"}
                             </div>
                             <Link to={`/temples/${temple._id}`} className="temple-view-btn">
-                                View
+                                View Details
                             </Link>
                         </div>
                     ))}
