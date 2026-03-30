@@ -9,6 +9,7 @@ import TempleDisplay from '../components/TempleDisplay';
 import Bill from '../components/Bill';
 import './Dashboard.css';
 import axios from '../utils/axiosConfig';
+import AdminEvents from './AdminEvents';
 import { GeoapifyGeocoderAutocomplete, GeoapifyContext } from '@geoapify/react-geocoder-autocomplete';
 import '@geoapify/geocoder-autocomplete/styles/minimal.css';
 
@@ -23,6 +24,8 @@ const Dashboard = () => {
     const [selectedBooking, setSelectedBooking] = useState(null);
     const [selectedDonation, setSelectedDonation] = useState(null);
     const [viewingSevaBookings, setViewingSevaBookings] = useState(null);
+    const [events, setEvents] = useState([]);
+    const [focusedField, setFocusedField] = useState(null);
 
     // Temple Form Data
     const [templeFormData, setTempleFormData] = useState({
@@ -44,6 +47,7 @@ const Dashboard = () => {
         fetchDonations();
         fetchBookings();
         fetchUsers();
+        fetchEvents();
     }, []);
 
     // ...
@@ -99,6 +103,15 @@ const Dashboard = () => {
         }
     };
 
+    const fetchEvents = async () => {
+        try {
+            const response = await axios.get('/events');
+            setEvents(response.data);
+        } catch (error) {
+            console.error('Error fetching events:', error);
+        }
+    };
+
     const handleUserDelete = async (id) => {
         if (!window.confirm('Are you sure you want to delete this user?')) return;
         try {
@@ -132,6 +145,14 @@ const Dashboard = () => {
             setMessage(error.response?.data?.message || 'Error updating role');
             setStatus('error');
         }
+    };
+
+    // Helper for floating label classes
+    const getFormGroupClass = (fieldName, formData) => {
+        let classes = 'form-group';
+        if (focusedField === fieldName) classes += ' focused';
+        if (formData && formData[fieldName] && formData[fieldName].toString().length > 0) classes += ' has-content';
+        return classes;
     };
 
     const handleBookingStatusUpdate = async (id, newStatus) => {
@@ -296,6 +317,7 @@ const Dashboard = () => {
     const totalBookingsCount = bookings.length;
     const totalUsersCount = users.length;
     const totalTemplesCount = temples.length;
+    const totalEventsCount = events.length;
 
     // --- Chart Data Aggregation ---
     const revenueData = useMemo(() => {
@@ -386,6 +408,9 @@ const Dashboard = () => {
                         <button className={`nav-btn ${activeTab === 'donations' ? 'active' : ''}`} onClick={() => setActiveTab('donations')}>
                             <span className="nav-icon">💰</span> Donations
                         </button>
+                        <button className={`nav-btn ${activeTab === 'events' ? 'active' : ''}`} onClick={() => setActiveTab('events')}>
+                            <span className="nav-icon">📅</span> Manage Events
+                        </button>
                     </nav>
                 </aside>
 
@@ -425,6 +450,13 @@ const Dashboard = () => {
                                     <div className="admin-stat-details">
                                         <span className="admin-stat-value">{totalTemplesCount}</span>
                                         <span className="admin-stat-label">Active Temples</span>
+                                    </div>
+                                </div>
+                                <div className="admin-stat-card">
+                                    <div className="admin-stat-icon" style={{ background: 'linear-gradient(135deg, rgba(243, 156, 18, 0.2), rgba(230, 126, 34, 0.2))' }}>📅</div>
+                                    <div className="admin-stat-details">
+                                        <span className="admin-stat-value">{totalEventsCount}</span>
+                                        <span className="admin-stat-label">Events</span>
                                     </div>
                                 </div>
                             </div>
@@ -496,314 +528,414 @@ const Dashboard = () => {
                         </>
                     )}
 
+                    {activeTab === 'events' && (
+                        <div className="admin-events-tab-content">
+                            <AdminEvents />
+                        </div>
+                    )}
+
                     {message && (
                         <div className={`status-message ${status}`}>
                             {message}
                         </div>
                     )}
 
-                    <div className="glass-card form-container">
-                        <h3 className="form-title">
-                            {activeTab === 'donations' ? 'Donation History' : activeTab === 'bookings' ? 'All Bookings' : activeTab === 'users' ? 'User Management' : (editingId ? `Edit ${activeTab === 'temples' ? 'Temple' : 'Seva'}` : `Add New ${activeTab === 'temples' ? 'Temple' : 'Seva'}`)}
-                        </h3>
+                    {['temples', 'sevas', 'users', 'donations', 'bookings'].includes(activeTab) && (
+                        <>
+                            <div className="glass-card form-container">
+                                {activeTab === 'temples' ? (
+                                    <form onSubmit={handleTempleSubmit} className="temple-form">
+                                        <div className="form-section-title">Temple Identity</div>
+                                        <div className={getFormGroupClass('name', templeFormData)}>
+                                            <label>Temple Name</label>
+                                            <input 
+                                                type="text" 
+                                                name="name" 
+                                                value={templeFormData.name} 
+                                                onChange={handleTempleChange} 
+                                                onFocus={() => setFocusedField('name')}
+                                                onBlur={() => setFocusedField(null)}
+                                                required 
+                                            />
+                                        </div>
+                                        <div className={getFormGroupClass('location', templeFormData)} style={{ position: 'relative', zIndex: 100 }}>
+                                            <label>Location</label>
+                                            <input 
+                                                type="text" 
+                                                name="location" 
+                                                value={templeFormData.location} 
+                                                onChange={handleTempleChange} 
+                                                onFocus={() => setFocusedField('location')}
+                                                onBlur={() => setFocusedField(null)}
+                                                required 
+                                                placeholder="Enter city or full address" 
+                                            />
+                                        </div>
 
-                        {activeTab === 'temples' ? (
-                            <form onSubmit={handleTempleSubmit} className="temple-form">
-                                {/* ... temple form inputs ... */}
-                                <div className="form-group">
-                                    <label>Temple Name</label>
-                                    <input type="text" name="name" value={templeFormData.name} onChange={handleTempleChange} required />
-                                </div>
-                                <div className="form-group" style={{ position: 'relative', zIndex: 100 }}>
-                                    <label>Location</label>
-                                    <input type="text" name="location" value={templeFormData.location} onChange={handleTempleChange} required placeholder="Enter city or full address" />
-                                </div>
-                                <div className="form-group">
-                                    <label>Map Coordinates (Optional)</label>
-                                    <input 
-                                        type="text" 
-                                        name="coordinateString" 
-                                        value={templeFormData.coordinateString} 
-                                        onChange={handleTempleChange} 
-                                        placeholder="e.g. 18.4662, 83.6662" 
-                                    />
-                                    <small style={{ color: '#888', display: 'block', marginTop: '4px' }}>Paste latitude and longitude separated by a comma</small>
-                                </div>
-                                <div className="form-group">
-                                    <label>Description</label>
-                                    <textarea name="description" value={templeFormData.description} onChange={handleTempleChange} required />
-                                </div>
-                                <div className="form-group">
-                                    <label>History</label>
-                                    <textarea name="history" value={templeFormData.history} onChange={handleTempleChange} required />
-                                </div>
-                                <div className="form-group">
-                                    <label>Images (Comma separated URLs)</label>
-                                    <input type="text" name="images" value={templeFormData.images} onChange={handleTempleChange} />
-                                </div>
-                                <div className="form-buttons">
-                                    <button type="submit" className="submit-btn" disabled={status === 'loading'}>
-                                        {status === 'loading' ? 'Saving...' : (editingId ? 'Update Temple' : 'Add Temple')}
-                                    </button>
-                                    {editingId && <button type="button" onClick={handleCancelEdit} className="cancel-btn">Cancel</button>}
-                                </div>
-                            </form>
-                        ) : activeTab === 'sevas' ? (
-                            <form onSubmit={handleSevaSubmit} className="seva-form">
-                                {/* ... seva form inputs ... */}
-                                <div className="form-group">
-                                    <label>Seva Name</label>
-                                    <input type="text" name="name" value={sevaFormData.name} onChange={handleSevaChange} required />
-                                </div>
-                                <div className="form-group">
-                                    <label>Description</label>
-                                    <textarea name="description" value={sevaFormData.description} onChange={handleSevaChange} required />
-                                </div>
-                                <div className="form-row">
-                                    <div className="form-group">
-                                        <label>Price (₹)</label>
-                                        <input type="number" name="price" value={sevaFormData.price} onChange={handleSevaChange} required />
+                                        <div className="form-section-title">Logistics & Content</div>
+                                        <div className={getFormGroupClass('coordinateString', templeFormData)}>
+                                            <label>Map Coordinates (Optional)</label>
+                                            <input 
+                                                type="text" 
+                                                name="coordinateString" 
+                                                value={templeFormData.coordinateString} 
+                                                onChange={handleTempleChange} 
+                                                onFocus={() => setFocusedField('coordinateString')}
+                                                onBlur={() => setFocusedField(null)}
+                                                placeholder="e.g. 18.4662, 83.6662" 
+                                            />
+                                        </div>
+                                        <div className={getFormGroupClass('images', templeFormData)}>
+                                            <label>Image URLs (Comma separated)</label>
+                                            <input 
+                                                type="text" 
+                                                name="images" 
+                                                value={templeFormData.images} 
+                                                onChange={handleTempleChange} 
+                                                onFocus={() => setFocusedField('images')}
+                                                onBlur={() => setFocusedField(null)}
+                                            />
+                                        </div>
+
+                                        <div className="form-section-title">Sacred Narrative</div>
+                                        <div className={getFormGroupClass('description', templeFormData)}>
+                                            <label>Description</label>
+                                            <textarea 
+                                                name="description" 
+                                                value={templeFormData.description} 
+                                                onChange={handleTempleChange} 
+                                                onFocus={() => setFocusedField('description')}
+                                                onBlur={() => setFocusedField(null)}
+                                                required 
+                                            />
+                                        </div>
+                                        <div className={getFormGroupClass('history', templeFormData)}>
+                                            <label>History</label>
+                                            <textarea 
+                                                name="history" 
+                                                value={templeFormData.history} 
+                                                onChange={handleTempleChange} 
+                                                onFocus={() => setFocusedField('history')}
+                                                onBlur={() => setFocusedField(null)}
+                                                required 
+                                            />
+                                        </div>
+                                        
+                                        <div className="form-buttons">
+                                            <button type="submit" className="submit-btn" disabled={status === 'loading'}>
+                                                {status === 'loading' ? 'Saving...' : (editingId ? 'Update Temple' : 'Add Temple')}
+                                            </button>
+                                            {editingId && <button type="button" onClick={handleCancelEdit} className="cancel-btn">Cancel</button>}
+                                        </div>
+                                    </form>
+                                ) : activeTab === 'sevas' ? (
+                                    <form onSubmit={handleSevaSubmit} className="seva-form-premium">
+                                        <div className="form-section-title">Seva Identity</div>
+                                        <div className={getFormGroupClass('name', sevaFormData)}>
+                                            <label>Seva Name</label>
+                                            <input 
+                                                type="text" 
+                                                name="name" 
+                                                value={sevaFormData.name} 
+                                                onChange={handleSevaChange} 
+                                                onFocus={() => setFocusedField('name')}
+                                                onBlur={() => setFocusedField(null)}
+                                                required 
+                                                placeholder="e.g. Abhishekam"
+                                            />
+                                        </div>
+                                        <div className={getFormGroupClass('description', sevaFormData)}>
+                                            <label>Description</label>
+                                            <textarea 
+                                                name="description" 
+                                                value={sevaFormData.description} 
+                                                onChange={handleSevaChange} 
+                                                onFocus={() => setFocusedField('description')}
+                                                onBlur={() => setFocusedField(null)}
+                                                required 
+                                                placeholder="Describe the sacred service..."
+                                            />
+                                        </div>
+
+                                        <div className="form-section-title">Booking Details</div>
+                                        <div className="form-row">
+                                            <div className={getFormGroupClass('price', sevaFormData)}>
+                                                <label>Price (₹)</label>
+                                                <input 
+                                                    type="number" 
+                                                    name="price" 
+                                                    value={sevaFormData.price} 
+                                                    onChange={handleSevaChange} 
+                                                    onFocus={() => setFocusedField('price')}
+                                                    onBlur={() => setFocusedField(null)}
+                                                    required 
+                                                />
+                                            </div>
+                                            <div className={getFormGroupClass('duration', sevaFormData)}>
+                                                <label>Duration</label>
+                                                <input 
+                                                    type="text" 
+                                                    name="duration" 
+                                                    value={sevaFormData.duration} 
+                                                    onChange={handleSevaChange} 
+                                                    onFocus={() => setFocusedField('duration')}
+                                                    onBlur={() => setFocusedField(null)}
+                                                    placeholder="e.g. 30 mins" 
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className="form-row">
+                                            <div className={getFormGroupClass('ticketLimit', sevaFormData)}>
+                                                <label>Ticket Limit (Required)</label>
+                                                <input 
+                                                    type="number" 
+                                                    name="ticketLimit" 
+                                                    value={sevaFormData.ticketLimit} 
+                                                    onChange={handleSevaChange} 
+                                                    onFocus={() => setFocusedField('ticketLimit')}
+                                                    onBlur={() => setFocusedField(null)}
+                                                    required 
+                                                    min="1" 
+                                                />
+                                            </div>
+                                            <div className={getFormGroupClass('temple', sevaFormData)}>
+                                                <label>Select Temple</label>
+                                                <select 
+                                                    name="temple" 
+                                                    value={sevaFormData.temple} 
+                                                    onChange={handleSevaChange} 
+                                                    onFocus={() => setFocusedField('temple')}
+                                                    onBlur={() => setFocusedField(null)}
+                                                    required
+                                                >
+                                                    <option value=""></option>
+                                                    {temples.map(t => (
+                                                        <option key={t._id} value={t._id} style={{background: '#0f172a'}}>{t.name}</option>
+                                                    ))}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div className="form-buttons">
+                                            <button type="submit" className="submit-btn" style={{background: 'linear-gradient(135deg, #3b82f6, #6366f1)'}} disabled={status === 'loading'}>
+                                                {status === 'loading' ? 'Saving...' : (editingId ? 'Update Seva' : 'Add Seva')}
+                                            </button>
+                                            {editingId && <button type="button" onClick={handleCancelEdit} className="cancel-btn">Cancel</button>}
+                                        </div>
+                                    </form>
+                                ) : (
+                                    <div style={{ textAlign: 'center', color: '#666', padding: '2rem' }}>
+                                        <p>View all {activeTab === 'bookings' ? 'bookings' : (activeTab === 'users' ? 'registered users' : 'donations')} made by users below.</p>
                                     </div>
-                                    <div className="form-group">
-                                        <label>Duration</label>
-                                        <input type="text" name="duration" value={sevaFormData.duration} onChange={handleSevaChange} placeholder="e.g. 30 mins" />
-                                    </div>
-                                </div>
-                                <div className="form-row">
-                                    <div className="form-group">
-                                        <label>Ticket Limit (Required)</label>
-                                        <input type="number" name="ticketLimit" value={sevaFormData.ticketLimit} onChange={handleSevaChange} required min="1" />
-                                    </div>
-                                    <div className="form-group"></div> {/* Spacer */}
-                                </div>
-                                <div className="form-group">
-                                    <label>Select Temple</label>
-                                    <select name="temple" value={sevaFormData.temple} onChange={handleSevaChange} required>
-                                        <option value="">-- Select Temple --</option>
-                                        {temples.map(t => (
-                                            <option key={t._id} value={t._id}>{t.name}</option>
-                                        ))}
-                                    </select>
-                                </div>
-                                <div className="form-buttons">
-                                    <button type="submit" className="submit-btn" disabled={status === 'loading'}>
-                                        {status === 'loading' ? 'Saving...' : (editingId ? 'Update Seva' : 'Add Seva')}
-                                    </button>
-                                    {editingId && <button type="button" onClick={handleCancelEdit} className="cancel-btn">Cancel</button>}
-                                </div>
-                            </form>
-                        ) : (
-                            <div style={{ textAlign: 'center', color: '#666', padding: '2rem' }}>
-                                <p>View all {activeTab === 'bookings' ? 'bookings' : (activeTab === 'users' ? 'registered users' : 'donations')} made by users below.</p>
+                                )}
                             </div>
-                        )}
-                    </div>
 
-                    <div style={{ marginTop: '4rem' }}>
-                        <h3 className="form-title" style={{ textAlign: 'left', marginBottom: '1.5rem' }}>
-                            {activeTab === 'temples' ? 'Existing Temples' : (activeTab === 'sevas' ? 'Existing Sevas' : (activeTab === 'bookings' ? 'All Bookings' : (activeTab === 'users' ? 'Registered Users' : 'All Donations')))}
-                        </h3>
-                        <div className="glass-card" style={{ padding: '0', overflowX: 'auto' }}>
-                            {activeTab === 'temples' ? (
-                                temples.length > 0 ? (
-                                    <table className="admin-table">
-                                        <thead>
-                                            <tr>
-                                                <th>Name</th>
-                                                <th>Location</th>
-                                                <th className="text-right">Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {temples.map(temple => (
-                                                <tr key={temple._id}>
-                                                    <td>{temple.name}</td>
-                                                    <td>{temple.location}</td>
-                                                    <td className="text-right actions-cell">
-                                                        <button onClick={() => handleEdit(temple, 'temple')} className="edit-btn">Edit</button>
-                                                        <button onClick={() => handleDelete(temple._id, 'temple')} className="delete-btn">Delete</button>
-                                                    </td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
-                                ) : <div className="no-data">No temples found.</div>
-                            ) : activeTab === 'sevas' ? (
-                                sevas.length > 0 ? (
-                                    <table className="admin-table">
-                                        <thead>
-                                            <tr>
-                                                <th>Name</th>
-                                                <th>Temple</th>
-                                                <th>Price</th>
-                                                <th>Limit</th>
-                                                <th>Tickets Sold</th>
-                                                <th className="text-right">Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {sevas.map(seva => (
-                                                <tr key={seva._id}>
-                                                    <td>{seva.name}</td>
-                                                    <td>{seva.temple?.name || 'N/A'}</td>
-                                                    <td>₹{seva.price}</td>
-                                                    <td>{seva.ticketLimit}</td>
-                                                    <td className="seva-booked-count">{seva.bookedCount || 0}</td>
-                                                    <td className="text-right actions-cell">
-                                                        <button
-                                                            onClick={() => setViewingSevaBookings(seva)}
-                                                            className="edit-btn btn-bookings"
-                                                        >
-                                                            Bookings
-                                                        </button>
-                                                        <button onClick={() => handleEdit(seva, 'seva')} className="edit-btn">Edit</button>
-                                                        <button onClick={() => handleDelete(seva._id, 'seva')} className="delete-btn">Delete</button>
-                                                    </td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
-                                ) : <div className="no-data">No sevas found.</div>
-                            ) : activeTab === 'bookings' ? (
-                                bookings.length > 0 ? (
-                                    <table className="admin-table">
-                                        <thead>
-                                            <tr>
-                                                <th>Type</th>
-                                                <th>Item</th>
-                                                <th>User</th>
-                                                <th>Date</th>
-                                                <th>Tickets</th>
-                                                <th>Status</th>
-                                                <th className="text-right">Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {bookings.map(booking => (
-                                                <tr key={booking._id}>
-                                                    <td>{booking.typeModel}</td>
-                                                    <td>{booking.item?.title || booking.item?.name || 'N/A'}</td>
-                                                    <td>
-                                                        <div>{booking.user?.name || booking.devotee || 'N/A'}</div>
-                                                        <div style={{ fontSize: '0.8rem', color: '#888' }}>{booking.user?.email || ''}</div>
-                                                    </td>
-                                                    <td>{new Date(booking.date).toLocaleDateString()}</td>
-                                                    <td>{booking.members}</td>
-                                                    <td>{booking.members}</td>
-                                                    <td>
-                                                        <select
-                                                            value={booking.status}
-                                                            onChange={(e) => handleBookingStatusUpdate(booking._id, e.target.value)}
-                                                            style={{
-                                                                padding: '4px',
-                                                                borderRadius: '4px',
-                                                                border: '1px solid rgba(255,255,255,0.2)',
-                                                                background: 'rgba(0,0,0,0.2)',
-                                                                color: 'white'
-                                                            }}
-                                                        >
-                                                            <option value="pending" style={{ color: 'black' }}>Pending</option>
-                                                            <option value="confirmed" style={{ color: 'black' }}>Confirmed</option>
-                                                            <option value="completed" style={{ color: 'black' }}>Completed</option>
-                                                            <option value="cancelled" style={{ color: 'black' }}>Cancelled</option>
-                                                        </select>
-                                                    </td>
-                                                    <td className="text-right">
-                                                        <button
-                                                            onClick={() => setSelectedBooking(booking)}
-                                                            className="edit-btn"
-                                                            style={{ background: '#3498db' }}
-                                                        >
-                                                            Bill
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
-                                ) : <div className="no-data">No bookings found.</div>
-                            ) : activeTab === 'users' ? (
-                                users.length > 0 ? (
-                                    <table className="admin-table">
-                                        <thead>
-                                            <tr>
-                                                <th>Name</th>
-                                                <th>Email</th>
-                                                <th>Role</th>
-                                                <th>Joined Date</th>
-                                                <th className="text-right">Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {users.map(u => (
-                                                <tr key={u._id}>
-                                                    <td>{u.name}</td>
-                                                    <td>{u.email}</td>
-                                                    <td>
-                                                        <span style={{
-                                                            padding: '4px 8px',
-                                                            borderRadius: '4px',
-                                                            background: u.role === 'admin' ? '#dcfce7' : '#e0f2fe',
-                                                            color: u.role === 'admin' ? '#166534' : '#0284c7',
-                                                            fontSize: '0.85rem'
-                                                        }}>
-                                                            {u.role}
-                                                        </span>
-                                                    </td>
-                                                    <td>{new Date(u.createdAt).toLocaleDateString()}</td>
-                                                    <td className="text-right actions-cell">
-                                                        <button
-                                                            onClick={() => handleRoleUpdate(u._id, u.role)}
-                                                            className="edit-btn"
-                                                            style={{ background: u.role === 'admin' ? '#f59e0b' : '#3b82f6' }}
-                                                        >
-                                                            {u.role === 'admin' ? 'Demote' : 'Make Admin'}
-                                                        </button>
-                                                        <button onClick={() => handleUserDelete(u._id)} className="delete-btn">Delete</button>
-                                                    </td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
-                                ) : <div className="no-data">No users found.</div>
-                            ) : (
-                                donations.length > 0 ? (
-                                    <table className="admin-table">
-                                        <thead>
-                                            <tr>
-                                                <th>User/Donor</th>
-                                                <th>Temple</th>
-                                                <th>Amount</th>
-                                                <th>Method</th>
-                                                <th>Date</th>
-                                                <th className="text-right">Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {donations.map(donation => (
-                                                <tr key={donation._id}>
-                                                    <td>{donation.donorName || donation.user?.name || 'Unknown'}</td>
-                                                    <td>{donation.temple?.name || 'N/A'}</td>
-                                                    <td style={{ color: '#27ae60', fontWeight: 'bold' }}>₹{donation.amount}</td>
-                                                    <td>{donation.paymentMethod}</td>
-                                                    <td>{new Date(donation.createdAt).toLocaleDateString()}</td>
-                                                    <td className="text-right">
-                                                        <button
-                                                            onClick={() => setSelectedDonation(donation)}
-                                                            className="edit-btn"
-                                                            style={{ background: '#8e44ad' }}
-                                                        >
-                                                            View
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
-                                ) : <div className="no-data">No donations found.</div>
-                            )}
-                        </div>
-                    </div>
+                            <div style={{ marginTop: '4rem' }}>
+                                <h3 className="form-title" style={{ textAlign: 'left', marginBottom: '1.5rem' }}>
+                                    {activeTab === 'temples' ? 'Existing Temples' : (activeTab === 'sevas' ? 'Existing Sevas' : (activeTab === 'bookings' ? 'All Bookings' : (activeTab === 'users' ? 'Registered Users' : 'All Donations')))}
+                                </h3>
+                                <div className="glass-card" style={{ padding: '0', overflowX: 'auto' }}>
+                                    {activeTab === 'temples' ? (
+                                        temples.length > 0 ? (
+                                            <table className="admin-table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Name</th>
+                                                        <th>Location</th>
+                                                        <th className="text-right">Actions</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {temples.map(temple => (
+                                                        <tr key={temple._id}>
+                                                            <td>{temple.name}</td>
+                                                            <td>{temple.location}</td>
+                                                            <td className="text-right actions-cell">
+                                                                <button onClick={() => handleEdit(temple, 'temple')} className="edit-btn">Edit</button>
+                                                                <button onClick={() => handleDelete(temple._id, 'temple')} className="delete-btn">Delete</button>
+                                                            </td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        ) : <div className="no-data">No temples found.</div>
+                                    ) : activeTab === 'sevas' ? (
+                                        sevas.length > 0 ? (
+                                            <table className="admin-table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Name</th>
+                                                        <th>Temple</th>
+                                                        <th>Price</th>
+                                                        <th>Limit</th>
+                                                        <th>Tickets Sold</th>
+                                                        <th className="text-right">Actions</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {sevas.map(seva => (
+                                                        <tr key={seva._id}>
+                                                            <td>{seva.name}</td>
+                                                            <td>{seva.temple?.name || 'N/A'}</td>
+                                                            <td>₹{seva.price}</td>
+                                                            <td>{seva.ticketLimit}</td>
+                                                            <td className="seva-booked-count">{seva.bookedCount || 0}</td>
+                                                            <td className="text-right actions-cell">
+                                                                <button
+                                                                    onClick={() => setViewingSevaBookings(seva)}
+                                                                    className="edit-btn btn-bookings"
+                                                                >
+                                                                    Bookings
+                                                                </button>
+                                                                <button onClick={() => handleEdit(seva, 'seva')} className="edit-btn">Edit</button>
+                                                                <button onClick={() => handleDelete(seva._id, 'seva')} className="delete-btn">Delete</button>
+                                                            </td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        ) : <div className="no-data">No sevas found.</div>
+                                    ) : activeTab === 'bookings' ? (
+                                        bookings.length > 0 ? (
+                                            <table className="admin-table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Type</th>
+                                                        <th>Item</th>
+                                                        <th>User</th>
+                                                        <th>Date</th>
+                                                        <th>Tickets</th>
+                                                        <th>Status</th>
+                                                        <th className="text-right">Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {bookings.map(booking => (
+                                                        <tr key={booking._id}>
+                                                            <td>{booking.typeModel}</td>
+                                                            <td>{booking.item?.title || booking.item?.name || 'N/A'}</td>
+                                                            <td>
+                                                                <div>{booking.user?.name || booking.devotee || 'N/A'}</div>
+                                                                <div style={{ fontSize: '0.8rem', color: '#888' }}>{booking.user?.email || ''}</div>
+                                                            </td>
+                                                            <td>{new Date(booking.date).toLocaleDateString()}</td>
+                                                            <td>{booking.members}</td>
+                                                            <td>{booking.members}</td>
+                                                            <td>
+                                                                <select
+                                                                    value={booking.status}
+                                                                    onChange={(e) => handleBookingStatusUpdate(booking._id, e.target.value)}
+                                                                    style={{
+                                                                        padding: '4px',
+                                                                        borderRadius: '4px',
+                                                                        border: '1px solid rgba(255,255,255,0.2)',
+                                                                        background: 'rgba(0,0,0,0.2)',
+                                                                        color: 'white'
+                                                                    }}
+                                                                >
+                                                                    <option value="pending" style={{ color: 'black' }}>Pending</option>
+                                                                    <option value="confirmed" style={{ color: 'black' }}>Confirmed</option>
+                                                                    <option value="completed" style={{ color: 'black' }}>Completed</option>
+                                                                    <option value="cancelled" style={{ color: 'black' }}>Cancelled</option>
+                                                                </select>
+                                                            </td>
+                                                            <td className="text-right">
+                                                                <button
+                                                                    onClick={() => setSelectedBooking(booking)}
+                                                                    className="edit-btn"
+                                                                    style={{ background: '#3498db' }}
+                                                                >
+                                                                    Bill
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        ) : <div className="no-data">No bookings found.</div>
+                                    ) : activeTab === 'users' ? (
+                                        users.length > 0 ? (
+                                            <table className="admin-table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Name</th>
+                                                        <th>Email</th>
+                                                        <th>Role</th>
+                                                        <th>Joined Date</th>
+                                                        <th className="text-right">Actions</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {users.map(u => (
+                                                        <tr key={u._id}>
+                                                            <td>{u.name}</td>
+                                                            <td>{u.email}</td>
+                                                            <td>
+                                                                <span style={{
+                                                                    padding: '4px 8px',
+                                                                    borderRadius: '4px',
+                                                                    background: u.role === 'admin' ? '#dcfce7' : '#e0f2fe',
+                                                                    color: u.role === 'admin' ? '#166534' : '#0284c7',
+                                                                    fontSize: '0.85rem'
+                                                                }}>
+                                                                    {u.role}
+                                                                </span>
+                                                            </td>
+                                                            <td>{new Date(u.createdAt).toLocaleDateString()}</td>
+                                                            <td className="text-right actions-cell">
+                                                                <button
+                                                                    onClick={() => handleRoleUpdate(u._id, u.role)}
+                                                                    className="edit-btn"
+                                                                    style={{ background: u.role === 'admin' ? '#f59e0b' : '#3b82f6' }}
+                                                                >
+                                                                    {u.role === 'admin' ? 'Demote' : 'Make Admin'}
+                                                                </button>
+                                                                <button onClick={() => handleUserDelete(u._id)} className="delete-btn">Delete</button>
+                                                            </td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        ) : <div className="no-data">No users found.</div>
+                                    ) : (
+                                        donations.length > 0 ? (
+                                            <table className="admin-table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>User/Donor</th>
+                                                        <th>Temple</th>
+                                                        <th>Amount</th>
+                                                        <th>Method</th>
+                                                        <th>Date</th>
+                                                        <th className="text-right">Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {donations.map(donation => (
+                                                        <tr key={donation._id}>
+                                                            <td>{donation.donorName || donation.user?.name || 'Unknown'}</td>
+                                                            <td>{donation.temple?.name || 'N/A'}</td>
+                                                            <td style={{ color: '#27ae60', fontWeight: 'bold' }}>₹{donation.amount}</td>
+                                                            <td>{donation.paymentMethod}</td>
+                                                            <td>{new Date(donation.createdAt).toLocaleDateString()}</td>
+                                                            <td className="text-right">
+                                                                <button
+                                                                    onClick={() => setSelectedDonation(donation)}
+                                                                    className="edit-btn"
+                                                                    style={{ background: '#8e44ad' }}
+                                                                >
+                                                                    View
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        ) : <div className="no-data">No donations found.</div>
+                                    )}
+                                </div>
+                            </div>
+                        </>
+                    )}
                     {selectedBooking && <Bill booking={selectedBooking} onClose={() => setSelectedBooking(null)} />}
 
                     {viewingSevaBookings && (

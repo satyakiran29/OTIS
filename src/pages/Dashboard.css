@@ -187,8 +187,14 @@
 }
 
 .form-container {
-    padding: 2.5rem;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 3rem;
+    background: rgba(15, 23, 42, 0.4);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 24px;
+    background-image: 
+        radial-gradient(at 0% 0%, rgba(255, 153, 51, 0.03) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(59, 130, 246, 0.03) 0px, transparent 50%);
 }
 
 .form-title {
@@ -200,7 +206,8 @@
 }
 
 .form-group {
-    margin-bottom: 1.5rem;
+    position: relative;
+    margin-bottom: 2rem;
 }
 
 .form-group label {
@@ -209,6 +216,36 @@
     color: var(--text-light);
     font-weight: 500;
     letter-spacing: 0.5px;
+    position: absolute;
+    top: 14px;
+    left: 16px;
+    pointer-events: none;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 10;
+}
+
+.form-group.focused label,
+.form-group.has-content label {
+    top: -12px;
+    left: 12px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: var(--primary-color);
+    background: #0f172a;
+    padding: 0 8px;
+    border-radius: 4px;
+}
+
+/* For Seva specific Celestial Blue accents */
+.seva-form-premium .form-group.focused label,
+.seva-form-premium .form-group.has-content label {
+    color: #3b82f6; /* Celestial Blue */
+}
+
+.seva-form-premium input:focus,
+.seva-form-premium textarea:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 20px -5px rgba(59, 130, 246, 0.4);
 }
 
 .form-group input,
@@ -220,8 +257,14 @@
     border-radius: 8px;
     color: var(--text-light);
     font-size: 1rem;
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     font-family: var(--font-main);
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: #64748b;
+    opacity: 0.8;
 }
 
 .form-group input:focus,
@@ -301,8 +344,24 @@
 
 .form-row {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+}
+
+.form-section-title {
+    font-size: 0.7rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--gold);
+    margin: 1.5rem 0 1.5rem;
+    padding-bottom: 8px;
+    border-bottom: 1px dashed rgba(255, 204, 0, 0.2);
+}
+
+.seva-form-premium .form-section-title {
+    color: #3b82f6;
+    border-bottom-color: rgba(59, 130, 246, 0.2);
 }
 
 .form-buttons {

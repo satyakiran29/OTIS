@@ -1,84 +1,141 @@
 import React, { useState, useEffect } from 'react';
 import axios from '../utils/axiosConfig';
-import { useAuth } from '../context/AuthContext';
-import './Events.css'; // We will create this next
-import BookingForm from '../components/BookingForm'; // We will create this next
+import EventCard from '../components/EventCard';
+import './Events.css';
 
 const Events = () => {
     const [events, setEvents] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [selectedEvent, setSelectedEvent] = useState(null);
-    const { user } = useAuth();
+    const [filterCategory, setFilterCategory] = useState('All');
+    const [countdownEvent, setCountdownEvent] = useState(null);
+    const [timeLeft, setTimeLeft] = useState('');
 
     useEffect(() => {
-        const fetchEvents = async () => {
-            try {
-                const res = await axios.get('/events');
-                setEvents(res.data);
-                setLoading(false);
-            } catch (err) {
-                console.error(err);
-                setLoading(false);
-            }
-        };
-
         fetchEvents();
     }, []);
 
-    const handleBookClick = (event) => {
-        if (!user) {
-            alert('Please login to book tickets');
-            return;
+    useEffect(() => {
+        if (!countdownEvent) return;
+
+        const interval = setInterval(() => {
+            const eventDate = new Date(`${countdownEvent.date.split('T')[0]}T${countdownEvent.time || '00:00'}`);
+            const now = new Date();
+            const difference = eventDate.getTime() - now.getTime();
+
+            if (difference > 0) {
+                const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
+                const minutes = Math.floor((difference / 1000 / 60) % 60);
+                const seconds = Math.floor((difference / 1000) % 60);
+                setTimeLeft(`${days}d ${hours}h ${minutes}m ${seconds}s`);
+            } else {
+                setTimeLeft('Event has started or passed');
+                clearInterval(interval);
+            }
+        }, 1000);
+
+        return () => clearInterval(interval);
+    }, [countdownEvent]);
+
+    const fetchEvents = async () => {
+        try {
+            // Note: Uses dummy data as a fallback to demonstrate UI if the backend route is missing.
+            const dummyEvents = [
+                {
+                    _id: '1',
+                    name: 'Morning Suprabhatam',
+                    description: 'Sacred chanting to awaken the deities. A peaceful start to the day.',
+                    category: 'Daily',
+                    date: new Date().toISOString(),
+                    time: '05:00 AM',
+                    location: 'Main Sanctum',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/e/ea/The_Konark_Sun_Temple.jpg'
+                },
+                {
+                    _id: '2',
+                    name: 'Friday Abhishekam',
+                    description: 'Special holy bath and adornment performed for the main deity every Friday.',
+                    category: 'Weekly',
+                    date: new Date(Date.now() + 86400000 * 3).toISOString(),
+                    time: '08:00 AM',
+                    location: 'Inner Temple Hall',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/5/5b/Meenakshi_Amman_Temple_Madurai.jpg'
+                },
+                {
+                    _id: '3',
+                    name: 'Maha Brahmotsavam',
+                    description: 'The grand annual festival featuring chariot processions and vibrant cultural programs over nine spectacular days.',
+                    category: 'Annual',
+                    date: new Date(Date.now() + 86400000 * 15).toISOString(),
+                    time: '06:00 AM onwards',
+                    location: 'Temple Grounds & Streets',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/f/f3/Brihadeeswarar_Temple_at_Thanjavur.jpg'
+                }
+            ];
+
+            const response = await axios.get('/events').catch(() => ({ data: dummyEvents }));
+            const fetchedEvents = response.data && response.data.length > 0 ? response.data : dummyEvents;
+            setEvents(fetchedEvents);
+
+            // Find the closest upcoming event for the countdown
+            const upcoming = fetchedEvents
+                .filter(e => new Date(e.date) > new Date())
+                .sort((a, b) => new Date(a.date) - new Date(b.date))[0];
+            
+            if (upcoming) setCountdownEvent(upcoming);
+        } catch (error) {
+            console.error('Error fetching events:', error);
+        } finally {
+            setLoading(false);
         }
-        setSelectedEvent(event);
     };
 
-    const handleCloseBooking = () => {
-        setSelectedEvent(null);
-    };
-
-    if (loading) return (
-        <div className="temple-loader-container">
-            <span className="temple-icon">🛕</span>
-            <span className="temple-loader-text">Loading Events...</span>
-        </div>
-    );
+    const categories = ['All', 'Daily', 'Weekly', 'Monthly', 'Annual'];
+    const filteredEvents = filterCategory === 'All' 
+        ? events 
+        : events.filter(e => e.category === filterCategory);
 
     return (
-        <div className="events-page page-container">
-            <h1 className="page-title">Upcoming Spiritual Events</h1>
-            <div className="events-grid">
-                {events.map(event => (
-                    <div key={event._id} className="event-card">
-                        <div className="event-image-container">
-                            <img
-                                src={event.image || 'https://via.placeholder.com/300x200?text=Event'}
-                                alt={event.title}
-                                className="event-image"
-                            />
-                            <div className="event-date">
-                                <span>{new Date(event.date).getDate()}</span>
-                                <span>{new Date(event.date).toLocaleString('default', { month: 'short' })}</span>
-                            </div>
-                        </div>
-                        <div className="event-details">
-                            <h2>{event.title}</h2>
-                            <p className="event-location"><i className="fas fa-map-marker-alt"></i> {event.location}</p>
-                            <p className="event-description">{event.description.substring(0, 100)}...</p>
-                            <button className="book-btn" onClick={() => handleBookClick(event)}>
-                                Book Now
-                            </button>
-                        </div>
-                    </div>
-                ))}
+        <div className="events-container">
+            <div className="events-header-wrapper">
+                <h1>Temple Events & Festivals</h1>
+                <p>Join us in celebrating our rich traditions and spiritual gatherings.</p>
             </div>
 
-            {selectedEvent && (
-                <div className="modal-overlay">
-                    <div className="modal-content">
-                        <button className="close-btn" onClick={handleCloseBooking}>&times;</button>
-                        <BookingForm type="event" item={selectedEvent} onClose={handleCloseBooking} />
-                    </div>
+            {countdownEvent && (
+                <div className="countdown-section">
+                    <h2>Next Major Event: {countdownEvent.name}</h2>
+                    <div className="timer-display">{timeLeft}</div>
+                </div>
+            )}
+
+            <div className="events-controls">
+                <div className="category-filters">
+                    {categories.map(cat => (
+                        <button 
+                            key={cat} 
+                            className={`filter-btn ${filterCategory === cat ? 'active' : ''}`}
+                            onClick={() => setFilterCategory(cat)}
+                        >
+                            {cat}
+                        </button>
+                    ))}
+                </div>
+            </div>
+
+            {loading ? (
+                <div className="loading-spinner">Loading events...</div>
+            ) : (
+                <div className="events-grid">
+                    {filteredEvents.length > 0 ? (
+                        filteredEvents.map(event => (
+                            <EventCard key={event._id || event.id} event={event} />
+                        ))
+                    ) : (
+                        <div className="no-events-message">
+                            <h3>No events found for this category.</h3>
+                        </div>
+                    )}
                 </div>
             )}
         </div>

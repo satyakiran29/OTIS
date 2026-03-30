@@ -12,6 +12,7 @@ import PrivacyPolicy from './pages/PrivacyPolicy';
 import Temples from './pages/Temples';
 import TempleDetails from './pages/TempleDetails';
 import Events from './pages/Events';
+import AdminEvents from './pages/AdminEvents';
 import Donations from './pages/Donations';
 import Profile from './pages/Profile';
 import Darshan from './pages/Darshan';
@@ -20,12 +21,15 @@ import Dashboard from './pages/Dashboard';
 
 import './App.css';
 
+import Chatbot from './components/Chatbot/Chatbot';
+
 // Layout component to handle conditional rendering of Navbar/Footer
 const Layout = ({ children }) => {
 
   return (
     <div className="app">
       <Navbar />
+      <Chatbot />
       {children}
       <Footer />
     </div>
@@ -65,6 +69,7 @@ function App() {
             <Route path="/temples" element={<Temples />} />
             <Route path="/temples/:id" element={<TempleDetails />} />
             <Route path="/events" element={<Events />} />
+            <Route path="/admin/events" element={<ProtectedRoute adminOnly={true}><AdminEvents /></ProtectedRoute>} />
             <Route path="/donations" element={<Donations />} />
             <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
             <Route path="/darshan" element={<Darshan />} />

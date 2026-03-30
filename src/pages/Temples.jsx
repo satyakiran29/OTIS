@@ -22,6 +22,7 @@ const Temples = () => {
 
     const filteredTemples = temples.filter(temple =>
         temple.name.toLowerCase().includes(searchTerm.toLowerCase())
+
     );
 
     return (

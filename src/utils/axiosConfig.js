@@ -1,8 +1,7 @@
 import axios from 'axios';
 
 const instance = axios.create({
-    baseURL: 'https://otis-api.onrender.com/api', // Use deployed backend for production
-    //baseURL: 'http://localhost:5000/api', // Use local backend for development
+    baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
 });
 
 export default instance;

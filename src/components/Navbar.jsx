@@ -154,17 +154,19 @@ const Navbar = () => {
                                     Hello, {user.name}
                                 </Link>
                                 {user.role === 'admin' && (
-                                    <Link to="/dashboard" style={{
-                                        padding: '0.5rem 1.2rem',
-                                        border: '1px solid var(--primary-color)',
-                                        borderRadius: '50px',
-                                        color: 'var(--primary-color)',
-                                        fontWeight: '500',
-                                        fontSize: '0.85rem',
-                                        textDecoration: 'none'
-                                    }}>
-                                        Dashboard
-                                    </Link>
+                                    <>
+                                        <Link to="/dashboard" style={{
+                                            padding: '0.5rem 1.2rem',
+                                            border: '1px solid var(--primary-color)',
+                                            borderRadius: '50px',
+                                            color: 'var(--primary-color)',
+                                            fontWeight: '500',
+                                            fontSize: '0.85rem',
+                                            textDecoration: 'none'
+                                        }}>
+                                            Dashboard
+                                        </Link>
+                                    </>
                                 )}
                                 <button onClick={handleLogout} style={{
                                     padding: '0.5rem 1.2rem',
@@ -304,17 +306,19 @@ const Navbar = () => {
                                 My Profile
                             </Link>
                             {user.role === 'admin' && (
-                                <Link to="/dashboard" onClick={() => setMobileMenuOpen(false)} style={{
-                                    padding: '1rem',
-                                    border: '1px solid var(--primary-color)',
-                                    borderRadius: '12px',
-                                    color: 'var(--primary-color)',
-                                    textAlign: 'center',
-                                    textDecoration: 'none',
-                                    fontSize: '1.1rem'
-                                }}>
-                                    Dashboard
-                                </Link>
+                                <>
+                                    <Link to="/dashboard" onClick={() => setMobileMenuOpen(false)} style={{
+                                        padding: '1rem',
+                                        border: '1px solid var(--primary-color)',
+                                        borderRadius: '12px',
+                                        color: 'var(--primary-color)',
+                                        textAlign: 'center',
+                                        textDecoration: 'none',
+                                        fontSize: '1.1rem'
+                                    }}>
+                                        Dashboard
+                                    </Link>
+                                </>
                             )}
                             <button onClick={handleLogout} style={{
                                 padding: '1rem',
