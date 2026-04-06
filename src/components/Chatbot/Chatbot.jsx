@@ -38,9 +38,9 @@ const Chatbot = () => {
 
         const s1 = document.createElement("script");
         const s0 = document.getElementsByTagName("script")[0];
-        if (!document.querySelector('script[src="https://embed.tawk.to/69cf7a25d21d921c37582209/1jlhcb50p"]')) {
+        if (!document.querySelector('script[src="https://embed.tawk.to/69cf74a9c4f63c1c36d2783d/1jl95ve0u"]')) {
             s1.async = true;
-            s1.src = 'https://embed.tawk.to/69cf7a25d21d921c37582209/1jlhcb50p';
+            s1.src = 'https://embed.tawk.to/69cf74a9c4f63c1c36d2783d/1jl95ve0u';
             s1.charset = 'UTF-8';
             s1.setAttribute('crossorigin', '*');
             if (s0 && s0.parentNode) {
