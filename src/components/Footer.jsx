@@ -19,6 +19,9 @@ const Footer = () => {
                     <span style={{ color: 'rgba(255,255,255,0.2)' }}>|</span>
                     <Link to="/privacy" style={{ color: 'rgba(255,255,255,0.6)', textDecoration: 'none', transition: 'color 0.2s' }} onMouseEnter={(e) => e.target.style.color = '#fff'} onMouseLeave={(e) => e.target.style.color = 'rgba(255,255,255,0.6)'}>Privacy Policy</Link>
                 </div>
+                <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.9rem', marginBottom: '1rem' }}>
+                    Contact us: <a href="mailto:satyakiran299@gmail.com" style={{ color: '#3498db', textDecoration: 'none' }}>satyakiran299@gmail.com</a>
+                </p>
                 <p style={{ color: 'rgba(255,255,255,0.2)', fontSize: '0.9rem' }}>
                     © {new Date().getFullYear()} Team 10. All rights reserved.
                 </p>

@@ -5,6 +5,8 @@ import './Chatbot.css';
 
 const Chatbot = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const [view, setView] = useState('selection');
+    const [isTawkActive, setIsTawkActive] = useState(false);
     const [messages, setMessages] = useState([
         { sender: 'bot', text: 'Namaskaram! I am your Temple Assistant. How can I help you today?' }
     ]);
@@ -17,8 +19,49 @@ const Chatbot = () => {
     };
 
     useEffect(() => {
-        if (isOpen) scrollToBottom();
-    }, [messages, isOpen, isTyping]);
+        if (isOpen && view === 'ai') scrollToBottom();
+    }, [messages, isOpen, isTyping, view]);
+
+    useEffect(() => {
+        // Embed Tawk.to script
+        window.Tawk_API = window.Tawk_API || {};
+        window.Tawk_LoadStart = new Date();
+        
+        window.Tawk_API.onLoad = function() {
+            window.Tawk_API.hideWidget();
+        };
+        
+        window.Tawk_API.onChatMinimized = function() {
+            window.Tawk_API.hideWidget();
+            setIsTawkActive(false);
+        };
+
+        const s1 = document.createElement("script");
+        const s0 = document.getElementsByTagName("script")[0];
+        if (!document.querySelector('script[src="https://embed.tawk.to/69cf7a25d21d921c37582209/1jlhares2"]')) {
+            s1.async = true;
+            s1.src = 'https://embed.tawk.to/69cf7a25d21d921c37582209/1jlhares2';
+            s1.charset = 'UTF-8';
+            s1.setAttribute('crossorigin', '*');
+            if (s0 && s0.parentNode) {
+                s0.parentNode.insertBefore(s1, s0);
+            } else {
+                document.head.appendChild(s1);
+            }
+        }
+    }, []);
+
+    const handleCustomerCareClick = () => {
+        if (window.Tawk_API && window.Tawk_API.maximize) {
+            window.Tawk_API.showWidget();
+            window.Tawk_API.maximize();
+            setIsOpen(false);
+            setView('selection');
+            setIsTawkActive(true);
+        } else {
+            alert('Customer care chat is still loading. Please try again in a moment.');
+        }
+    };
 
     const handleSend = async (messageText = input) => {
         if (!messageText.trim()) return;
@@ -55,8 +98,8 @@ const Chatbot = () => {
 
     return (
         <div className={`chatbot-wrapper ${isOpen ? 'open' : 'closed'}`}>
-            {!isOpen && (
-                <button className="chatbot-toggle-btn" onClick={() => setIsOpen(true)}>
+            {!isOpen && !isTawkActive && (
+                <button className="chatbot-toggle-btn" onClick={() => { setIsOpen(true); setView('selection'); }}>
                     <span className="chatbot-icon">💬</span>
                 </button>
             )}
@@ -65,12 +108,40 @@ const Chatbot = () => {
                 <div className="chatbot-window">
                     <div className="chatbot-header">
                         <div className="chatbot-title">
-                            <span className="bot-avatar">🛕</span> Temple Assistant
+                            {view === 'ai' ? (
+                                <><span className="bot-avatar">🛕</span> Temple Assistant</>
+                            ) : (
+                                <><span className="bot-avatar">💬</span> Need Help?</>
+                            )}
                         </div>
-                        <button className="chatbot-close-btn" onClick={() => setIsOpen(false)}>✖</button>
+                        {view === 'ai' ? (
+                            <button className="chatbot-close-btn" onClick={() => setView('selection')}>←</button>
+                        ) : (
+                            <button className="chatbot-close-btn" onClick={() => setIsOpen(false)}>✖</button>
+                        )}
                     </div>
 
-                    <div className="chatbot-messages">
+                    {view === 'selection' ? (
+                        <div className="chatbot-selection">
+                            <div className="selection-message">How would you like to get help?</div>
+                            <button className="selection-btn" onClick={() => setView('ai')}>
+                                <span className="selection-icon">🤖</span>
+                                <div>
+                                    <div className="selection-title">AI Assistant</div>
+                                    <div className="selection-desc">Get instant answers to common questions</div>
+                                </div>
+                            </button>
+                            <button className="selection-btn" onClick={handleCustomerCareClick}>
+                                <span className="selection-icon">🎧</span>
+                                <div>
+                                    <div className="selection-title">Customer Care</div>
+                                    <div className="selection-desc">Talk to our live support team</div>
+                                </div>
+                            </button>
+                        </div>
+                    ) : (
+                        <>
+                            <div className="chatbot-messages">
                         {messages.map((msg, index) => (
                             <div key={index} className={`chat-bubble ${msg.sender}`}>
                                 {msg.text}
@@ -104,6 +175,8 @@ const Chatbot = () => {
                         />
                         <button className="chatbot-send-btn" onClick={() => handleSend()}>Send</button>
                     </div>
+                        </>
+                    )}
                 </div>
             )}
         </div>
