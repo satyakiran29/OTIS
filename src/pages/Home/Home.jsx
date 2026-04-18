@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import Hero from '../../components/Hero';
 import SectionTitle from '../../components/SectionTitle';
 import GuideCard from '../../components/GuideCard';
@@ -11,7 +12,15 @@ const Home = () => {
 
             <main>
                 {/* About Section */}
-                <section id="about" className="section-padding" style={{ background: 'linear-gradient(to bottom, transparent, rgba(15, 23, 42, 0.5))' }}>
+                <motion.section 
+                    id="about" 
+                    className="section-padding" 
+                    style={{ background: 'linear-gradient(to bottom, transparent, rgba(15, 23, 42, 0.5))' }}
+                    initial={{ opacity: 0, y: 50 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, amount: 0.3 }}
+                    transition={{ duration: 0.8 }}
+                >
                     <SectionTitle title="About the System" subtitle="System Overview" />
                     <div className="glass-card" style={{ padding: '3.5rem', maxWidth: '900px', margin: '0 auto', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
                         <div style={{ position: 'absolute', top: 0, left: 0, width: '4px', height: '100%', background: 'var(--primary-color)' }}></div>
@@ -22,10 +31,17 @@ const Home = () => {
                             We provide easy-to-use tools for coordinating devotees, tracking donations, and scheduling events, so that the spiritual focus remains at the heart of everything we do.
                         </p>
                     </div>
-                </section>
+                </motion.section>
 
                 {/* Team Section */}
-                <section id="team" className="section-padding">
+                <motion.section 
+                    id="team" 
+                    className="section-padding"
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true, amount: 0.1 }}
+                    transition={{ duration: 0.8 }}
+                >
                     <SectionTitle title="Our Team" subtitle="The Minds Behind The Project" />
 
                     <div style={{ marginBottom: '5rem' }}>
@@ -55,20 +71,37 @@ const Home = () => {
                         </h3>
                         <TeamGrid />
                     </div>
-                </section>
+                </motion.section>
 
                 {/* Project Section */}
                 <section id="project" className="section-padding" style={{ background: 'linear-gradient(to top, transparent, rgba(15, 23, 42, 0.5))', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
                     <SectionTitle title="The Project" subtitle="Our Vision & Mission" />
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem', maxWidth: '1100px', margin: '0 auto' }}>
-                        <div className="glass-card" style={{ padding: '2rem' }}>
+                        
+                        <motion.div 
+                            className="glass-card" 
+                            style={{ padding: '2rem' }}
+                            initial={{ opacity: 0, x: -50 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            viewport={{ once: true, amount: 0.5 }}
+                            transition={{ duration: 0.6, delay: 0.1 }}
+                        >
                             <h4 style={{ color: 'var(--primary-color)', marginBottom: '1rem', fontSize: '1.3rem' }}>Our Vision</h4>
                             <p style={{ color: 'var(--text-muted)' }}>To create a unified digital gateway for temples worldwide, preserving cultural heritage through secure and scalable technology.</p>
-                        </div>
-                        <div className="glass-card" style={{ padding: '2rem' }}>
+                        </motion.div>
+
+                        <motion.div 
+                            className="glass-card" 
+                            style={{ padding: '2rem' }}
+                            initial={{ opacity: 0, x: 50 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            viewport={{ once: true, amount: 0.5 }}
+                            transition={{ duration: 0.6, delay: 0.3 }}
+                        >
                             <h4 style={{ color: 'var(--primary-color)', marginBottom: '1rem', fontSize: '1.3rem' }}>Our Mission</h4>
                             <p style={{ color: 'var(--text-muted)' }}>Providing accessible tools for smaller temples to manage their resources while offering devotees a direct line to spiritual services.</p>
-                        </div>
+                        </motion.div>
+
                     </div>
                 </section>
             </main>
