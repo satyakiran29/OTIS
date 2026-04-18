@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import '../index.css';
+import './Navbar.css';
 
 const Navbar = () => {
     const [scrolled, setScrolled] = useState(false);
@@ -16,7 +16,6 @@ const Navbar = () => {
         setMobileMenuOpen(false);
     };
 
-    // Hide specific links if not on home page, or just link back to home sections
     const isHome = location.pathname === '/';
 
     useEffect(() => {
@@ -32,7 +31,6 @@ const Navbar = () => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    // Close mobile menu when route changes
     useEffect(() => {
         setMobileMenuOpen(false);
     }, [location]);
@@ -40,105 +38,42 @@ const Navbar = () => {
     const navLinks = ['Home', 'About', 'Team', 'Project', 'Events', 'Donations'];
 
     return (
-        <nav
-            style={{
-                position: 'fixed',
-                top: 0,
-                left: 0,
-                width: '100%',
-                zIndex: 1000,
-                transition: 'all 0.3s ease',
-                padding: scrolled ? '1rem 2rem' : '1.5rem 2rem',
-                background: scrolled || mobileMenuOpen ? 'rgba(15, 23, 42, 0.95)' : 'transparent',
-                backdropFilter: scrolled || mobileMenuOpen ? 'blur(10px)' : 'none',
-                boxShadow: scrolled ? '0 4px 6px -1px rgba(0, 0, 0, 0.1)' : 'none',
-            }}
-        >
-            <div style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                maxWidth: '1200px',
-                margin: '0 auto'
-            }}>
-                <div className="logo" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', zIndex: 1001 }}>
-                    <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none' }}>
+        <nav className={`navbar ${scrolled || mobileMenuOpen ? 'scrolled' : ''}`}>
+            <div className="navbar-inner">
+                <div className="logo">
+                    <Link to="/" className="logo-link">
                         <span style={{ fontSize: '1.5rem' }}>🛕</span>
-                        <h1 style={{
-                            fontSize: '1.5rem',
-                            fontWeight: '700',
-                            fontFamily: 'var(--font-serif)',
-                            color: 'var(--text-light)',
-                            letterSpacing: '1px',
-                            margin: 0
-                        }}>
-                            Temple<span style={{ color: 'var(--primary-color)' }}>Info</span>
+                        <h1 className="logo-text">
+                            Temple<span>Info</span>
                         </h1>
                     </Link>
                 </div>
 
                 {/* Desktop Menu */}
-                <div className="desktop-menu" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                    <ul style={{ display: 'flex', gap: '1.25rem', listStyle: 'none', margin: 0, padding: 0 }}>
+                <div className="desktop-menu">
+                    <ul className="nav-links-list">
                         {navLinks.map((item) => {
                             const anchorId = item.toLowerCase();
-                            // 'Project' section in Home.jsx has id="project"
-                            // 'Team' section in Home.jsx has id="team"
-                            // 'Home' section in Hero.jsx has id="home"
-                            // 'About' section doesn't exist explicitly in Home.jsx yet, but let's assume it maps to home or a future section
-
-                            // If it's a dedicated page route (like /events, /donations), use normal link
                             const isPageRoute = ['Events', 'Donations'].includes(item);
 
                             if (isPageRoute) {
                                 return (
                                     <li key={item}>
-                                        <Link
-                                            to={`/${anchorId}`}
-                                            style={{
-                                                color: 'var(--text-light)',
-                                                fontWeight: '500',
-                                                position: 'relative',
-                                                textDecoration: 'none',
-                                                fontSize: '0.95rem'
-                                            }}
-                                            className="nav-link"
-                                        >
+                                        <Link to={`/${anchorId}`} className="nav-link">
                                             {item}
                                         </Link>
                                     </li>
                                 );
                             }
 
-                            // Otherwise it's a section on the Home page
                             return (
                                 <li key={item}>
                                     {isHome ? (
-                                        <a
-                                            href={`#${anchorId}`}
-                                            style={{
-                                                color: 'var(--text-light)',
-                                                fontWeight: '500',
-                                                position: 'relative',
-                                                textDecoration: 'none',
-                                                fontSize: '0.95rem'
-                                            }}
-                                            className="nav-link"
-                                        >
+                                        <a href={`#${anchorId}`} className="nav-link">
                                             {item}
                                         </a>
                                     ) : (
-                                        <Link
-                                            to={`/#${anchorId}`}
-                                            style={{
-                                                color: 'var(--text-light)',
-                                                fontWeight: '500',
-                                                position: 'relative',
-                                                textDecoration: 'none',
-                                                fontSize: '0.95rem'
-                                            }}
-                                            className="nav-link"
-                                        >
+                                        <Link to={`/#${anchorId}`} className="nav-link">
                                             {item}
                                         </Link>
                                     )}
@@ -147,62 +82,27 @@ const Navbar = () => {
                         })}
                     </ul>
 
-                    <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                    <div className="user-actions">
                         {user ? (
                             <>
-                                <Link to="/profile" style={{ color: 'var(--text-light)', textDecoration: 'none', fontWeight: '600', fontSize: '0.9rem' }}>
+                                <Link to="/profile" className="user-greeting">
                                     Hello, {user.name}
                                 </Link>
                                 {user.role === 'admin' && (
-                                    <>
-                                        <Link to="/dashboard" style={{
-                                            padding: '0.5rem 1.2rem',
-                                            border: '1px solid var(--primary-color)',
-                                            borderRadius: '50px',
-                                            color: 'var(--primary-color)',
-                                            fontWeight: '500',
-                                            fontSize: '0.85rem',
-                                            textDecoration: 'none'
-                                        }}>
-                                            Dashboard
-                                        </Link>
-                                    </>
+                                    <Link to="/dashboard" className="btn-dashboard">
+                                        Dashboard
+                                    </Link>
                                 )}
-                                <button onClick={handleLogout} style={{
-                                    padding: '0.5rem 1.2rem',
-                                    background: 'var(--primary-color)',
-                                    border: 'none',
-                                    borderRadius: '50px',
-                                    color: '#fff',
-                                    fontWeight: '500',
-                                    fontSize: '0.85rem',
-                                    cursor: 'pointer'
-                                }}>
+                                <button onClick={handleLogout} className="btn-logout">
                                     Logout
                                 </button>
                             </>
                         ) : (
                             <>
-                                <Link to="/login" style={{
-                                    padding: '0.5rem 1.2rem',
-                                    border: '1px solid var(--primary-color)',
-                                    borderRadius: '50px',
-                                    color: 'var(--primary-color)',
-                                    fontWeight: '500',
-                                    fontSize: '0.85rem',
-                                    textDecoration: 'none'
-                                }}>
+                                <Link to="/login" className="btn-login">
                                     Login
                                 </Link>
-                                <Link to="/signup" style={{
-                                    padding: '0.5rem 1.2rem',
-                                    background: 'var(--primary-color)',
-                                    borderRadius: '50px',
-                                    color: '#fff',
-                                    fontWeight: '500',
-                                    fontSize: '0.85rem',
-                                    textDecoration: 'none'
-                                }}>
+                                <Link to="/signup" className="btn-signup">
                                     Sign Up
                                 </Link>
                             </>
@@ -220,7 +120,7 @@ const Navbar = () => {
                         color: 'var(--text-light)',
                         cursor: 'pointer',
                         zIndex: 1001,
-                        display: 'none', // Hidden by default, shown via CSS
+                        display: 'none', // Hidden on desktop via CSS in Navbar.css
                         padding: '0.5rem'
                     }}
                 >
@@ -243,9 +143,10 @@ const Navbar = () => {
                 backdropFilter: 'blur(15px)',
                 padding: '5rem 2rem 2rem',
                 transform: mobileMenuOpen ? 'translateX(0)' : 'translateX(100%)',
-                transition: 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                transition: 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
                 overflowY: 'auto',
-                zIndex: 999
+                zIndex: 999,
+                display: mobileMenuOpen ? 'block' : 'none'
             }}>
                 <ul style={{ display: 'flex', flexDirection: 'column', gap: '2rem', listStyle: 'none', padding: 0, marginBottom: '3rem', textAlign: 'center' }}>
                     {navLinks.map((item) => {
@@ -306,19 +207,17 @@ const Navbar = () => {
                                 My Profile
                             </Link>
                             {user.role === 'admin' && (
-                                <>
-                                    <Link to="/dashboard" onClick={() => setMobileMenuOpen(false)} style={{
-                                        padding: '1rem',
-                                        border: '1px solid var(--primary-color)',
-                                        borderRadius: '12px',
-                                        color: 'var(--primary-color)',
-                                        textAlign: 'center',
-                                        textDecoration: 'none',
-                                        fontSize: '1.1rem'
-                                    }}>
-                                        Dashboard
-                                    </Link>
-                                </>
+                                <Link to="/dashboard" onClick={() => setMobileMenuOpen(false)} style={{
+                                    padding: '1rem',
+                                    border: '1px solid var(--primary-color)',
+                                    borderRadius: '12px',
+                                    color: 'var(--primary-color)',
+                                    textAlign: 'center',
+                                    textDecoration: 'none',
+                                    fontSize: '1.1rem'
+                                }}>
+                                    Dashboard
+                                </Link>
                             )}
                             <button onClick={handleLogout} style={{
                                 padding: '1rem',
