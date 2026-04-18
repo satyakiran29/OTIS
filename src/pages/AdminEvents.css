@@ -176,12 +176,12 @@
 }
 
 /* --- Floating Labels & Input Aesthetic --- */
-.form-group {
+.admin-events-container .form-group {
     position: relative;
     margin-bottom: 2.5rem;
 }
 
-.form-group label {
+.admin-events-container .form-group label {
     position: absolute;
     top: 14px;
     left: 16px;
@@ -194,8 +194,8 @@
 }
 
 /* When the input is focused or has content, move label to top */
-.form-group.focused label,
-.form-group.has-content label {
+.admin-events-container .form-group.focused label,
+.admin-events-container .form-group.has-content label {
     top: -12px;
     left: 12px;
     font-size: 0.75rem;
@@ -206,9 +206,9 @@
     border-radius: 4px;
 }
 
-.form-group input, 
-.form-group select, 
-.form-group textarea {
+.admin-events-container .form-group input, 
+.admin-events-container .form-group select, 
+.admin-events-container .form-group textarea {
     width: 100%;
     padding: 14px 16px;
     background: rgba(255, 255, 255, 0.02);
@@ -220,9 +220,9 @@
     transition: all 0.3s ease;
 }
 
-.form-group input:focus, 
-.form-group select:focus, 
-.form-group textarea:focus {
+.admin-events-container .form-group input:focus, 
+.admin-events-container .form-group select:focus, 
+.admin-events-container .form-group textarea:focus {
     outline: none;
     background: rgba(255, 255, 255, 0.04);
     border-color: var(--divine-saffron);
@@ -236,8 +236,8 @@
     color: #64748b; /* Lighter color when empty */
 }
 
-.form-group.has-content input,
-.form-group.has-content select {
+.admin-events-container .form-group.has-content input,
+.admin-events-container .form-group.has-content select {
     color: white;
 }
 
@@ -253,7 +253,7 @@
     border-bottom: 1px dashed rgba(255, 153, 51, 0.2);
 }
 
-.form-row {
+.admin-events-container .form-row {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 1.5rem;
