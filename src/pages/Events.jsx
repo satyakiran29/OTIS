@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import axios from '../utils/axiosConfig';
 import EventCard from '../components/EventCard';
+import SkeletonLoader from '../components/SkeletonLoader';
 import './Events.css';
 
 const Events = () => {
@@ -126,7 +127,9 @@ const Events = () => {
             </div>
 
             {loading ? (
-                <div className="loading-spinner">Loading events...</div>
+                <div style={{marginTop: '2rem'}}>
+                    <SkeletonLoader type="grid" count={3} />
+                </div>
             ) : filteredEvents.length > 0 ? (
                 <div className="events-grid">
                     {filteredEvents.map(event => (

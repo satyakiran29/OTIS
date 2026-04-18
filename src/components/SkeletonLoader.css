@@ -1,0 +1,140 @@
+/* SkeletonLoader.css */
+.skeleton-wrapper {
+    width: 100%;
+}
+
+/* Base Animation Class */
+.skeleton-shimmer {
+    background: linear-gradient(
+        90deg,
+        rgba(30, 41, 59, 1) 0px,
+        rgba(40, 53, 76, 1) 50%,
+        rgba(30, 41, 59, 1) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite linear;
+    border-radius: 8px;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+/* --- Hero Layout Skeleton --- */
+.skeleton-hero {
+    height: 60vh;
+    border-radius: 0;
+    margin-bottom: 2rem;
+    position: relative;
+}
+
+.skeleton-hero-overlay {
+    position: absolute;
+    bottom: 3rem;
+    left: 2rem;
+    width: 100%;
+    max-width: 800px;
+}
+
+.skeleton-hero-title {
+    height: 4rem;
+    width: 60%;
+    margin-bottom: 1rem;
+    border-radius: 6px;
+}
+
+.skeleton-hero-subtitle {
+    height: 1.5rem;
+    width: 30%;
+    border-radius: 4px;
+}
+
+/* --- Content Block Skeleton --- */
+.skeleton-content-block {
+    background: var(--bg-card);
+    padding: 2.5rem;
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    margin-bottom: 2rem;
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.skeleton-text-heading {
+    height: 2rem;
+    width: 250px;
+    margin-bottom: 2rem;
+    border-radius: 4px;
+}
+
+.skeleton-text-line {
+    height: 1rem;
+    width: 100%;
+    margin-bottom: 0.8rem;
+    border-radius: 4px;
+}
+
+.skeleton-text-line.short {
+    width: 85%;
+}
+
+.skeleton-text-line.shorter {
+    width: 65%;
+}
+
+/* --- Grid Skeleton (Events/Temples) --- */
+.skeleton-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.skeleton-card {
+    background: var(--bg-card);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.skeleton-card-img {
+    height: 200px;
+    width: 100%;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
+
+.skeleton-card-title {
+    height: 1.5rem;
+    width: 70%;
+    margin-bottom: 0.8rem;
+    border-radius: 4px;
+}
+
+.skeleton-card-text {
+    height: 1rem;
+    width: 50%;
+    margin-bottom: 1.5rem;
+    border-radius: 4px;
+}
+
+.skeleton-card-btn {
+    height: 2.5rem;
+    width: 100%;
+    border-radius: 50px;
+    margin-top: auto;
+}
+
+@media (max-width: 640px) {
+    .skeleton-grid {
+        grid-template-columns: 1fr;
+    }
+}

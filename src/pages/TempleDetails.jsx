@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import { useParams, Link } from 'react-router-dom';
 import axios from '../utils/axiosConfig';
 import BookingForm from '../components/BookingForm';
+import SkeletonLoader from '../components/SkeletonLoader';
 import { useAuth } from '../context/AuthContext';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -64,9 +65,8 @@ const TempleDetails = () => {
 
     if (loading) {
         return (
-            <div className="temple-loader-container" style={{ minHeight: '60vh' }}>
-                <span className="temple-icon">🛕</span>
-                <span className="temple-loader-text">Loading Temple Details...</span>
+            <div className="temple-details-page">
+                <SkeletonLoader type="hero" />
             </div>
         );
     }

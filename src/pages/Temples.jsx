@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import SectionTitle from '../components/SectionTitle';
+import SkeletonLoader from '../components/SkeletonLoader';
 import axios from '../utils/axiosConfig';
 import './Temples.css';
 
@@ -8,6 +9,7 @@ const Temples = () => {
     const [temples, setTemples] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
+    const [loading, setLoading] = useState(true);
     const itemsPerPage = 6;
 
     useEffect(() => {
@@ -17,6 +19,8 @@ const Temples = () => {
                 setTemples(response.data);
             } catch (error) {
                 console.error('Error fetching temples:', error);
+            } finally {
+                setLoading(false);
             }
         };
         fetchTemples();
@@ -64,7 +68,13 @@ const Temples = () => {
                 </div>
 
                 {/* Grid */}
-                <div className="temples-grid">
+                {loading ? (
+                    <div style={{marginTop: '2rem'}}>
+                        <SkeletonLoader type="grid" count={6} />
+                    </div>
+                ) : (
+                    <>
+                        <div className="temples-grid">
                     {currentTemples.map((temple, index) => {
                         const delayClass = `animate-delay-${((index % 3) + 1) * 100}`;
                         return (
@@ -120,6 +130,8 @@ const Temples = () => {
                             Next &raquo;
                         </button>
                     </div>
+                )}
+                </>
                 )}
             </div>
         </div>
