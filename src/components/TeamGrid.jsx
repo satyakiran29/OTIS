@@ -20,14 +20,14 @@ const TeamGrid = () => {
         { 
             name: 'Manthini Neelaveni', 
             initials: 'MN',
-            github: '#',
-            linkedin: '#',
+            github: 'https://github.com/Neelaveni6678',
+            linkedin: 'https://www.linkedin.com/in/manthini-neelaveni-560a86354',
             website: '#'
         },
         { 
             name: 'Kambala Vijaya Sankar', 
             initials: 'KVS',
-            github: '#',
+            github: 'https://github.com/vijay-017',
             linkedin: '#',
             website: '#'
         },
