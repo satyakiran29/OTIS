@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useParams, Link } from 'react-router-dom';
 import axios from '../utils/axiosConfig';
 import BookingForm from '../components/BookingForm';
@@ -28,6 +29,7 @@ const TempleDetails = () => {
     const [sevas, setSevas] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectedSeva, setSelectedSeva] = useState(null);
+    const [lightboxIndex, setLightboxIndex] = useState(null);
     const { user } = useAuth();
 
     const fetchData = async () => {
@@ -188,7 +190,12 @@ const TempleDetails = () => {
                         <h2>Gallery</h2>
                         <div className="gallery-grid">
                             {temple.images.slice(1).map((img, index) => (
-                                <img key={index} src={img} alt={`${temple.name} ${index + 2}`} />
+                                <img 
+                                    key={index} 
+                                    src={img} 
+                                    alt={`${temple.name} ${index + 2}`} 
+                                    onClick={() => setLightboxIndex(index + 1)}
+                                />
                             ))}
                         </div>
                     </section>
@@ -202,6 +209,41 @@ const TempleDetails = () => {
                         <BookingForm type="seva" item={selectedSeva} onClose={handleCloseBooking} onSuccess={fetchData} />
                     </div>
                 </div>
+            )}
+
+            {lightboxIndex !== null && createPortal(
+                <div className="lightbox-overlay animate-fade-in" onClick={() => setLightboxIndex(null)}>
+                    <button className="lightbox-close" onClick={() => setLightboxIndex(null)}>&times;</button>
+                    
+                    {temple.images.length > 2 && (
+                        <button 
+                            className="lightbox-nav lightbox-prev" 
+                            onClick={(e) => { 
+                                e.stopPropagation(); 
+                                setLightboxIndex((prev) => prev > 1 ? prev - 1 : temple.images.length - 1); 
+                            }}
+                        >
+                            &#10094;
+                        </button>
+                    )}
+
+                    <div className="lightbox-content-wrapper" onClick={(e) => e.stopPropagation()}>
+                        <img src={temple.images[lightboxIndex]} alt="Temple Gallery" className="lightbox-img" />
+                    </div>
+
+                    {temple.images.length > 2 && (
+                        <button 
+                            className="lightbox-nav lightbox-next" 
+                            onClick={(e) => { 
+                                e.stopPropagation(); 
+                                setLightboxIndex((prev) => prev < temple.images.length - 1 ? prev + 1 : 1); 
+                            }}
+                        >
+                            &#10095;
+                        </button>
+                    )}
+                </div>,
+                document.body
             )}
 
             <style>{`
@@ -352,6 +394,80 @@ const TempleDetails = () => {
                     color: var(--text-muted);
                     border: 1px solid rgba(255, 255, 255, 0.1);
                     box-shadow: none;
+                }
+                
+                /* Lightbox Styles */
+                .lightbox-overlay {
+                    position: fixed;
+                    top: 0; left: 0; right: 0; bottom: 0;
+                    background: rgba(0, 0, 0, 0.9);
+                    backdrop-filter: blur(10px);
+                    z-index: 99999;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
+                .lightbox-close {
+                    position: absolute;
+                    top: 20px; right: 30px;
+                    color: white;
+                    font-size: 3rem;
+                    background: transparent;
+                    border: none;
+                    cursor: pointer;
+                    transition: color 0.3s ease;
+                    z-index: 100000;
+                }
+                .lightbox-close:hover {
+                    color: var(--primary-color);
+                }
+                .lightbox-nav {
+                    position: absolute;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    background: rgba(255,255,255,0.1);
+                    color: white;
+                    border: none;
+                    font-size: 2rem;
+                    padding: 1rem;
+                    cursor: pointer;
+                    border-radius: 50%;
+                    transition: all 0.3s ease;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 60px; height: 60px;
+                    z-index: 100000;
+                }
+                .lightbox-nav:hover {
+                    background: var(--primary-color);
+                    color: #000;
+                }
+                .lightbox-prev { left: 40px; }
+                .lightbox-next { right: 40px; }
+                
+                .lightbox-content-wrapper {
+                    max-width: 90%;
+                    max-height: 90vh;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
+                .lightbox-img {
+                    max-width: 100%;
+                    max-height: 90vh;
+                    object-fit: contain;
+                    border-radius: 8px;
+                    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+                }
+                
+                @media (max-width: 768px) {
+                    .lightbox-nav {
+                        width: 45px; height: 45px;
+                        font-size: 1.2rem;
+                    }
+                    .lightbox-prev { left: 10px; }
+                    .lightbox-next { right: 10px; }
                 }
             `}</style>
         </div>
