@@ -79,17 +79,19 @@ const TempleDetails = () => {
     }
 
     return (
-        <div className="temple-details-page">
+        <div className="temple-details-page animate-fade-in">
             {/* Hero Section */}
             <div className="temple-hero" style={{ backgroundImage: `url(${temple.images[0] || 'https://via.placeholder.com/1200x600'})` }}>
                 <div className="hero-overlay">
-                    <h1>{temple.name}</h1>
-                    <p><i className="fas fa-map-marker-alt"></i> {temple.location}</p>
+                    <div className="hero-content-wrapper">
+                        <h1>{temple.name}</h1>
+                        <p><i className="fas fa-map-marker-alt"></i> {temple.location}</p>
+                    </div>
                 </div>
             </div>
 
             <div className="content-container">
-                <section className="info-section">
+                <section className="info-section animate-fade-in animate-delay-100">
                     <h2>About the Temple</h2>
                     <p>{temple.description}</p>
 
@@ -98,7 +100,7 @@ const TempleDetails = () => {
                 </section>
 
                 {temple.coordinates && temple.coordinates.lat && temple.coordinates.lon && (
-                    <section className="map-section">
+                    <section className="map-section animate-fade-in animate-delay-200">
                         <h2>Location Map</h2>
                         <div className="map-container-wrapper" style={{ height: '400px', width: '100%', borderRadius: '10px', overflow: 'hidden' }}>
                             <MapContainer
@@ -143,7 +145,7 @@ const TempleDetails = () => {
                     </section>
                 )}
 
-                <section className="sevas-section">
+                <section className="sevas-section animate-fade-in animate-delay-300">
                     <h2>Available Sevas</h2>
                     {sevas.length === 0 ? (
                         <p>No sevas information available yet.</p>
@@ -160,7 +162,7 @@ const TempleDetails = () => {
                                     {seva.ticketLimit > 0 && (
                                         <p style={{
                                             marginBottom: '1rem',
-                                            color: (seva.availableTickets === 0 ? '#e74c3c' : '#27ae60'),
+                                            color: (seva.availableTickets === 0 ? 'var(--accent-color)' : '#10b981'),
                                             fontWeight: 'bold',
                                             fontSize: '0.9rem'
                                         }}>
@@ -181,9 +183,8 @@ const TempleDetails = () => {
                     )}
                 </section>
 
-                {/* Additional Gallery Section if needed */}
                 {temple.images.length > 1 && (
-                    <section className="gallery-section">
+                    <section className="gallery-section animate-fade-in animate-delay-300">
                         <h2>Gallery</h2>
                         <div className="gallery-grid">
                             {temple.images.slice(1).map((img, index) => (
@@ -218,15 +219,28 @@ const TempleDetails = () => {
                     align-items: flex-end;
                 }
                 .hero-overlay {
-                    background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+                    background: linear-gradient(to top, rgba(15, 23, 42, 1) 0%, rgba(15, 23, 42, 0.6) 50%, transparent 100%);
                     width: 100%;
-                    padding: 3rem 2rem;
+                    padding: 4rem 2rem 6rem 2rem;
                     color: white;
                 }
+                .hero-content-wrapper {
+                    max-width: 1000px;
+                    margin: 0 auto;
+                    width: 100%;
+                    transform: translateY(1.5rem);
+                }
                 .hero-overlay h1 {
-                    font-size: 3rem;
+                    font-size: 3.5rem;
                     margin-bottom: 0.5rem;
-                    font-family: 'Playfair Display', serif;
+                    font-family: var(--font-serif);
+                    color: var(--primary-color);
+                    text-shadow: 0 4px 15px rgba(0, 0, 0, 0.8);
+                }
+                .hero-overlay p {
+                    font-size: 1.1rem;
+                    color: var(--text-light);
+                    text-shadow: 0 2px 10px rgba(0,0,0,0.8);
                 }
                 .content-container {
                     max-width: 1000px;
@@ -264,7 +278,7 @@ const TempleDetails = () => {
                     border: 1px solid rgba(255, 255, 255, 0.1);
                     border-radius: 10px;
                     padding: 1.5rem;
-                    background: rgba(0, 0, 0, 0.2);
+                    background: rgba(30, 41, 59, 0.5); /* subtle transparency of bg-card */
                     transition: transform 0.2s;
                 }
                 .seva-card:hover {
@@ -274,7 +288,7 @@ const TempleDetails = () => {
                 }
                 .seva-card h3 {
                     margin: 0 0 0.5rem 0;
-                    color: var(--text-light);
+                    color: var(--gold, #ffd700);
                 }
                 .seva-footer {
                     display: flex;
@@ -297,8 +311,8 @@ const TempleDetails = () => {
                     flex-direction: column;
                     justify-content: center;
                     align-items: center;
-                    background: #1a202c;
-                    color: white;
+                    background: var(--bg-dark);
+                    color: var(--text-light);
                 }
                 .gallery-grid {
                     display: grid;
@@ -311,10 +325,33 @@ const TempleDetails = () => {
                     object-fit: cover;
                     border-radius: 8px;
                     cursor: pointer;
-                    transition: transform 0.2s;
+                    transition: transform 0.3s ease;
                 }
                 .gallery-grid img:hover {
                     transform: scale(1.05);
+                }
+                .book-btn {
+                    width: 100%;
+                    padding: 0.8rem;
+                    background: var(--gradient-text, linear-gradient(to right, #ff9933, #ffd700));
+                    color: #0f172a;
+                    border: none;
+                    border-radius: 50px;
+                    font-weight: 700;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                    box-shadow: 0 4px 15px rgba(255, 153, 51, 0.3);
+                }
+                .book-btn:hover:not(:disabled) {
+                    transform: translateY(-2px);
+                    box-shadow: 0 6px 20px rgba(255, 153, 51, 0.5);
+                }
+                .book-btn:disabled {
+                    cursor: not-allowed;
+                    background: var(--bg-card);
+                    color: var(--text-muted);
+                    border: 1px solid rgba(255, 255, 255, 0.1);
+                    box-shadow: none;
                 }
             `}</style>
         </div>

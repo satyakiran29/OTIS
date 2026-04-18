@@ -12,18 +12,22 @@
 }
 
 .search-bar {
-    padding: 0.5rem;
+    padding: 0.5rem 0.5rem 0.5rem 1.5rem;
     display: flex;
     align-items: center;
     width: 100%;
     max-width: 600px;
-    background: var(--bg-card);
-    /* Use theme bg */
+    background: rgba(30, 41, 59, 0.8);
+    backdrop-filter: blur(12px);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    /* Add a border */
-    border-radius: 8px;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
-    /* Slightly darker shadow for dark theme */
+    border-radius: 50px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.search-bar:focus-within {
+    border-color: rgba(255, 153, 51, 0.5);
+    box-shadow: 0 0 20px rgba(255, 153, 51, 0.2);
 }
 
 .search-input {
@@ -38,22 +42,23 @@
 }
 
 .search-btn {
-    padding: 0.8rem 1.2rem;
+    padding: 0.8rem 1.5rem;
     border: none;
-    background: var(--primary-color);
-    /* Updated to theme primary */
-    border-radius: 4px;
+    background: var(--gradient-text);
+    border-radius: 50px;
     cursor: pointer;
-    color: #fff;
-    transition: background-color 0.2s;
+    color: #0f172a;
+    font-weight: 700;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
     display: flex;
-    /* Ensure center alignment */
     align-items: center;
     justify-content: center;
+    box-shadow: 0 4px 15px rgba(255, 153, 51, 0.3);
 }
 
 .search-btn:hover {
-    background: var(--secondary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 153, 51, 0.5);
 }
 
 .temples-grid {
@@ -128,23 +133,96 @@
 .temple-view-btn {
     width: 100%;
     padding: 0.8rem;
-    /* Increased padding slightly */
-    background: #3b82f6;
-    color: #fff;
-    border: none;
-    border-radius: 6px;
+    background: transparent;
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color);
+    border-radius: 50px;
     font-weight: 600;
     cursor: pointer;
-    display: block;
-    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
     text-decoration: none;
-    transition: background-color 0.2s;
+    transition: all 0.3s ease;
     margin-top: auto;
-    /* Push to bottom */
+}
+
+.temple-view-btn span {
+    transition: transform 0.3s ease;
 }
 
 .temple-view-btn:hover {
-    background: #2563eb;
+    background: rgba(255, 153, 51, 0.1);
+    box-shadow: 0 0 15px rgba(255, 153, 51, 0.2);
+}
+
+.temple-view-btn:hover span {
+    transform: translateX(4px);
+}
+
+/* Pagination Stylings */
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+    margin-top: 4rem;
+    padding-bottom: 2rem;
+}
+
+.pagination-btn {
+    padding: 0.6rem 1.2rem;
+    background: transparent;
+    color: var(--text-light);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.pagination-btn:hover:not(.disabled) {
+    background: var(--primary-color);
+    color: #0f172a;
+    border-color: var(--primary-color);
+}
+
+.pagination-btn.disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.pagination-numbers {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.pagination-number {
+    width: 40px;
+    height: 40px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(30, 41, 59, 0.5);
+    color: var(--text-light);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.pagination-number:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.pagination-number.active {
+    background: var(--gradient-text);
+    color: #0f172a;
+    border: none;
+    box-shadow: 0 4px 15px rgba(255, 153, 51, 0.3);
 }
 
 /* Responsive Breakpoints */
@@ -161,5 +239,10 @@
 
     .search-bar {
         max-width: 100%;
+    }
+    
+    .pagination-container {
+        flex-direction: column;
+        gap: 1rem;
     }
 }

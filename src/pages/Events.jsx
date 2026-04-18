@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import axios from '../utils/axiosConfig';
 import EventCard from '../components/EventCard';
 import './Events.css';
@@ -9,6 +10,7 @@ const Events = () => {
     const [filterCategory, setFilterCategory] = useState('All');
     const [countdownEvent, setCountdownEvent] = useState(null);
     const [timeLeft, setTimeLeft] = useState('');
+    const [selectedEvent, setSelectedEvent] = useState(null);
 
     useEffect(() => {
         fetchEvents();
@@ -128,13 +130,40 @@ const Events = () => {
             ) : filteredEvents.length > 0 ? (
                 <div className="events-grid">
                     {filteredEvents.map(event => (
-                        <EventCard key={event._id || event.id} event={event} />
+                        <EventCard key={event._id || event.id} event={event} onClick={setSelectedEvent} />
                     ))}
                 </div>
             ) : (
                 <div className="no-events-message">
                     <h3>No events found for this category.</h3>
                 </div>
+            )}
+
+            {selectedEvent && createPortal(
+                <div className="event-modal-overlay animate-fade-in" onClick={() => setSelectedEvent(null)}>
+                    <div className="event-modal-content" onClick={(e) => e.stopPropagation()}>
+                        <button className="close-modal-btn" onClick={() => setSelectedEvent(null)}>&times;</button>
+                        {selectedEvent.imageUrl && (
+                            <img src={selectedEvent.imageUrl} alt={selectedEvent.name} className="modal-image" />
+                        )}
+                        <div className="modal-details">
+                            <span className={`event-badge badge-${selectedEvent.category?.toLowerCase() || 'daily'}`}>
+                                {selectedEvent.category}
+                            </span>
+                            <h2>{selectedEvent.name}</h2>
+                            <div className="modal-meta">
+                                <p><span>📅 Date:</span> {new Date(selectedEvent.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
+                                <p><span>⏰ Time:</span> {selectedEvent.time || 'TBD'}</p>
+                                {selectedEvent.location && <p><span>📍 Location:</span> {selectedEvent.location}</p>}
+                            </div>
+                            <div className="modal-desc">
+                                <h3>About this Event</h3>
+                                <p>{selectedEvent.description}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>, 
+                document.body
             )}
         </div>
     );
