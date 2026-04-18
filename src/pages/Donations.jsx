@@ -247,9 +247,9 @@ const Donations = () => {
 
                     <div className="form-group full-width">
                         <label>Mobile Number *</label>
-                        <div style={{ display: 'flex', gap: '0.5rem' }}>
-                            <span style={{ padding: '0.8rem', background: '#f8f9fa', border: '1px solid #ddd', borderRadius: '4px' }}>🇮🇳 +91</span>
-                            <input type="tel" name="mobile" style={{ flex: 1 }} placeholder="Mobile Number" value={formData.mobile} onChange={handleChange} required />
+                        <div className="mobile-input-container">
+                            <span className="mobile-prefix">🇮🇳 +91</span>
+                            <input type="tel" name="mobile" className="mobile-input" placeholder="Mobile Number" value={formData.mobile} onChange={handleChange} required />
                         </div>
                     </div>
 
