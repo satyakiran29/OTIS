@@ -78,8 +78,8 @@ const Navbar = () => {
                 </div>
 
                 {/* Desktop Menu */}
-                <div className="desktop-menu" style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
-                    <ul style={{ display: 'flex', gap: '2rem', listStyle: 'none', margin: 0, padding: 0 }}>
+                <div className="desktop-menu" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                    <ul style={{ display: 'flex', gap: '1.25rem', listStyle: 'none', margin: 0, padding: 0 }}>
                         {navLinks.map((item) => {
                             const anchorId = item.toLowerCase();
                             // 'Project' section in Home.jsx has id="project"

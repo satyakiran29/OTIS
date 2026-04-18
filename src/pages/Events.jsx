@@ -125,17 +125,15 @@ const Events = () => {
 
             {loading ? (
                 <div className="loading-spinner">Loading events...</div>
-            ) : (
+            ) : filteredEvents.length > 0 ? (
                 <div className="events-grid">
-                    {filteredEvents.length > 0 ? (
-                        filteredEvents.map(event => (
-                            <EventCard key={event._id || event.id} event={event} />
-                        ))
-                    ) : (
-                        <div className="no-events-message">
-                            <h3>No events found for this category.</h3>
-                        </div>
-                    )}
+                    {filteredEvents.map(event => (
+                        <EventCard key={event._id || event.id} event={event} />
+                    ))}
+                </div>
+            ) : (
+                <div className="no-events-message">
+                    <h3>No events found for this category.</h3>
                 </div>
             )}
         </div>
