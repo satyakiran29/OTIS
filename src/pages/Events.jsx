@@ -96,7 +96,7 @@ const Events = () => {
         : events.filter(e => e.category === filterCategory);
 
     return (
-        <div className="events-container">
+        <div className="events-page-wrapper page-container animate-fade-in">
             <div className="events-header-wrapper">
                 <h1>Temple Events & Festivals</h1>
                 <p>Join us in celebrating our rich traditions and spiritual gatherings.</p>
