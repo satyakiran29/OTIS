@@ -13,8 +13,8 @@ const TeamGrid = () => {
         { 
             name: 'Kurimina Anuradha', 
             initials: 'KA',
-            github: '#',
-            linkedin: '#',
+            github: 'https://github.com/anuradhakurimina399-prog',
+            linkedin: 'https://www.linkedin.com/in/kurimina-anuradha-544544293?utm_source=share_via&utm_content=profile&utm_medium=member_android',
             website: '#'
         },
         { 
@@ -34,7 +34,7 @@ const TeamGrid = () => {
         { 
             name: 'Palaka Dhanunjaya', 
             initials: 'PD',
-            github: '#',
+            github: 'https://github.com/Dhanunjaya-21',
             linkedin: '#',
             website: '#'
         }
