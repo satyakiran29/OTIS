@@ -1,14 +1,48 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import TeamCard from './TeamCard';
 
 const TeamGrid = () => {
     const developers = [
-        { name: 'Pampana Satya Kiran', initials: 'PSK', role: 'Full Stack Developer' },
-        { name: 'Kurimina Anuradha', initials: 'KA', role: 'Frontend Developer' },
-        { name: 'Manthini Neelaveni', initials: 'MN', role: 'UI/UX Designer' },
-        { name: 'Kambala Vijaya Sankar', initials: 'KVS', role: 'Backend Developer' },
-        { name: 'Palaka Dhanunjaya', initials: 'PD', role: 'Database Engineer' }
+        { 
+            name: 'Pampana Satya Kiran', 
+            initials: 'PSK',
+            github: 'https://github.com/satyakiran29',
+            linkedin: 'https://linkedin.com/in/satyakiran29',
+            website: 'https://psatyakiran.in'
+        },
+        { 
+            name: 'Kurimina Anuradha', 
+            initials: 'KA',
+            github: '#',
+            linkedin: '#',
+            website: '#'
+        },
+        { 
+            name: 'Manthini Neelaveni', 
+            initials: 'MN',
+            github: '#',
+            linkedin: '#',
+            website: '#'
+        },
+        { 
+            name: 'Kambala Vijaya Sankar', 
+            initials: 'KVS',
+            github: '#',
+            linkedin: '#',
+            website: '#'
+        },
+        { 
+            name: 'Palaka Dhanunjaya', 
+            initials: 'PD',
+            github: '#',
+            linkedin: '#',
+            website: '#'
+        }
     ];
+
+    const shuffledDevelopers = useMemo(() => {
+        return [...developers].sort(() => Math.random() - 0.5);
+    }, []);
 
     return (
         <div style={{
@@ -17,12 +51,14 @@ const TeamGrid = () => {
             gap: '2rem',
             marginTop: '3rem'
         }}>
-            {developers.map((dev, index) => (
+            {shuffledDevelopers.map((dev, index) => (
                 <TeamCard
-                    key={index}
+                    key={dev.name}
                     name={dev.name}
                     initials={dev.initials}
-                    role={dev.role}
+                    github={dev.github}
+                    linkedin={dev.linkedin}
+                    website={dev.website}
                     delay={`${index * 0.1}s`}
                 />
             ))}
