@@ -16,7 +16,6 @@ import AdminEvents from './pages/AdminEvents/AdminEvents';
 import Donations from './pages/Donations/Donations';
 import Profile from './pages/Profile/Profile';
 import Darshan from './pages/Darshan/Darshan';
-import Accommodation from './pages/Accommodation/Accommodation';
 import Dashboard from './pages/Dashboard/Dashboard';
 
 import './App.css';
@@ -73,7 +72,6 @@ function App() {
             <Route path="/donations" element={<Donations />} />
             <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
             <Route path="/darshan" element={<Darshan />} />
-            <Route path="/accommodation" element={<Accommodation />} />
             <Route path="/dashboard" element={<ProtectedRoute adminOnly={true}><Dashboard /></ProtectedRoute>} />
           </Routes>
         </Layout>

@@ -35,7 +35,7 @@ const Navbar = () => {
         setMobileMenuOpen(false);
     }, [location]);
 
-    const navLinks = ['Home', 'About', 'Team', 'Project', 'Events', 'Accommodation', 'Donations'];
+    const navLinks = ['Home', 'About', 'Team', 'Project', 'Events', 'Donations'];
 
     return (
         <nav className={`navbar ${scrolled || mobileMenuOpen ? 'scrolled' : ''}`}>
@@ -54,7 +54,7 @@ const Navbar = () => {
                     <ul className="nav-links-list">
                         {navLinks.map((item) => {
                             const anchorId = item.toLowerCase();
-                            const isPageRoute = ['Events', 'Accommodation', 'Donations'].includes(item);
+                            const isPageRoute = ['Events', 'Donations'].includes(item);
 
                             if (isPageRoute) {
                                 return (
@@ -151,7 +151,7 @@ const Navbar = () => {
                 <ul style={{ display: 'flex', flexDirection: 'column', gap: '2rem', listStyle: 'none', padding: 0, marginBottom: '3rem', textAlign: 'center' }}>
                     {navLinks.map((item) => {
                         const anchorId = item.toLowerCase();
-                        const isPageRoute = ['Events', 'Accommodation', 'Donations'].includes(item);
+                        const isPageRoute = ['Events', 'Donations'].includes(item);
 
                         if (isPageRoute) {
                             return (

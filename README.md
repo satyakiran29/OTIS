@@ -21,7 +21,7 @@ OTIS simplifies the interaction between temples and devotees by offering a robus
 * **User Authentication**: Secure user registration, login, profile management, and Two-Factor Authentication (OTP via email).
 * **Role-based Access**: Dedicated Admin Dashboard for administrators to manage temples, sevas (services, prices, limits), users, and monitor bookings/donations with visual charts.
 * **Temple Exploration & Maps**: Browse, search, and view detailed information including history, descriptions, and galleries. Built-in interactive map support for locating temples.
-* **Booking System**: Seamlessly book Sevas (Darshan) and Accommodations with dynamic ticket availability tracking.
+* **Booking System**: Seamlessly book Sevas (Darshan) with dynamic ticket availability tracking.
 * **Secure Payments**: Integrated with **Stripe** for processing bookings and donations securely.
 * **Donation Portal**: Dedicated portals for transparent user donations and automated receipt generation.
 * **Customer Support Chatbot**: Integrated conversational interface to quickly assist users with standard inquiries and routing.
