@@ -940,7 +940,7 @@ const Dashboard = () => {
 
                     {viewingSevaBookings && (
                         <div className="modal-overlay" onClick={() => setViewingSevaBookings(null)}>
-                            <div className="modal-content glass-card" onClick={e => e.stopPropagation()} style={{ maxWidth: '800px', width: '90%', maxHeight: '90vh', overflowY: 'auto' }}>
+                            <div className="dashboard-modal-content glass-card" onClick={e => e.stopPropagation()} style={{ maxWidth: '800px', width: '90%', maxHeight: '90vh', overflowY: 'auto' }}>
                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
                                     <div>
                                         <h2 style={{ margin: 0, color: 'var(--primary-color)' }}>{viewingSevaBookings.name} - Bookings</h2>
@@ -1002,7 +1002,7 @@ const Dashboard = () => {
 
                     {selectedDonation && (
                         <div className="modal-overlay" onClick={() => setSelectedDonation(null)}>
-                            <div className="modal-content glass-card" onClick={e => e.stopPropagation()} style={{ maxWidth: '600px', width: '90%', maxHeight: '90vh', overflowY: 'auto' }}>
+                            <div className="dashboard-modal-content glass-card" onClick={e => e.stopPropagation()} style={{ maxWidth: '600px', width: '90%', maxHeight: '90vh', overflowY: 'auto' }}>
                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
                                     <h2 style={{ margin: 0, color: 'var(--primary-color)' }}>Donation Details</h2>
                                     <button onClick={() => setSelectedDonation(null)} style={{ background: 'none', border: 'none', fontSize: '1.5rem', cursor: 'pointer', color: 'var(--text-light)' }}>×</button>

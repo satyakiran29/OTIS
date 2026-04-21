@@ -233,6 +233,13 @@
     justify-content: center;
 }
 
+/* Scoped max-width for booking form modals only */
+.modal-content.booking-modal-content {
+    max-width: 480px;
+    display: block;
+    margin: 0 auto;
+}
+
 .close-btn {
     position: absolute;
     top: -40px;
@@ -255,8 +262,8 @@
 
 @media (min-width: 500px) {
     .close-btn {
-        top: 10px;
-        right: 10px;
+        top: 15px;
+        right: 15px;
         transform: none;
     }
 }

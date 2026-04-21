@@ -18,9 +18,8 @@ const Donations = () => {
         address: '',
         address2: '',
         city: '',
-        zipcode: '',
         state: '',
-        country: 'India',
+        country: 'IN',
         mobile: '',
 
         donationDate: '',
@@ -78,23 +77,22 @@ const Donations = () => {
                 }
             };
 
-            if (formData.paymentMethod === 'Card') {
+            // Route both Card and UPI through Secure Stripe Checkout
+            if (['Card', 'UPI'].includes(formData.paymentMethod)) {
                 const res = await axios.post('/payments/create-payment-intent', {
                     amount: formData.amount,
+                    paymentMethodType: formData.paymentMethod === 'UPI' ? 'upi' : 'card',
                     description: `Donation from ${formData.donorName}`,
                     metadata: {
-                        donorName: formData.donorName,
-                        templeId: formData.templeId,
-                        mobile: formData.mobile,
-                        occasion: formData.occasion || 'N/A'
+                        ...formData
                     }
                 }, config);
                 setClientSecret(res.data.clientSecret);
                 setShowPaymentModal(true);
                 setStatus('idle');
             } else {
-                await axios.post('/donations', formData, config);
-                setStatus('success');
+                setMessage('Invalid payment method selected.');
+                setStatus('error');
             }
         } catch (err) {
             console.error(err);
@@ -105,21 +103,8 @@ const Donations = () => {
 
     const handlePaymentSuccess = async () => {
         setShowPaymentModal(false);
-        setStatus('submitting');
-        try {
-            const config = {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${user.token}`
-                }
-            };
-            await axios.post('/donations', formData, config);
-            setStatus('success');
-        } catch (err) {
-            console.error(err);
-            setMessage('Payment succeeded but failed to save donation info.');
-            setStatus('error');
-        }
+        // Backend webhook will process the donation and send the email
+        setStatus('success');
     };
 
     if (status === 'success') {
@@ -145,6 +130,8 @@ const Donations = () => {
                 <StripePaymentModal
                     clientSecret={clientSecret}
                     amount={formData.amount}
+                    formData={formData}
+                    userEmail={user?.email}
                     onSuccess={handlePaymentSuccess}
                     onClose={() => setShowPaymentModal(false)}
                 />
@@ -236,11 +223,10 @@ const Donations = () => {
                         <div className="form-group">
                             <label>Country *</label>
                             <select name="country" value={formData.country} onChange={handleChange} required>
-                                <option value="India">India</option>
-                                <option value="USA">USA</option>
-                                <option value="UK">UK</option>
-                                <option value="Australia">Australia</option>
-                                {/* Add more as needed */}
+                                <option value="IN">India</option>
+                                <option value="US">USA</option>
+                                <option value="GB">UK</option>
+                                <option value="AU">Australia</option>
                             </select>
                         </div>
                     </div>
@@ -267,7 +253,6 @@ const Donations = () => {
                         <select name="paymentMethod" value={formData.paymentMethod} onChange={handleChange}>
                             <option value="Card">Credit/Debit Card</option>
                             <option value="UPI">UPI</option>
-                            <option value="NetBanking">Net Banking</option>
                         </select>
                     </div>
 

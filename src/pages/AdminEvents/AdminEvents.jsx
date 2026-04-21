@@ -98,8 +98,13 @@ const AdminEvents = () => {
         return classes;
     };
 
-    if (!userInfo || userInfo.role !== 'admin') {
-        return <div className="admin-denied">Access Denied. Admins Only.</div>;
+    // If accessed directly (not via Dashboard), still guard
+    if (!userInfo) {
+        return <div className="admin-denied" style={{padding: '4rem', textAlign: 'center', color: '#ef4444'}}>Please log in to access this page.</div>;
+    }
+
+    if (userInfo.role !== 'admin') {
+        return <div className="admin-denied" style={{padding: '4rem', textAlign: 'center', color: '#ef4444'}}>Access Denied. Admins Only.</div>;
     }
 
     return (
@@ -140,7 +145,7 @@ const AdminEvents = () => {
                                     <td>
                                         <div style={{color: '#94a3b8', fontWeight: '600'}}>{event.temple?.name || 'N/A'}</div>
                                     </td>
-                                    <td><span className={`cat-label ${event.category.toLowerCase()}`}>{event.category}</span></td>
+                                    <td><span className={`cat-label ${(event.category || 'daily').toLowerCase()}`}>{event.category || 'N/A'}</span></td>
                                     <td>
                                         <div style={{color: 'white', fontWeight: '600', marginBottom: '4px'}}>{new Date(event.date).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}</div>
                                         <div style={{fontSize: '0.85rem', color: '#64748b'}}>🕒 {event.time || '-'}</div>
@@ -166,8 +171,8 @@ const AdminEvents = () => {
             )}
 
             {isModalOpen && (
-                <div className="modal-overlay" onClick={(e) => e.target.className === 'modal-overlay' && setIsModalOpen(false)}>
-                    <div className="modal-content">
+                <div className="admin-modal-overlay" onClick={(e) => e.target.className === 'admin-modal-overlay' && setIsModalOpen(false)}>
+                    <div className="admin-modal-content">
                         <div className="modal-header">
                             <h3>{editingEvent ? '📝 Edit Sacred Event' : '✨ Create Divine Event'}</h3>
                         </div>

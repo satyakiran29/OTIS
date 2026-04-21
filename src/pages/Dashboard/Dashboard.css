@@ -431,6 +431,26 @@
     color: var(--text-muted);
 }
 
+/* Dashboard Modals (wider than booking modal) */
+.dashboard-modal-content {
+    position: relative;
+    padding: 2rem;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 25px 60px -10px rgba(0, 0, 0, 0.6);
+    animation: scaleIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Manage Events Tab Wrapper */
+.admin-events-tab-content {
+    margin-top: -1rem;
+}
+
+.admin-events-tab-content .admin-events-container {
+    margin: 0;
+    padding: 0;
+}
+
 .days-checkbox-group {
     display: flex;
     gap: 1rem;

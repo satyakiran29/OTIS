@@ -61,9 +61,17 @@
     color: #ef4444;
 }
 
-.bill-header {
-    text-align: center;
+.bill-header-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 2px dashed #e5e7eb;
+}
+
+.bill-header {
+    text-align: left;
 }
 
 .bill-header h2 {
@@ -95,6 +103,14 @@
     font-weight: 600;
     letter-spacing: 0.5px;
     border: 1px solid #e5e7eb;
+}
+
+.bill-qr-container {
+    background: white;
+    padding: 0.5rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
 }
 
 .bill-details-grid {

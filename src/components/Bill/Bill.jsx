@@ -1,4 +1,5 @@
 import React from 'react';
+import { QRCodeSVG } from 'qrcode.react';
 import './Bill.css';
 
 const Bill = ({ booking, onClose }) => {
@@ -11,15 +12,36 @@ const Bill = ({ booking, onClose }) => {
     const totalAmount = booking.item?.price ? booking.item.price * booking.members : 0;
     const date = new Date(booking.date).toLocaleDateString();
 
+    // Generate comprehensive QR Code payload
+    const qrPayload = JSON.stringify({
+        id: booking._id,
+        user: booking.user?.name || 'Unknown',
+        item: booking.item?.name || booking.item?.title || booking.typeModel,
+        temple: booking.typeModel === 'Temple' ? (booking.item?.name || 'N/A') : (booking.item?.temple?.name || booking.item?.temple?.title || 'N/A'),
+        tickets: booking.members,
+        date: date,
+        status: booking.status || 'valid'
+    });
+
     return (
         <div className="bill-overlay" onClick={onClose}>
             <div className="bill-container" onClick={e => e.stopPropagation()}>
                 <button className="bill-close-btn" onClick={onClose}>&times;</button>
 
-                <div className="bill-header">
-                    <h2>OTIS</h2>
-                    <p className="sub-header">Online Temple Information Management System</p>
-                    <div className="receipt-badge">Official Receipt</div>
+                <div className="bill-header-wrapper">
+                    <div className="bill-header">
+                        <h2>OTIS</h2>
+                        <p className="sub-header">Online Temple Information Management System</p>
+                        <div className="receipt-badge">Official E-Ticket</div>
+                    </div>
+                    <div className="bill-qr-container">
+                        <QRCodeSVG 
+                            value={qrPayload} 
+                            size={100} 
+                            level={"H"} 
+                            includeMargin={false} 
+                        />
+                    </div>
                 </div>
 
                 <div className="bill-details-grid">

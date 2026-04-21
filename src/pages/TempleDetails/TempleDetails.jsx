@@ -204,7 +204,7 @@ const TempleDetails = () => {
 
             {selectedSeva && (
                 <div className="modal-overlay">
-                    <div className="modal-content">
+                    <div className="modal-content booking-modal-content">
                         <button className="close-btn" onClick={handleCloseBooking}>&times;</button>
                         <BookingForm type="seva" item={selectedSeva} onClose={handleCloseBooking} onSuccess={fetchData} />
                     </div>

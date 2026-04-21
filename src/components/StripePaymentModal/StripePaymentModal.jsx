@@ -5,7 +5,7 @@ import './StripePaymentModal.css';
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
-const CheckoutForm = ({ amount, onSuccess, onClose }) => {
+const CheckoutForm = ({ amount, formData, userEmail, onSuccess, onClose }) => {
     const stripe = useStripe();
     const elements = useElements();
     const [error, setError] = useState(null);
@@ -21,7 +21,22 @@ const CheckoutForm = ({ amount, onSuccess, onClose }) => {
         const { error: paymentError, paymentIntent } = await stripe.confirmPayment({
             elements,
             confirmParams: {
-                // Not redirecting to keep user in modal.
+                return_url: `${window.location.origin}/donations`,
+                payment_method_data: {
+                    billing_details: {
+                        name: formData.donorName,
+                        email: userEmail || '',
+                        phone: formData.mobile,
+                        address: {
+                            line1: formData.address,
+                            line2: formData.address2 || '',
+                            city: formData.city,
+                            state: formData.state,
+                            postal_code: formData.zipcode,
+                            country: formData.country
+                        }
+                    }
+                }
             },
             redirect: 'if_required'
         });
@@ -40,7 +55,7 @@ const CheckoutForm = ({ amount, onSuccess, onClose }) => {
 
     return (
         <form onSubmit={handleSubmit} className="stripe-checkout-form">
-            <PaymentElement />
+            <PaymentElement options={{ fields: { billingDetails: 'never' } }} />
             {error && <div className="payment-error">{error}</div>}
             <div className="modal-actions">
                 <button type="button" className="cancel-btn" onClick={onClose} disabled={isProcessing}>
@@ -54,7 +69,7 @@ const CheckoutForm = ({ amount, onSuccess, onClose }) => {
     );
 };
 
-const StripePaymentModal = ({ clientSecret, amount, onSuccess, onClose }) => {
+const StripePaymentModal = ({ clientSecret, amount, formData, userEmail, onSuccess, onClose }) => {
     if (!clientSecret) return null;
 
     const options = {
@@ -78,7 +93,7 @@ const StripePaymentModal = ({ clientSecret, amount, onSuccess, onClose }) => {
             <div className="payment-modal-content">
                 <h2>Secure Payment</h2>
                 <Elements stripe={stripePromise} options={options}>
-                    <CheckoutForm amount={amount} onSuccess={onSuccess} onClose={onClose} />
+                    <CheckoutForm amount={amount} formData={formData} userEmail={userEmail} onSuccess={onSuccess} onClose={onClose} />
                 </Elements>
             </div>
         </div>
