@@ -88,7 +88,7 @@ const Navbar = () => {
                                 <Link to="/profile" className="user-greeting">
                                     Hello, {user.name}
                                 </Link>
-                                {user.role === 'admin' && (
+                                {(user.role === 'admin' || user.role === 'super-admin') && (
                                     <Link to="/dashboard" className="btn-dashboard">
                                         Dashboard
                                     </Link>
@@ -206,7 +206,7 @@ const Navbar = () => {
                             }}>
                                 My Profile
                             </Link>
-                            {user.role === 'admin' && (
+                            {(user.role === 'admin' || user.role === 'super-admin') && (
                                 <Link to="/dashboard" onClick={() => setMobileMenuOpen(false)} style={{
                                     padding: '1rem',
                                     border: '1px solid var(--primary-color)',
