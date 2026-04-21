@@ -5,7 +5,7 @@ import './StripePaymentModal.css';
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
-const CheckoutForm = ({ amount, formData, userEmail, onSuccess, onClose }) => {
+const CheckoutForm = ({ amount, formData, userEmail, onSuccess, onClose, returnUrl }) => {
     const stripe = useStripe();
     const elements = useElements();
     const [error, setError] = useState(null);
@@ -21,22 +21,7 @@ const CheckoutForm = ({ amount, formData, userEmail, onSuccess, onClose }) => {
         const { error: paymentError, paymentIntent } = await stripe.confirmPayment({
             elements,
             confirmParams: {
-                return_url: `${window.location.origin}/donations`,
-                payment_method_data: {
-                    billing_details: {
-                        name: formData.donorName,
-                        email: userEmail || '',
-                        phone: formData.mobile,
-                        address: {
-                            line1: formData.address,
-                            line2: formData.address2 || '',
-                            city: formData.city,
-                            state: formData.state,
-                            postal_code: formData.zipcode,
-                            country: formData.country
-                        }
-                    }
-                }
+                return_url: returnUrl || `${window.location.origin}/`
             },
             redirect: 'if_required'
         });
@@ -53,9 +38,29 @@ const CheckoutForm = ({ amount, formData, userEmail, onSuccess, onClose }) => {
         }
     };
 
+    const paymentElementOptions = {
+        defaultValues: {
+            billingDetails: {
+                name: formData?.donorName || userEmail || '',
+                email: userEmail || '',
+                phone: formData?.mobile || '',
+                address: formData?.address ? {
+                    line1: formData.address,
+                    line2: formData.address2 || '',
+                    city: formData.city,
+                    state: formData.state,
+                    postal_code: formData.zipcode,
+                    country: formData.country || 'IN'
+                } : {
+                    country: 'IN'
+                }
+            }
+        }
+    };
+
     return (
         <form onSubmit={handleSubmit} className="stripe-checkout-form">
-            <PaymentElement options={{ fields: { billingDetails: 'never' } }} />
+            <PaymentElement options={paymentElementOptions} />
             {error && <div className="payment-error">{error}</div>}
             <div className="modal-actions">
                 <button type="button" className="cancel-btn" onClick={onClose} disabled={isProcessing}>
@@ -69,7 +74,7 @@ const CheckoutForm = ({ amount, formData, userEmail, onSuccess, onClose }) => {
     );
 };
 
-const StripePaymentModal = ({ clientSecret, amount, formData, userEmail, onSuccess, onClose }) => {
+const StripePaymentModal = ({ clientSecret, amount, formData, userEmail, onSuccess, onClose, returnUrl }) => {
     if (!clientSecret) return null;
 
     const options = {
@@ -93,7 +98,7 @@ const StripePaymentModal = ({ clientSecret, amount, formData, userEmail, onSucce
             <div className="payment-modal-content">
                 <h2>Secure Payment</h2>
                 <Elements stripe={stripePromise} options={options}>
-                    <CheckoutForm amount={amount} formData={formData} userEmail={userEmail} onSuccess={onSuccess} onClose={onClose} />
+                    <CheckoutForm amount={amount} formData={formData} userEmail={userEmail} onSuccess={onSuccess} onClose={onClose} returnUrl={returnUrl} />
                 </Elements>
             </div>
         </div>

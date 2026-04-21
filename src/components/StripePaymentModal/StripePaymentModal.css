@@ -127,3 +127,28 @@
         transform: scale(1);
     }
 }
+
+/* Responsive adjustments */
+@media screen and (max-width: 600px) {
+    .payment-modal-content {
+        padding: 1.5rem;
+        width: 92%;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+
+    .payment-modal-content h2 {
+        font-size: 1.4rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .modal-actions {
+        flex-direction: column-reverse;
+        gap: 0.8rem;
+    }
+
+    .cancel-btn,
+    .pay-btn {
+        width: 100%;
+    }
+}

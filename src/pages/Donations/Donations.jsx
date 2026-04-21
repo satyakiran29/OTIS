@@ -84,7 +84,11 @@ const Donations = () => {
                     paymentMethodType: formData.paymentMethod === 'UPI' ? 'upi' : 'card',
                     description: `Donation from ${formData.donorName}`,
                     metadata: {
-                        ...formData
+                        ...formData,
+                        type: 'donation',
+                        userId: user._id || user.id,
+                        userEmail: user.email,
+                        userName: user.name || formData.donorName
                     }
                 }, config);
                 setClientSecret(res.data.clientSecret);
@@ -134,6 +138,7 @@ const Donations = () => {
                     userEmail={user?.email}
                     onSuccess={handlePaymentSuccess}
                     onClose={() => setShowPaymentModal(false)}
+                    returnUrl={`${window.location.origin}/donations`}
                 />
             )}
             <div className="donations-container">

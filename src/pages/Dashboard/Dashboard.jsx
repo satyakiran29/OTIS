@@ -313,7 +313,13 @@ const Dashboard = () => {
     };
 
     // --- Compute Admin Stats ---
-    const totalRevenue = donations.reduce((sum, d) => sum + (Number(d.amount) || 0), 0);
+    const bookingRevenue = bookings.reduce((sum, b) => {
+        const price = b.item && b.item.price ? Number(b.item.price) : 0;
+        const members = b.members || 1;
+        return sum + (price * members);
+    }, 0);
+    const totalRevenue = donations.reduce((sum, d) => sum + (Number(d.amount) || 0), 0) + bookingRevenue;
+    
     const totalBookingsCount = bookings.length;
     const totalUsersCount = users.length;
     const totalTemplesCount = temples.length;
@@ -321,44 +327,54 @@ const Dashboard = () => {
 
     // --- Chart Data Aggregation ---
     const revenueData = useMemo(() => {
-        // Aggregate donations by month (e.g., "Jan", "Feb")
         const monthly = {};
+        
         donations.forEach(d => {
             const date = new Date(d.createdAt || d.donationDate);
             const monthObj = date.toLocaleString('default', { month: 'short' });
-            if (!monthly[monthObj]) monthly[monthObj] = 0;
-            monthly[monthObj] += Number(d.amount) || 0;
+            if (!monthly[monthObj]) monthly[monthObj] = { name: monthObj, 'Donation Revenue': 0, 'Seva Revenue': 0, 'Event Revenue': 0 };
+            monthly[monthObj]['Donation Revenue'] += Number(d.amount) || 0;
         });
 
-        const sortedMonths = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-        // Convert to array and sort chronologically
-        return Object.keys(monthly)
-            .map(month => ({ name: month, revenue: monthly[month] }))
-            .sort((a, b) => sortedMonths.indexOf(a.name) - sortedMonths.indexOf(b.name));
-    }, [donations]);
-
-    const analyticsData = useMemo(() => {
-        // Aggregate bookings by type over time. For simplicity, group by Month.
-        const monthly = {};
         bookings.forEach(b => {
-            const date = new Date(b.date || b.createdAt);
-            const month = date.toLocaleString('default', { month: 'short' });
-            if (!monthly[month]) monthly[month] = { name: month, Seva: 0, General: 0 };
-
-            if (b.typeModel === 'Seva' || b.typeModel === 'seva') {
-                monthly[month].Seva += 1;
-            } else {
-                monthly[month].General += 1;
+            const date = new Date(b.createdAt || b.date);
+            const monthObj = date.toLocaleString('default', { month: 'short' });
+            if (!monthly[monthObj]) monthly[monthObj] = { name: monthObj, 'Donation Revenue': 0, 'Seva Revenue': 0, 'Event Revenue': 0 };
+            const price = b.item && b.item.price ? Number(b.item.price) : 0;
+            const members = b.members || 1;
+            
+            if (b.typeModel === 'Seva' || b.typeModel === 'seva' || b.type === 'seva') {
+                monthly[monthObj]['Seva Revenue'] += (price * members);
+            } else if (b.typeModel === 'Event' || b.typeModel === 'event' || b.type === 'event') {
+                monthly[monthObj]['Event Revenue'] += (price * members);
             }
         });
 
-        // Add Donations to analytics to see full interactions
+        const sortedMonths = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        return Object.values(monthly)
+            .sort((a, b) => sortedMonths.indexOf(a.name) - sortedMonths.indexOf(b.name));
+    }, [donations, bookings]);
+
+    const analyticsData = useMemo(() => {
+        const monthly = {};
+        
+        bookings.forEach(b => {
+            const date = new Date(b.createdAt || b.date);
+            const month = date.toLocaleString('default', { month: 'short' });
+            if (!monthly[month]) monthly[month] = { name: month, 'Seva Bookings': 0, 'General Bookings': 0, 'Donation Count': 0 };
+
+            if (b.typeModel === 'Seva' || b.typeModel === 'seva' || b.type === 'seva') {
+                monthly[month]['Seva Bookings'] += 1;
+            } else {
+                monthly[month]['General Bookings'] += 1;
+            }
+        });
+
         donations.forEach(d => {
             const date = new Date(d.createdAt || d.donationDate);
             const month = date.toLocaleString('default', { month: 'short' });
-            if (!monthly[month]) monthly[month] = { name: month, Seva: 0, General: 0, Donations: 0 };
-            if (monthly[month].Donations === undefined) monthly[month].Donations = 0;
-            monthly[month].Donations += 1;
+            if (!monthly[month]) monthly[month] = { name: month, 'Seva Bookings': 0, 'General Bookings': 0, 'Donation Count': 0 };
+            monthly[month]['Donation Count'] += 1;
         });
 
         const sortedMonths = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -375,7 +391,7 @@ const Dashboard = () => {
                     <p className="label" style={{ fontWeight: 'bold', marginBottom: '5px' }}>{label}</p>
                     {payload.map((entry, index) => (
                         <p key={`item-${index}`} style={{ color: entry.color, margin: 0, fontSize: '0.9rem' }}>
-                            {entry.name}: {entry.name === 'revenue' ? `₹${entry.value}` : entry.value}
+                            {entry.name}: {String(entry.name).includes('Revenue') ? `₹${entry.value.toLocaleString()}` : entry.value}
                         </p>
                     ))}
                 </div>
@@ -466,7 +482,7 @@ const Dashboard = () => {
                                 {/* Sales Revenue Chart */}
                                 <div className="chart-card glass-card">
                                     <div className="chart-header">
-                                        <h3>Sales Revenue</h3>
+                                        <h3>Financial Dashboard</h3>
                                     </div>
                                     <div className="chart-wrapper" style={{ height: 300 }}>
                                         <ResponsiveContainer width="100%" height="100%">
@@ -475,7 +491,11 @@ const Dashboard = () => {
                                                 <XAxis dataKey="name" stroke="#888" tickLine={false} axisLine={false} />
                                                 <YAxis stroke="#888" tickLine={false} axisLine={false} tickFormatter={(val) => `₹${val}`} />
                                                 <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(255,255,255,0.02)' }} />
-                                                <Bar dataKey="revenue" fill="url(#colorRevenue)" radius={[4, 4, 0, 0]} maxBarSize={40} />
+                                                
+                                                <Bar dataKey="Donation Revenue" stackId="a" fill="url(#colorRevenue)" maxBarSize={40} />
+                                                <Bar dataKey="Seva Revenue" stackId="a" fill="#3b82f6" maxBarSize={40} />
+                                                <Bar dataKey="Event Revenue" stackId="a" fill="#10b981" radius={[4, 4, 0, 0]} maxBarSize={40} />
+                                                
                                                 <defs>
                                                     <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
                                                         <stop offset="5%" stopColor="var(--primary-color)" stopOpacity={0.9} />
@@ -517,9 +537,9 @@ const Dashboard = () => {
                                                 <XAxis dataKey="name" stroke="#888" tickLine={false} axisLine={false} />
                                                 <YAxis stroke="#888" tickLine={false} axisLine={false} />
                                                 <Tooltip content={<CustomTooltip />} />
-                                                <Area type="monotone" dataKey="Seva" stroke="#3b82f6" strokeWidth={3} fillOpacity={1} fill="url(#colorSeva)" />
-                                                <Area type="monotone" dataKey="General" stroke="#10b981" strokeWidth={3} fillOpacity={1} fill="url(#colorGen)" />
-                                                <Area type="monotone" dataKey="Donations" stroke="#8b5cf6" strokeWidth={3} fillOpacity={1} fill="url(#colorDon)" />
+                                                <Area type="monotone" dataKey="Seva Bookings" stroke="#3b82f6" strokeWidth={3} fillOpacity={1} fill="url(#colorSeva)" />
+                                                <Area type="monotone" dataKey="General Bookings" stroke="#10b981" strokeWidth={3} fillOpacity={1} fill="url(#colorGen)" />
+                                                <Area type="monotone" dataKey="Donation Count" stroke="#8b5cf6" strokeWidth={3} fillOpacity={1} fill="url(#colorDon)" />
                                             </AreaChart>
                                         </ResponsiveContainer>
                                     </div>
@@ -882,14 +902,18 @@ const Dashboard = () => {
                                                             </td>
                                                             <td>{new Date(u.createdAt).toLocaleDateString()}</td>
                                                             <td className="text-right actions-cell">
-                                                                <button
-                                                                    onClick={() => handleRoleUpdate(u._id, u.role)}
-                                                                    className="edit-btn"
-                                                                    style={{ background: u.role === 'admin' ? '#f59e0b' : '#3b82f6' }}
-                                                                >
-                                                                    {u.role === 'admin' ? 'Demote' : 'Make Admin'}
-                                                                </button>
-                                                                <button onClick={() => handleUserDelete(u._id)} className="delete-btn">Delete</button>
+                                                                {user.role === 'super-admin' && (
+                                                                    <>
+                                                                        <button
+                                                                            onClick={() => handleRoleUpdate(u._id, u.role)}
+                                                                            className="edit-btn"
+                                                                            style={{ background: u.role === 'admin' ? '#f59e0b' : '#3b82f6' }}
+                                                                        >
+                                                                            {u.role === 'admin' ? 'Demote' : 'Make Admin'}
+                                                                        </button>
+                                                                        <button onClick={() => handleUserDelete(u._id)} className="delete-btn">Delete</button>
+                                                                    </>
+                                                                )}
                                                             </td>
                                                         </tr>
                                                     ))}

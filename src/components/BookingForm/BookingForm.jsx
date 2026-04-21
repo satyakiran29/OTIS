@@ -115,8 +115,10 @@ const BookingForm = ({ type, item, onClose, onSuccess }) => {
                 <StripePaymentModal
                     clientSecret={clientSecret}
                     amount={totalPrice}
+                    userEmail={user?.email}
                     onSuccess={handlePaymentSuccess}
                     onClose={() => setShowPaymentModal(false)}
+                    returnUrl={window.location.href}
                 />
             )}
             <h2>Book {type === 'event' ? 'Event Ticket' : 'Seva'}</h2>
