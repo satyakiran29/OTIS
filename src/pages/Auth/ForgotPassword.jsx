@@ -15,6 +15,8 @@ const ForgotPassword = () => {
     const [error, setError] = React.useState('');
     const [successMessage, setSuccessMessage] = React.useState('');
     const [isLoading, setIsLoading] = React.useState(false);
+    const [showPassword, setShowPassword] = React.useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
 
     // Password validation logic
     const [passwordRequirements, setPasswordRequirements] = React.useState({
@@ -232,10 +234,10 @@ const ForgotPassword = () => {
 
                     {step === 3 && (
                         <>
-                            <div>
+                            <div style={{ position: 'relative' }}>
                                 <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)' }}>New Password</label>
                                 <input
-                                    type="password"
+                                    type={showPassword ? "text" : "password"}
                                     name="newPassword"
                                     value={formData.newPassword}
                                     onChange={handlePasswordChange}
@@ -244,6 +246,7 @@ const ForgotPassword = () => {
                                     style={{
                                         width: '100%',
                                         padding: '1rem',
+                                        paddingRight: '3rem',
                                         background: 'rgba(0,0,0,0.2)',
                                         border: '1px solid',
                                         borderColor: formData.newPassword.length > 0 && !isPasswordValid ? '#f97316' : 'rgba(255,255,255,0.1)',
@@ -259,6 +262,32 @@ const ForgotPassword = () => {
                                         if (formData.newPassword.length === 0 || isPasswordValid) e.target.style.borderColor = 'rgba(255,255,255,0.1)';
                                     }}
                                 />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    style={{
+                                        position: 'absolute',
+                                        right: '1rem',
+                                        top: '2.8rem',
+                                        background: 'none',
+                                        border: 'none',
+                                        color: 'var(--text-muted)',
+                                        cursor: 'pointer',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        padding: '0.2rem',
+                                        transition: 'color 0.3s'
+                                    }}
+                                    onMouseEnter={(e) => e.currentTarget.style.color = '#fff'}
+                                    onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-muted)'}
+                                >
+                                    {showPassword ? (
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49"/><path d="M14.084 14.158a3 3 0 0 1-4.242-4.242"/><path d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143"/><path d="m2 2 20 20"/></svg>
+                                    ) : (
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/></svg>
+                                    )}
+                                </button>
 
                                 {/* Password Strength Bar - Only visible if password has content */}
                                 {formData.newPassword.length > 0 && (
@@ -297,10 +326,10 @@ const ForgotPassword = () => {
                                 )}
                             </div>
 
-                            <div>
+                            <div style={{ position: 'relative' }}>
                                 <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)' }}>Confirm Password</label>
                                 <input
-                                    type="password"
+                                    type={showConfirmPassword ? "text" : "password"}
                                     name="confirmPassword"
                                     value={formData.confirmPassword}
                                     onChange={handleChange}
@@ -309,6 +338,7 @@ const ForgotPassword = () => {
                                     style={{
                                         width: '100%',
                                         padding: '1rem',
+                                        paddingRight: '3rem',
                                         background: 'rgba(0,0,0,0.2)',
                                         border: '1px solid',
                                         borderColor: formData.confirmPassword.length > 0 && !passwordsMatch ? '#f97316' : 'rgba(255,255,255,0.1)',
@@ -324,6 +354,32 @@ const ForgotPassword = () => {
                                         if (formData.confirmPassword.length === 0 || passwordsMatch) e.target.style.borderColor = 'rgba(255,255,255,0.1)';
                                     }}
                                 />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                    style={{
+                                        position: 'absolute',
+                                        right: '1rem',
+                                        top: '2.8rem',
+                                        background: 'none',
+                                        border: 'none',
+                                        color: 'var(--text-muted)',
+                                        cursor: 'pointer',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        padding: '0.2rem',
+                                        transition: 'color 0.3s'
+                                    }}
+                                    onMouseEnter={(e) => e.currentTarget.style.color = '#fff'}
+                                    onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-muted)'}
+                                >
+                                    {showConfirmPassword ? (
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49"/><path d="M14.084 14.158a3 3 0 0 1-4.242-4.242"/><path d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143"/><path d="m2 2 20 20"/></svg>
+                                    ) : (
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/></svg>
+                                    )}
+                                </button>
                                 {formData.confirmPassword.length > 0 && !passwordsMatch && (
                                     <p style={{ color: '#f97316', fontSize: '0.85rem', marginTop: '0.5rem' }}>Passwords do not match</p>
                                 )}

@@ -15,6 +15,7 @@ const Login = () => {
     const [error, setError] = React.useState('');
     const [isLoading, setIsLoading] = React.useState(false);
     const [timer, setTimer] = React.useState(0);
+    const [showPassword, setShowPassword] = React.useState(false);
 
     React.useEffect(() => {
         let interval;
@@ -134,10 +135,10 @@ const Login = () => {
                                 />
                             </div>
 
-                            <div>
+                            <div style={{ position: 'relative' }}>
                                 <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)' }}>Password</label>
                                 <input
-                                    type="password"
+                                    type={showPassword ? "text" : "password"}
                                     name="password"
                                     value={formData.password}
                                     onChange={handleChange}
@@ -146,6 +147,7 @@ const Login = () => {
                                     style={{
                                         width: '100%',
                                         padding: '1rem',
+                                        paddingRight: '3rem',
                                         background: 'rgba(0,0,0,0.2)',
                                         border: '1px solid rgba(255,255,255,0.1)',
                                         borderRadius: '8px',
@@ -156,6 +158,32 @@ const Login = () => {
                                     onFocus={(e) => e.target.style.borderColor = 'var(--primary-color)'}
                                     onBlur={(e) => e.target.style.borderColor = 'rgba(255,255,255,0.1)'}
                                 />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    style={{
+                                        position: 'absolute',
+                                        right: '1rem',
+                                        bottom: '0.7rem',
+                                        background: 'none',
+                                        border: 'none',
+                                        color: 'var(--text-muted)',
+                                        cursor: 'pointer',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        padding: '0.2rem',
+                                        transition: 'color 0.3s'
+                                    }}
+                                    onMouseEnter={(e) => e.currentTarget.style.color = '#fff'}
+                                    onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-muted)'}
+                                >
+                                    {showPassword ? (
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49"/><path d="M14.084 14.158a3 3 0 0 1-4.242-4.242"/><path d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143"/><path d="m2 2 20 20"/></svg>
+                                    ) : (
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/></svg>
+                                    )}
+                                </button>
                             </div>
 
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.9rem' }}>
