@@ -249,7 +249,7 @@ const Donations = () => {
                      <div className="form-group full-width">
                         <label>Select Date *</label>
                         <input type="date" name="donationDate" value={formData.donationDate} onChange={handleChange} required />
-
+</div>
 
 
 
