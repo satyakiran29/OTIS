@@ -92,7 +92,7 @@ const Chatbot = () => {
     const quickReplies = [
         "What are the temple timings?",
         "Are there any upcoming events?",
-        "How can I book a Seva?",
+        "How can I book a Special Darshan?",
         "How can I make a donation?"
     ];
 

@@ -53,7 +53,7 @@ const TempleDetails = () => {
 
     const handleBookClick = (seva) => {
         if (!user) {
-            alert('Please login to book sevas');
+            alert('Please login to book special darshan');
             return;
         }
         setSelectedSeva(seva);
@@ -135,7 +135,7 @@ const TempleDetails = () => {
                                             {sevas && sevas.length > 0 && (
                                                 <div style={{ background: '#f0fdf4', padding: '4px 8px', borderRadius: '4px', display: 'inline-block' }}>
                                                     <span style={{ fontSize: '0.8rem', fontWeight: 'bold', color: '#166534' }}>
-                                                        {sevas.length} Sevas Available
+                                                        {sevas.length} Special Darshan Available
                                                     </span>
                                                 </div>
                                             )}
@@ -148,9 +148,9 @@ const TempleDetails = () => {
                 )}
 
                 <section className="sevas-section animate-fade-in animate-delay-300">
-                    <h2>Available Sevas</h2>
+                    <h2>Available Special Darshan</h2>
                     {sevas.length === 0 ? (
-                        <p>No sevas information available yet.</p>
+                        <p>No special darshan information available yet.</p>
                     ) : (
                         <div className="sevas-grid">
                             {sevas.map(seva => (
@@ -177,7 +177,7 @@ const TempleDetails = () => {
                                         disabled={seva.ticketLimit > 0 && seva.availableTickets === 0}
                                         style={{ opacity: (seva.ticketLimit > 0 && seva.availableTickets === 0) ? 0.6 : 1 }}
                                     >
-                                        {seva.ticketLimit > 0 && seva.availableTickets === 0 ? 'Sold Out' : 'Book Seva'}
+                                        {seva.ticketLimit > 0 && seva.availableTickets === 0 ? 'Sold Out' : 'Book Special Darshan'}
                                     </button>
                                 </div>
                             ))}

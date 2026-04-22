@@ -246,7 +246,7 @@ const Dashboard = () => {
                 headers: { 'Authorization': `Bearer ${user.token}` }
             });
 
-            setMessage(editingId ? 'Seva updated successfully!' : 'Seva added successfully!');
+            setMessage(editingId ? 'Special Darshan updated successfully!' : 'Special Darshan added successfully!');
             setStatus('success');
             setSevaFormData({ name: '', description: '', price: '', duration: '', temple: '', ticketLimit: '' });
             setEditingId(null);
@@ -319,7 +319,7 @@ const Dashboard = () => {
         return sum + (price * members);
     }, 0);
     const totalRevenue = donations.reduce((sum, d) => sum + (Number(d.amount) || 0), 0) + bookingRevenue;
-    
+
     const totalBookingsCount = bookings.length;
     const totalUsersCount = users.length;
     const totalTemplesCount = temples.length;
@@ -328,23 +328,23 @@ const Dashboard = () => {
     // --- Chart Data Aggregation ---
     const revenueData = useMemo(() => {
         const monthly = {};
-        
+
         donations.forEach(d => {
             const date = new Date(d.createdAt || d.donationDate);
             const monthObj = date.toLocaleString('default', { month: 'short' });
-            if (!monthly[monthObj]) monthly[monthObj] = { name: monthObj, 'Donation Revenue': 0, 'Seva Revenue': 0, 'Event Revenue': 0 };
+            if (!monthly[monthObj]) monthly[monthObj] = { name: monthObj, 'Donation Revenue': 0, 'Special Darshan Revenue': 0, 'Event Revenue': 0 };
             monthly[monthObj]['Donation Revenue'] += Number(d.amount) || 0;
         });
 
         bookings.forEach(b => {
             const date = new Date(b.createdAt || b.date);
             const monthObj = date.toLocaleString('default', { month: 'short' });
-            if (!monthly[monthObj]) monthly[monthObj] = { name: monthObj, 'Donation Revenue': 0, 'Seva Revenue': 0, 'Event Revenue': 0 };
+            if (!monthly[monthObj]) monthly[monthObj] = { name: monthObj, 'Donation Revenue': 0, 'Special Darshan Revenue': 0, 'Event Revenue': 0 };
             const price = b.item && b.item.price ? Number(b.item.price) : 0;
             const members = b.members || 1;
-            
+
             if (b.typeModel === 'Seva' || b.typeModel === 'seva' || b.type === 'seva') {
-                monthly[monthObj]['Seva Revenue'] += (price * members);
+                monthly[monthObj]['Special Darshan Revenue'] += (price * members);
             } else if (b.typeModel === 'Event' || b.typeModel === 'event' || b.type === 'event') {
                 monthly[monthObj]['Event Revenue'] += (price * members);
             }
@@ -357,14 +357,14 @@ const Dashboard = () => {
 
     const analyticsData = useMemo(() => {
         const monthly = {};
-        
+
         bookings.forEach(b => {
             const date = new Date(b.createdAt || b.date);
             const month = date.toLocaleString('default', { month: 'short' });
-            if (!monthly[month]) monthly[month] = { name: month, 'Seva Bookings': 0, 'General Bookings': 0, 'Donation Count': 0 };
+            if (!monthly[month]) monthly[month] = { name: month, 'Special Darshan Bookings': 0, 'General Bookings': 0, 'Donation Count': 0 };
 
             if (b.typeModel === 'Seva' || b.typeModel === 'seva' || b.type === 'seva') {
-                monthly[month]['Seva Bookings'] += 1;
+                monthly[month]['Special Darshan Bookings'] += 1;
             } else {
                 monthly[month]['General Bookings'] += 1;
             }
@@ -373,7 +373,7 @@ const Dashboard = () => {
         donations.forEach(d => {
             const date = new Date(d.createdAt || d.donationDate);
             const month = date.toLocaleString('default', { month: 'short' });
-            if (!monthly[month]) monthly[month] = { name: month, 'Seva Bookings': 0, 'General Bookings': 0, 'Donation Count': 0 };
+            if (!monthly[month]) monthly[month] = { name: month, 'Special Darshan Bookings': 0, 'General Bookings': 0, 'Donation Count': 0 };
             monthly[month]['Donation Count'] += 1;
         });
 
@@ -416,7 +416,7 @@ const Dashboard = () => {
                             <span className="nav-icon">🛕</span> Manage Temples
                         </button>
                         <button className={`nav-btn ${activeTab === 'sevas' ? 'active' : ''}`} onClick={() => setActiveTab('sevas')}>
-                            <span className="nav-icon">🙏</span> Manage Sevas
+                            <span className="nav-icon">🙏</span> Manage Special Darshan
                         </button>
                         <button className={`nav-btn ${activeTab === 'users' ? 'active' : ''}`} onClick={() => setActiveTab('users')}>
                             <span className="nav-icon">👥</span> Manage Users
@@ -491,11 +491,11 @@ const Dashboard = () => {
                                                 <XAxis dataKey="name" stroke="#888" tickLine={false} axisLine={false} />
                                                 <YAxis stroke="#888" tickLine={false} axisLine={false} tickFormatter={(val) => `₹${val}`} />
                                                 <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(255,255,255,0.02)' }} />
-                                                
+
                                                 <Bar dataKey="Donation Revenue" stackId="a" fill="url(#colorRevenue)" maxBarSize={40} />
-                                                <Bar dataKey="Seva Revenue" stackId="a" fill="#3b82f6" maxBarSize={40} />
+                                                <Bar dataKey="Special Darshan Revenue" stackId="a" fill="#3b82f6" maxBarSize={40} />
                                                 <Bar dataKey="Event Revenue" stackId="a" fill="#10b981" radius={[4, 4, 0, 0]} maxBarSize={40} />
-                                                
+
                                                 <defs>
                                                     <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
                                                         <stop offset="5%" stopColor="var(--primary-color)" stopOpacity={0.9} />
@@ -512,7 +512,7 @@ const Dashboard = () => {
                                     <div className="chart-header" style={{ marginBottom: '1.5rem' }}>
                                         <h3>Analytics / Visitors Overview</h3>
                                         <div className="chart-legends" style={{ display: 'flex', gap: '1.5rem', fontSize: '0.85rem' }}>
-                                            <span style={{ color: '#3b82f6', fontWeight: 600 }}>● Seva Bookings</span>
+                                            <span style={{ color: '#3b82f6', fontWeight: 600 }}>● Special Darshan Bookings</span>
                                             <span style={{ color: '#10b981', fontWeight: 600 }}>● Room/General</span>
                                             <span style={{ color: '#8b5cf6', fontWeight: 600 }}>● Donations</span>
                                         </div>
@@ -537,7 +537,7 @@ const Dashboard = () => {
                                                 <XAxis dataKey="name" stroke="#888" tickLine={false} axisLine={false} />
                                                 <YAxis stroke="#888" tickLine={false} axisLine={false} />
                                                 <Tooltip content={<CustomTooltip />} />
-                                                <Area type="monotone" dataKey="Seva Bookings" stroke="#3b82f6" strokeWidth={3} fillOpacity={1} fill="url(#colorSeva)" />
+                                                <Area type="monotone" dataKey="Special Darshan Bookings" stroke="#3b82f6" strokeWidth={3} fillOpacity={1} fill="url(#colorSeva)" />
                                                 <Area type="monotone" dataKey="General Bookings" stroke="#10b981" strokeWidth={3} fillOpacity={1} fill="url(#colorGen)" />
                                                 <Area type="monotone" dataKey="Donation Count" stroke="#8b5cf6" strokeWidth={3} fillOpacity={1} fill="url(#colorDon)" />
                                             </AreaChart>
@@ -568,50 +568,50 @@ const Dashboard = () => {
                                         <div className="form-section-title">Temple Identity</div>
                                         <div className={getFormGroupClass('name', templeFormData)}>
                                             <label>Temple Name</label>
-                                            <input 
-                                                type="text" 
-                                                name="name" 
-                                                value={templeFormData.name} 
-                                                onChange={handleTempleChange} 
+                                            <input
+                                                type="text"
+                                                name="name"
+                                                value={templeFormData.name}
+                                                onChange={handleTempleChange}
                                                 onFocus={() => setFocusedField('name')}
                                                 onBlur={() => setFocusedField(null)}
-                                                required 
+                                                required
                                             />
                                         </div>
                                         <div className={getFormGroupClass('location', templeFormData)} style={{ position: 'relative', zIndex: 100 }}>
                                             <label>Location</label>
-                                            <input 
-                                                type="text" 
-                                                name="location" 
-                                                value={templeFormData.location} 
-                                                onChange={handleTempleChange} 
+                                            <input
+                                                type="text"
+                                                name="location"
+                                                value={templeFormData.location}
+                                                onChange={handleTempleChange}
                                                 onFocus={() => setFocusedField('location')}
                                                 onBlur={() => setFocusedField(null)}
-                                                required 
-                                                placeholder="Enter city or full address" 
+                                                required
+
                                             />
                                         </div>
 
                                         <div className="form-section-title">Logistics & Content</div>
                                         <div className={getFormGroupClass('coordinateString', templeFormData)}>
                                             <label>Map Coordinates (Optional)</label>
-                                            <input 
-                                                type="text" 
-                                                name="coordinateString" 
-                                                value={templeFormData.coordinateString} 
-                                                onChange={handleTempleChange} 
+                                            <input
+                                                type="text"
+                                                name="coordinateString"
+                                                value={templeFormData.coordinateString}
+                                                onChange={handleTempleChange}
                                                 onFocus={() => setFocusedField('coordinateString')}
                                                 onBlur={() => setFocusedField(null)}
-                                                placeholder="e.g. 18.4662, 83.6662" 
+
                                             />
                                         </div>
                                         <div className={getFormGroupClass('images', templeFormData)}>
                                             <label>Image URLs (Comma separated)</label>
-                                            <input 
-                                                type="text" 
-                                                name="images" 
-                                                value={templeFormData.images} 
-                                                onChange={handleTempleChange} 
+                                            <input
+                                                type="text"
+                                                name="images"
+                                                value={templeFormData.images}
+                                                onChange={handleTempleChange}
                                                 onFocus={() => setFocusedField('images')}
                                                 onBlur={() => setFocusedField(null)}
                                             />
@@ -620,27 +620,27 @@ const Dashboard = () => {
                                         <div className="form-section-title">Sacred Narrative</div>
                                         <div className={getFormGroupClass('description', templeFormData)}>
                                             <label>Description</label>
-                                            <textarea 
-                                                name="description" 
-                                                value={templeFormData.description} 
-                                                onChange={handleTempleChange} 
+                                            <textarea
+                                                name="description"
+                                                value={templeFormData.description}
+                                                onChange={handleTempleChange}
                                                 onFocus={() => setFocusedField('description')}
                                                 onBlur={() => setFocusedField(null)}
-                                                required 
+                                                required
                                             />
                                         </div>
                                         <div className={getFormGroupClass('history', templeFormData)}>
                                             <label>History</label>
-                                            <textarea 
-                                                name="history" 
-                                                value={templeFormData.history} 
-                                                onChange={handleTempleChange} 
+                                            <textarea
+                                                name="history"
+                                                value={templeFormData.history}
+                                                onChange={handleTempleChange}
                                                 onFocus={() => setFocusedField('history')}
                                                 onBlur={() => setFocusedField(null)}
-                                                required 
+                                                required
                                             />
                                         </div>
-                                        
+
                                         <div className="form-buttons">
                                             <button type="submit" className="submit-btn" disabled={status === 'loading'}>
                                                 {status === 'loading' ? 'Saving...' : (editingId ? 'Update Temple' : 'Add Temple')}
@@ -650,30 +650,30 @@ const Dashboard = () => {
                                     </form>
                                 ) : activeTab === 'sevas' ? (
                                     <form onSubmit={handleSevaSubmit} className="seva-form-premium">
-                                        <div className="form-section-title">Seva Identity</div>
+                                        <div className="form-section-title">Special Darshan Identity</div>
                                         <div className={getFormGroupClass('name', sevaFormData)}>
-                                            <label>Seva Name</label>
-                                            <input 
-                                                type="text" 
-                                                name="name" 
-                                                value={sevaFormData.name} 
-                                                onChange={handleSevaChange} 
+                                            <label>Special Darshan Name</label>
+                                            <input
+                                                type="text"
+                                                name="name"
+                                                value={sevaFormData.name}
+                                                onChange={handleSevaChange}
                                                 onFocus={() => setFocusedField('name')}
                                                 onBlur={() => setFocusedField(null)}
-                                                required 
-                                                placeholder="e.g. Abhishekam"
+                                                required
+
                                             />
                                         </div>
                                         <div className={getFormGroupClass('description', sevaFormData)}>
                                             <label>Description</label>
-                                            <textarea 
-                                                name="description" 
-                                                value={sevaFormData.description} 
-                                                onChange={handleSevaChange} 
+                                            <textarea
+                                                name="description"
+                                                value={sevaFormData.description}
+                                                onChange={handleSevaChange}
                                                 onFocus={() => setFocusedField('description')}
                                                 onBlur={() => setFocusedField(null)}
-                                                required 
-                                                placeholder="Describe the sacred service..."
+                                                required
+
                                             />
                                         </div>
 
@@ -681,63 +681,63 @@ const Dashboard = () => {
                                         <div className="form-row">
                                             <div className={getFormGroupClass('price', sevaFormData)}>
                                                 <label>Price (₹)</label>
-                                                <input 
-                                                    type="number" 
-                                                    name="price" 
-                                                    value={sevaFormData.price} 
-                                                    onChange={handleSevaChange} 
+                                                <input
+                                                    type="number"
+                                                    name="price"
+                                                    value={sevaFormData.price}
+                                                    onChange={handleSevaChange}
                                                     onFocus={() => setFocusedField('price')}
                                                     onBlur={() => setFocusedField(null)}
-                                                    required 
+                                                    required
                                                 />
                                             </div>
                                             <div className={getFormGroupClass('duration', sevaFormData)}>
                                                 <label>Duration</label>
-                                                <input 
-                                                    type="text" 
-                                                    name="duration" 
-                                                    value={sevaFormData.duration} 
-                                                    onChange={handleSevaChange} 
+                                                <input
+                                                    type="text"
+                                                    name="duration"
+                                                    value={sevaFormData.duration}
+                                                    onChange={handleSevaChange}
                                                     onFocus={() => setFocusedField('duration')}
                                                     onBlur={() => setFocusedField(null)}
-                                                    placeholder="e.g. 30 mins" 
+
                                                 />
                                             </div>
                                         </div>
                                         <div className="form-row">
                                             <div className={getFormGroupClass('ticketLimit', sevaFormData)}>
                                                 <label>Ticket Limit (Required)</label>
-                                                <input 
-                                                    type="number" 
-                                                    name="ticketLimit" 
-                                                    value={sevaFormData.ticketLimit} 
-                                                    onChange={handleSevaChange} 
+                                                <input
+                                                    type="number"
+                                                    name="ticketLimit"
+                                                    value={sevaFormData.ticketLimit}
+                                                    onChange={handleSevaChange}
                                                     onFocus={() => setFocusedField('ticketLimit')}
                                                     onBlur={() => setFocusedField(null)}
-                                                    required 
-                                                    min="1" 
+                                                    required
+                                                    min="1"
                                                 />
                                             </div>
                                             <div className={getFormGroupClass('temple', sevaFormData)}>
                                                 <label>Select Temple</label>
-                                                <select 
-                                                    name="temple" 
-                                                    value={sevaFormData.temple} 
-                                                    onChange={handleSevaChange} 
+                                                <select
+                                                    name="temple"
+                                                    value={sevaFormData.temple}
+                                                    onChange={handleSevaChange}
                                                     onFocus={() => setFocusedField('temple')}
                                                     onBlur={() => setFocusedField(null)}
                                                     required
                                                 >
                                                     <option value=""></option>
                                                     {temples.map(t => (
-                                                        <option key={t._id} value={t._id} style={{background: '#0f172a'}}>{t.name}</option>
+                                                        <option key={t._id} value={t._id} style={{ background: '#0f172a' }}>{t.name}</option>
                                                     ))}
                                                 </select>
                                             </div>
                                         </div>
                                         <div className="form-buttons">
-                                            <button type="submit" className="submit-btn" style={{background: 'linear-gradient(135deg, #3b82f6, #6366f1)'}} disabled={status === 'loading'}>
-                                                {status === 'loading' ? 'Saving...' : (editingId ? 'Update Seva' : 'Add Seva')}
+                                            <button type="submit" className="submit-btn" style={{ background: 'linear-gradient(135deg, #3b82f6, #6366f1)' }} disabled={status === 'loading'}>
+                                                {status === 'loading' ? 'Saving...' : (editingId ? 'Update Special Darshan' : 'Add Special Darshan')}
                                             </button>
                                             {editingId && <button type="button" onClick={handleCancelEdit} className="cancel-btn">Cancel</button>}
                                         </div>
@@ -751,7 +751,7 @@ const Dashboard = () => {
 
                             <div style={{ marginTop: '4rem' }}>
                                 <h3 className="form-title" style={{ textAlign: 'left', marginBottom: '1.5rem' }}>
-                                    {activeTab === 'temples' ? 'Existing Temples' : (activeTab === 'sevas' ? 'Existing Sevas' : (activeTab === 'bookings' ? 'All Bookings' : (activeTab === 'users' ? 'Registered Users' : 'All Donations')))}
+                                    {activeTab === 'temples' ? 'Existing Temples' : (activeTab === 'sevas' ? 'Existing Special Darshan' : (activeTab === 'bookings' ? 'All Bookings' : (activeTab === 'users' ? 'Registered Users' : 'All Donations')))}
                                 </h3>
                                 <div className="glass-card" style={{ padding: '0', overflowX: 'auto' }}>
                                     {activeTab === 'temples' ? (
@@ -813,7 +813,7 @@ const Dashboard = () => {
                                                     ))}
                                                 </tbody>
                                             </table>
-                                        ) : <div className="no-data">No sevas found.</div>
+                                        ) : <div className="no-data">No special darshan found.</div>
                                     ) : activeTab === 'bookings' ? (
                                         bookings.length > 0 ? (
                                             <table className="admin-table">
@@ -1012,8 +1012,8 @@ const Dashboard = () => {
                                                 ))
                                             ) : (
                                                 <tr>
-                                                    <td colSpan="4" style={{ textAlign: 'center', padding: '2rem', color: '#888' }}>
-                                                        No bookings found for this Seva.
+                                                    <td colSpan="5" style={{ textAlign: 'center', padding: '2rem', color: '#888' }}>
+                                                        No bookings found for this Special Darshan.
                                                     </td>
                                                 </tr>
                                             )}

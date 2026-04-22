@@ -23,7 +23,7 @@ const TermsOfService = () => {
 
                     <section>
                         <h2 style={{ color: '#fff', fontSize: '1.5rem', marginBottom: '1rem' }}>2. Booking and Donations</h2>
-                        <p>All bookings (Darshan, Sevas) and donations made through our system are final. We strive to process all requests accurately, but specific timings and availability are subject to the respective temple's final confirmation.</p>
+                        <p>All bookings (Darshan, Special Darshan) and donations made through our system are final. We strive to process all requests accurately, but specific timings and availability are subject to the respective temple's final confirmation.</p>
                         <ul style={{ listStyleType: 'disc', paddingLeft: '2rem', marginTop: '0.5rem' }}>
                             <li>Cancellations are generally allowed within a designated grace period (e.g., 5 minutes after booking).</li>
                             <li>Refunds for eligible cancellations will be processed to the original payment method.</li>

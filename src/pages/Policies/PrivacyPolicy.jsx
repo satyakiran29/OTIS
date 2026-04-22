@@ -20,7 +20,7 @@ const PrivacyPolicy = () => {
                         <h2 style={{ color: '#fff', fontSize: '1.5rem', marginBottom: '1rem' }}>1. Information We Collect</h2>
                         <p>We respect your privacy and are committed to protecting your personal data. When you interact with the Temple Info System, we collect:</p>
                         <ul style={{ listStyleType: 'disc', paddingLeft: '2rem', marginTop: '0.5rem' }}>
-                            <li><strong>Personal Details:</strong> Name, Email address, Mobile number, Date of Birth, Gender, and optional cultural details (like Gothram) for sevas and donations.</li>
+                            <li><strong>Personal Details:</strong> Name, Email address, Mobile number, Date of Birth, Gender, and optional cultural details (like Gothram) for special darshan and donations.</li>
                             <li><strong>Booking Data:</strong> Information regarding the dates, tickets, and nature of your bookings.</li>
                             <li><strong>Payment Information:</strong> Processed securely via our payment gateway (e.g., Stripe). We do not store raw credit card details on our local servers.</li>
                         </ul>

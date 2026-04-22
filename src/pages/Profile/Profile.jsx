@@ -137,7 +137,7 @@ const Profile = () => {
     // Total amount donated
     const totalDonations = donations.reduce((sum, donation) => sum + (Number(donation.amount) || 0), 0);
 
-    // Total Seva Tickets (sum of all 'members' from bookings of type 'Seva')
+    // Total Special Darshan Tickets (sum of all 'members' from bookings of type 'Seva')
     const totalSevaTickets = bookings
         .filter(b => b.typeModel === 'Seva' || b.typeModel === 'seva')
         .reduce((sum, b) => sum + (Number(b.members) || 1), 0);
@@ -246,7 +246,7 @@ const Profile = () => {
                                             <div className="admin-stat-icon">✨</div>
                                             <div className="admin-stat-details">
                                                 <span className="admin-stat-value">{totalSevaTickets}</span>
-                                                <span className="admin-stat-label">Seva Tickets</span>
+                                                <span className="admin-stat-label">Special Darshan Tickets</span>
                                             </div>
                                         </div>
                                     </div>

@@ -34,7 +34,7 @@ const Darshan = () => {
     return (
         <div className="events-page page-container"> {/* Reusing events-page class for styling */}
             <div className="events-header">
-                <h1 className="page-title">Darshan Booking</h1>
+                <h1 className="page-title">Special Darshan Booking</h1>
                 <p className="page-subtitle">Book your slot for a divine experience.</p>
             </div>
 
@@ -65,7 +65,7 @@ const Darshan = () => {
                                 disabled={darshan.ticketLimit > 0 && darshan.availableTickets === 0}
                                 style={{ opacity: (darshan.ticketLimit > 0 && darshan.availableTickets === 0) ? 0.6 : 1 }}
                             >
-                                {darshan.ticketLimit > 0 && darshan.availableTickets === 0 ? 'Sold Out' : 'Book Darshan'}
+                                {darshan.ticketLimit > 0 && darshan.availableTickets === 0 ? 'Sold Out' : 'Book Special Darshan'}
                             </button>
                         </div>
                     </div>

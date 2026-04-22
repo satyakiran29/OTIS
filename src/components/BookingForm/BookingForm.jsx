@@ -121,7 +121,7 @@ const BookingForm = ({ type, item, onClose, onSuccess }) => {
                     returnUrl={window.location.href}
                 />
             )}
-            <h2>Book {type === 'event' ? 'Event Ticket' : 'Seva'}</h2>
+            <h2>Book {type === 'event' ? 'Event Ticket' : 'Special Darshan'}</h2>
             <p className="item-name">{item.title || item.name}</p>
 
             {error && <div className="error-message">{error}</div>}
