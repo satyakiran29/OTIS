@@ -18,6 +18,7 @@ const Donations = () => {
         address: '',
         address2: '',
         city: '',
+        zipcode: '',
         state: '',
         country: 'IN',
         mobile: '',
