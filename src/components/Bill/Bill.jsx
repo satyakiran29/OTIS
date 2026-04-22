@@ -15,7 +15,7 @@ const Bill = ({ booking, onClose }) => {
     // Generate comprehensive QR Code payload
     const qrPayload = JSON.stringify({
         id: booking._id,
-        user: booking.user?.name || 'Unknown',
+        user: booking.user?.username || booking.user?.name || booking.devotee || 'Unknown',
         item: booking.item?.name || booking.item?.title || booking.typeModel,
         temple: booking.typeModel === 'Temple' ? (booking.item?.name || 'N/A') : (booking.item?.temple?.name || booking.item?.temple?.title || 'N/A'),
         tickets: booking.members,
@@ -35,11 +35,11 @@ const Bill = ({ booking, onClose }) => {
                         <div className="receipt-badge">Official E-Ticket</div>
                     </div>
                     <div className="bill-qr-container">
-                        <QRCodeSVG 
-                            value={qrPayload} 
-                            size={100} 
-                            level={"H"} 
-                            includeMargin={false} 
+                        <QRCodeSVG
+                            value={qrPayload}
+                            size={100}
+                            level={"H"}
+                            includeMargin={false}
                         />
                     </div>
                 </div>
@@ -55,7 +55,7 @@ const Bill = ({ booking, onClose }) => {
                     </div>
                     <div className="detail-item">
                         <label>Devotee</label>
-                        <span>{booking.user?.name || 'N/A'}</span>
+                        <span>{booking.user?.username || booking.user?.name || booking.devotee || 'N/A'}</span>
                     </div>
                     <div className="detail-item text-right">
                         <label>Temple</label>

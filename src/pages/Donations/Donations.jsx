@@ -21,6 +21,7 @@ const Donations = () => {
         state: '',
         country: 'IN',
         mobile: '',
+        donationDate: '',
 
         
         templeId: ''
@@ -245,6 +246,9 @@ const Donations = () => {
                     </div>
 
                     <hr className="divider" />
+                     <div className="form-group full-width">
+                        <label>Select Date *</label>
+                        <input type="date" name="donationDate" value={formData.donationDate} onChange={handleChange} required />
 
 
 
