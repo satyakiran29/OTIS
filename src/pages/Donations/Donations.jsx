@@ -22,7 +22,7 @@ const Donations = () => {
         country: 'IN',
         mobile: '',
 
-        donationDate: '',
+        
         templeId: ''
     });
     const [status, setStatus] = useState('idle');
@@ -248,10 +248,6 @@ const Donations = () => {
 
 
 
-                    <div className="form-group full-width">
-                        <label>Select Date *</label>
-                        <input type="date" name="donationDate" value={formData.donationDate} onChange={handleChange} required />
-                    </div>
 
                     <div className="form-group full-width">
                         <label>Payment Method</label>
