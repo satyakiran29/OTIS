@@ -107,10 +107,28 @@ const Donations = () => {
         }
     };
 
-    const handlePaymentSuccess = async () => {
+    const handlePaymentSuccess = async (successfulPaymentIntentId) => {
         setShowPaymentModal(false);
-        // Backend webhook will process the donation and send the email
-        setStatus('success');
+        setStatus('submitting');
+        try {
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${user.token}`
+                }
+            };
+            
+            await axios.post('/donations', {
+                ...formData,
+                paymentIntentId: successfulPaymentIntentId
+            }, config);
+            
+            setStatus('success');
+        } catch (err) {
+            console.error(err);
+            setError('Payment succeeded but donation failed to save.');
+            setStatus('error');
+        }
     };
 
     if (status === 'success') {
